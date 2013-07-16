@@ -10,6 +10,7 @@ public class AvaeaIngot extends Item{
 		setMaxStackSize(64);
 		setCreativeTab(CreativeTabs.tabMaterials);
 		setUnlocalizedName("avaeaIngot");
+		func_111206_d("chalith:avaeaIngot");
 	}
 
 }

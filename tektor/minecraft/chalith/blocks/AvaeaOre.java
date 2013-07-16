@@ -13,7 +13,7 @@ public class AvaeaOre extends BlockOre{
 		setStepSound(Block.soundStoneFootstep);
 		setUnlocalizedName("avaeaOre");
 		setCreativeTab(CreativeTabs.tabBlock);
-		func_111022_d("chalit:avaeaOre");
+		func_111022_d("chalith:avaeaOre");
 	}
 	
 	

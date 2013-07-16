@@ -33,7 +33,7 @@ public class ChalithBase {
         public final static Block avaeaOre = new AvaeaOre(980);
        
         // Says where the client and server 'proxy' code is loaded.
-        @SidedProxy(clientSide="tutorial.generic.client.ClientProxy", serverSide="tutorial.generic.CommonProxy")
+        @SidedProxy(clientSide="tektor.minecraft.chalith.client.ClientProxy", serverSide="tektor.minecraft.chalith.CommonProxy")
         public static CommonProxy proxy;
 
 		private static Item avaeaIngot = new AvaeaIngot(7000);
