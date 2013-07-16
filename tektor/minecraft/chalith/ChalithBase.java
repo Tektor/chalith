@@ -6,7 +6,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import tektor.minecraft.chalith.blocks.AvaeaOre;
+import tektor.minecraft.chalith.blocks.LorynOre;
 import tektor.minecraft.chalith.items.AvaeaIngot;
+import tektor.minecraft.chalith.items.LorynIngot;
+import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Init;
@@ -31,12 +34,17 @@ public class ChalithBase {
         
         //blocks
         public final static Block avaeaOre = new AvaeaOre(980);
+        public final static Block lorynOre = new LorynOre(981);
+        
+        //items
+        public final static Item avaeaIngot = new AvaeaIngot(7000);
+        public final static Item lorynIngot = new LorynIngot(7001);
        
         // Says where the client and server 'proxy' code is loaded.
         @SidedProxy(clientSide="tektor.minecraft.chalith.client.ClientProxy", serverSide="tektor.minecraft.chalith.CommonProxy")
         public static CommonProxy proxy;
 
-		private static Item avaeaIngot = new AvaeaIngot(7000);
+		
        
         @EventHandler
         public void preInit(FMLPreInitializationEvent event) {
@@ -49,6 +57,7 @@ public class ChalithBase {
                 registerOres();
                 registerIngots();
                 smeltingRecipes();
+                GameRegistry.registerWorldGenerator(new ChalithWorldGen());
         }
        
         private void registerIngots() {
@@ -56,11 +65,16 @@ public class ChalithBase {
 			LanguageRegistry.addName(avaeaIngot, "Avaea Ingot");
 			GameRegistry.registerItem(avaeaIngot, "avaeaIngot");
 			OreDictionary.registerOre("ingotAvaea", new ItemStack(avaeaIngot));
+			//loryn
+			LanguageRegistry.addName(lorynIngot, "Loryn Ingot");
+			GameRegistry.registerItem(lorynIngot, "lorynIngot");
+			OreDictionary.registerOre("ingotLoryn", new ItemStack(lorynIngot));
 			
 		}
 
 		private void smeltingRecipes() {
-			GameRegistry.addSmelting(ChalithBase.avaeaOre.blockID, new ItemStack(ChalithBase.avaeaIngot), 0.3f);
+			GameRegistry.addSmelting(ChalithBase.avaeaOre.blockID, new ItemStack(ChalithBase.avaeaIngot), 0.4f);
+			GameRegistry.addSmelting(ChalithBase.lorynOre.blockID, new ItemStack(ChalithBase.lorynIngot), 0.4f);
 			
 		}
 
@@ -70,6 +84,11 @@ public class ChalithBase {
 			MinecraftForge.setBlockHarvestLevel(avaeaOre, "pickaxe", 1);
 			GameRegistry.registerBlock(avaeaOre,"avaeaOre");
 			OreDictionary.registerOre("oreAvaea", new ItemStack(avaeaOre));
+			//loryn
+			LanguageRegistry.addName(lorynOre, "Loryn Ore");
+			MinecraftForge.setBlockHarvestLevel(lorynOre, "pickaxe", 1);
+			GameRegistry.registerBlock(lorynOre, "lorynOre");
+			OreDictionary.registerOre("oreLoryn", new ItemStack(lorynOre));
 			
 		}
 
