@@ -9,6 +9,7 @@ import tektor.minecraft.chalith.blocks.AvaeaOre;
 import tektor.minecraft.chalith.blocks.LorynOre;
 import tektor.minecraft.chalith.items.AvaeaIngot;
 import tektor.minecraft.chalith.items.LorynIngot;
+import tektor.minecraft.chalith.items.RecallRune;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -39,6 +40,7 @@ public class ChalithBase {
         //items
         public final static Item avaeaIngot = new AvaeaIngot(7000);
         public final static Item lorynIngot = new LorynIngot(7001);
+        public final static Item recallRune = new RecallRune(7002);
        
         // Says where the client and server 'proxy' code is loaded.
         @SidedProxy(clientSide="tektor.minecraft.chalith.client.ClientProxy", serverSide="tektor.minecraft.chalith.CommonProxy")
@@ -56,11 +58,19 @@ public class ChalithBase {
                 proxy.registerRenderers();
                 registerOres();
                 registerIngots();
+                registerRunes();
                 smeltingRecipes();
                 GameRegistry.registerWorldGenerator(new ChalithWorldGen());
         }
        
-        private void registerIngots() {
+        private void registerRunes() {
+			//Recall
+        	LanguageRegistry.addName(recallRune, "Recall Rune");
+			GameRegistry.registerItem(recallRune, "recallRune");
+			
+		}
+
+		private void registerIngots() {
         	//avaea
 			LanguageRegistry.addName(avaeaIngot, "Avaea Ingot");
 			GameRegistry.registerItem(avaeaIngot, "avaeaIngot");
