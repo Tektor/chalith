@@ -9,6 +9,7 @@ import tektor.minecraft.chalith.blocks.AvaeaOre;
 import tektor.minecraft.chalith.blocks.LorynOre;
 import tektor.minecraft.chalith.items.AvaeaIngot;
 import tektor.minecraft.chalith.items.BaseRune;
+import tektor.minecraft.chalith.items.FireTrapRune;
 import tektor.minecraft.chalith.items.LorynIngot;
 import tektor.minecraft.chalith.items.RecallRune;
 import tektor.minecraft.chalith.items.RuneSymbol;
@@ -43,6 +44,7 @@ public class ChalithBase {
 	public final static Item avaeaIngot = new AvaeaIngot(7000);
 	public final static Item lorynIngot = new LorynIngot(7001);
 	public final static Item recallRune = new RecallRune(7002);
+	public final static Item fireTrapRune = new FireTrapRune(7005);
 	public static final Item baseRune = new BaseRune(7003);
 	private static final Item runeSymbol = new RuneSymbol(7004);
 
@@ -107,6 +109,9 @@ public class ChalithBase {
 		// Recall
 		LanguageRegistry.addName(recallRune, "Recall Rune");
 		GameRegistry.registerItem(recallRune, "recallRune");
+		// FireTrap
+				LanguageRegistry.addName(fireTrapRune, "Fire Trap Rune");
+				GameRegistry.registerItem(fireTrapRune, "fireTrapRune");
 
 	}
 
