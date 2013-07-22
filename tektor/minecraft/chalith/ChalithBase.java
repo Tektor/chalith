@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import tektor.minecraft.chalith.blocks.AvaeaOre;
+import tektor.minecraft.chalith.blocks.BlockFireTrapRune;
 import tektor.minecraft.chalith.blocks.LorynOre;
 import tektor.minecraft.chalith.items.AvaeaIngot;
 import tektor.minecraft.chalith.items.BaseRune;
@@ -39,12 +40,13 @@ public class ChalithBase {
 	// blocks
 	public final static Block avaeaOre = new AvaeaOre(980);
 	public final static Block lorynOre = new LorynOre(981);
+	public final static Block fireTrapRune = new BlockFireTrapRune(982);
 
 	// items
 	public final static Item avaeaIngot = new AvaeaIngot(7000);
 	public final static Item lorynIngot = new LorynIngot(7001);
 	public final static Item recallRune = new RecallRune(7002);
-	public final static Item fireTrapRune = new FireTrapRune(7005);
+	public final static Item fireTrapRune2 = new FireTrapRune(7005);
 	public static final Item baseRune = new BaseRune(7003);
 	private static final Item runeSymbol = new RuneSymbol(7004);
 
@@ -63,9 +65,17 @@ public class ChalithBase {
 		registerOres();
 		registerIngots();
 		registerRunes();
+		registerTileEntities();
 		smeltingRecipes();
 		runeCrafting();
 		GameRegistry.registerWorldGenerator(new ChalithWorldGen());
+	}
+
+	private void registerTileEntities() {
+		GameRegistry.registerTileEntity(
+				tektor.minecraft.chalith.entity.FireTrapRuneTileEntity.class,
+				"fireTrapRuneTileEntity");
+
 	}
 
 	private void runeCrafting() {
@@ -81,15 +91,15 @@ public class ChalithBase {
 		GameRegistry.addShapedRecipe(new ItemStack(this.recallRune, 1),
 				new Object[] { "ABC", " X ", "   ", 'A', diStack, 'B', inStack,
 						'C', nomStack, 'X', baseRuneStack });
-		//Di
+		// Di
 		GameRegistry.addShapedRecipe(new ItemStack(this.runeSymbol, 1, 0),
-				new Object[] { "A  ", " A ", "A  ", 'A', lorynIngotStack});
-		//In
+				new Object[] { "A  ", " A ", "A  ", 'A', lorynIngotStack });
+		// In
 		GameRegistry.addShapedRecipe(new ItemStack(this.runeSymbol, 1, 1),
-				new Object[] { "A  ", " A ", "  A", 'A', lorynIngotStack});
-		//Nom
+				new Object[] { "A  ", " A ", "  A", 'A', lorynIngotStack });
+		// Nom
 		GameRegistry.addShapedRecipe(new ItemStack(this.runeSymbol, 1, 2),
-				new Object[] { "AAA", "  A", "  A", 'A', lorynIngotStack});
+				new Object[] { "AAA", "  A", "  A", 'A', lorynIngotStack });
 
 	}
 
@@ -110,8 +120,10 @@ public class ChalithBase {
 		LanguageRegistry.addName(recallRune, "Recall Rune");
 		GameRegistry.registerItem(recallRune, "recallRune");
 		// FireTrap
-				LanguageRegistry.addName(fireTrapRune, "Fire Trap Rune");
-				GameRegistry.registerItem(fireTrapRune, "fireTrapRune");
+		LanguageRegistry.addName(fireTrapRune2, "Fire Trap Rune");
+		GameRegistry.registerItem(fireTrapRune2, "fireTrapRune");
+		LanguageRegistry.addName(fireTrapRune, "Fire Trap Rune");
+		GameRegistry.registerBlock(fireTrapRune, "fireTrapRuneBlock");
 
 	}
 
