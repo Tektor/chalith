@@ -95,7 +95,7 @@ public class BlockTrapRune extends BlockContainer {
 		}
 		float f2 = 0.0F;
 		float f3 = 1.0F;
-		float f5 = 0.003F;
+		float f5 = 0.0003F;
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 
 		if (l == 1) {
@@ -146,7 +146,7 @@ public class BlockTrapRune extends BlockContainer {
 	 * neighbor changed (coordinates passed are their own) Args: x, y, z,
 	 * neighbor blockID
 	 */
-	@SideOnly(Side.SERVER)
+	
 	public void onNeighborBlockChange(World par1World, int par2, int par3,
 			int par4, int par5) {
 		boolean flag = true;
@@ -186,7 +186,7 @@ public class BlockTrapRune extends BlockContainer {
 					par1World.getBlockMetadata(par2, par3, par4), 0);
 			par1World.setBlockToAir(par2, par3, par4);
 		}
-
+		
 		super.onNeighborBlockChange(par1World, par2, par3, par4, par5);
 	}
 
@@ -194,7 +194,7 @@ public class BlockTrapRune extends BlockContainer {
 	 * Triggered whenever an entity collides with this block (enters into the
 	 * block). Args: world, x, y, z, entity
 	 */
-	@SideOnly(Side.SERVER)
+	@Override
 	public void onEntityCollidedWithBlock(World par1World, int par2, int par3,
 			int par4, Entity par5Entity) {
 		
@@ -211,16 +211,20 @@ public class BlockTrapRune extends BlockContainer {
 
 		if (!par5Entity.getEntityName().equals(owner)) {
 			
-			par5Entity.setFire(3);
+			par5Entity.setFire(8);
 			par1World.playSoundAtEntity(par5Entity, "fire.fire", 1.0F, 1.0F);
-			par5Entity.attackEntityFrom(DamageSource.inFire, 1.0F);
+			par5Entity.attackEntityFrom(DamageSource.onFire, 5.0F);
+			
 			if(tile.uses > 1)
 			{
 				tile.uses--;
 			}
 			else
 			{
-			 	par1World.setBlockToAir(par2, par3, par4);
+			 	if (!par1World.isRemote) {
+					par1World.setBlockToAir(par2, par3, par4);
+					par1World.markBlockForUpdate(par2, par3, par4);
+				}
 			}
 		}
 	}
