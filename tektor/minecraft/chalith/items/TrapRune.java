@@ -1,5 +1,7 @@
 package tektor.minecraft.chalith.items;
 
+import java.util.List;
+
 import tektor.minecraft.chalith.ChalithBase;
 import tektor.minecraft.chalith.entity.TrapRuneTileEntity;
 import cpw.mods.fml.relauncher.Side;
@@ -25,19 +27,53 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
-public class FireTrapRune extends Item {
+public class TrapRune extends Item {
 
-	Icon itemIcon;
+	
+	private Icon[] icon = new Icon[2];
 
-	public FireTrapRune(int par1) {
+	public TrapRune(int par1) {
 		super(par1);
 		this.setMaxDamage(0);
-		this.setHasSubtypes(false);
+		this.setHasSubtypes(true);
 		this.setMaxStackSize(1);
-		func_111206_d("chalith:fireTrapRune");
 		this.setCreativeTab(CreativeTabs.tabTools);
 		this.setUnlocalizedName("fireTrapRune2");
 	}
+	
+	@Override
+	public Icon getIconFromDamage(int par1)
+	{
+		return icon[par1];
+	}
+	
+	@Override
+	public void registerIcons(IconRegister par1IconRegister) {
+		icon[0] = par1IconRegister.registerIcon("chalith:fireTrapRune");
+		icon[1] = par1IconRegister.registerIcon("chalith:iceTrapRune");
+	}
+	
+	@Override
+	public String getUnlocalizedName(ItemStack stack)
+	{
+		switch(stack.getItemDamage())
+		{
+		case 0: return "fireTrapRune";
+		case 1: return "iceTrapRune";
+		default: return "??";
+		}
+		
+	}
+	@Override
+ 	public String getItemDisplayName(ItemStack par1ItemStack)
+ 	{
+ 		switch(par1ItemStack.getItemDamage())
+ 		{
+ 		case 0: return "Fire TrapRune";
+		case 1: return "Ice TrapRune";
+		default: return "??";
+ 		}
+ 	}
 
 	/**
 	 * Callback for item usage. If the item does something special on right
@@ -80,7 +116,7 @@ public class FireTrapRune extends Item {
 			} else {
 
 				par3World.setBlock(par4, par5, par6,
-						ChalithBase.fireTrapRune.blockID, 0, 3);
+						ChalithBase.fireTrapRune.blockID, par1ItemStack.getItemDamage(), 3);
 
 				--par1ItemStack.stackSize;
 				
@@ -96,5 +132,13 @@ public class FireTrapRune extends Item {
 			}
 			return true;
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void getSubItems(int par1, CreativeTabs tab, List subItems) {
+		
+			subItems.add(new ItemStack(this, 1, 0));
+			subItems.add(new ItemStack(this, 1, 1));
 	}
 }

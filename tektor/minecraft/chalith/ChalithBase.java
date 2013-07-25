@@ -11,7 +11,7 @@ import tektor.minecraft.chalith.blocks.BlockTrapRune;
 import tektor.minecraft.chalith.blocks.LorynOre;
 import tektor.minecraft.chalith.items.AvaeaIngot;
 import tektor.minecraft.chalith.items.BaseRune;
-import tektor.minecraft.chalith.items.FireTrapRune;
+import tektor.minecraft.chalith.items.TrapRune;
 import tektor.minecraft.chalith.items.LorynIngot;
 import tektor.minecraft.chalith.items.RecallRune;
 import tektor.minecraft.chalith.items.RuneSymbol;
@@ -30,7 +30,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.2.8")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.3.0")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class ChalithBase {
 
@@ -107,7 +107,7 @@ public class ChalithBase {
 		avaeaIngot = new AvaeaIngot(itemID1);
 		lorynIngot = new LorynIngot(itemID2);
 		recallRune = new RecallRune(itemID3);
-		fireTrapRune2 = new FireTrapRune(itemID6);
+		fireTrapRune2 = new TrapRune(itemID6);
 		baseRune = new BaseRune(itemID4);
 		runeSymbol = new RuneSymbol(itemID5);
 	}
@@ -125,6 +125,8 @@ public class ChalithBase {
 		ItemStack nomStack = new ItemStack(this.runeSymbol, 1, 2);
 		ItemStack xenStack = new ItemStack(this.runeSymbol, 1, 3);
 		ItemStack borStack = new ItemStack(this.runeSymbol, 1, 6);
+		ItemStack cesStack = new ItemStack(this.runeSymbol, 1, 7);
+		ItemStack hirStack = new ItemStack(this.runeSymbol, 1, 9);
 		ItemStack voStack = new ItemStack(this.runeSymbol, 1, 13);
 		ItemStack avaeaIngotStack = new ItemStack(this.avaeaIngot, 1);
 		ItemStack lorynIngotStack = new ItemStack(this.lorynIngot, 1);
@@ -133,15 +135,22 @@ public class ChalithBase {
 
 		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1),
 				new Object[] { "XXX", "X X", "XXX", 'X', avaeaIngotStack });
+		//Recall
 		GameRegistry.addShapedRecipe(new ItemStack(this.recallRune, 1),
 				new Object[] { "ABC", " X ", "   ", 'A', diStack, 'B', inStack,
 						'C', nomStack, 'X', baseRuneStack });
+		//FireTrap
 		GameRegistry.addShapedRecipe(new ItemStack(this.fireTrapRune2, 1),
 				new Object[] { "ABC", " X ", "   ", 'A', xenStack, 'B',
 						voStack, 'C', borStack, 'X', baseRuneStack });
+		//IceTrap
+		GameRegistry.addShapedRecipe(new ItemStack(this.fireTrapRune2, 1),
+				new Object[] { "ABC", " X ", "   ", 'A', xenStack, 'B',
+						cesStack, 'C', hirStack, 'X', baseRuneStack });
+		
 		// Di
 		GameRegistry.addShapedRecipe(new ItemStack(this.runeSymbol, 1, 0),
-				new Object[] { "A  ", " A ", "A  ", 'A', lorynIngotStack });
+				new Object[] { "AA ", "  A", "AA ", 'A', lorynIngotStack });
 		// In
 		GameRegistry.addShapedRecipe(new ItemStack(this.runeSymbol, 1, 1),
 				new Object[] { "A  ", " A ", "  A", 'A', lorynIngotStack });
@@ -158,6 +167,12 @@ public class ChalithBase {
 		// Bor
 		GameRegistry.addShapedRecipe(new ItemStack(this.runeSymbol, 1, 6),
 				new Object[] { "A  ", "AA ", "A  ", 'A', lorynIngotStack });
+		// Ces
+		GameRegistry.addShapedRecipe(new ItemStack(this.runeSymbol, 1, 7),
+				new Object[] { "  A", " A ", "  A", 'A', lorynIngotStack });
+		// Hir
+		GameRegistry.addShapedRecipe(new ItemStack(this.runeSymbol, 1, 9),
+				new Object[] { "A A", " A ", "A A", 'A', lorynIngotStack });
 		// Vo
 		GameRegistry.addShapedRecipe(new ItemStack(this.runeSymbol, 1, 13),
 				new Object[] { "A A", "A A", " A ", 'A', lorynIngotStack });
@@ -183,8 +198,10 @@ public class ChalithBase {
 		// FireTrap
 		LanguageRegistry.addName(fireTrapRune2, "Fire Trap Rune");
 		GameRegistry.registerItem(fireTrapRune2, "fireTrapRune");
-		LanguageRegistry.addName(fireTrapRune, "Fire Trap Rune");
 		GameRegistry.registerBlock(fireTrapRune, "fireTrapRuneBlock");
+		LanguageRegistry.addName(new ItemStack(fireTrapRune,1,0), "Fire Trap Rune");
+		//Ice Trap
+		LanguageRegistry.addName(new ItemStack(fireTrapRune,1,1), "Ice Trap Rune");
 
 	}
 

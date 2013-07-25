@@ -18,6 +18,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -33,8 +34,8 @@ public class BlockTrapRune extends BlockContainer {
 		super(par1, Material.rock);
 		setUnlocalizedName("fireTrapRuneBlock");
 		setCreativeTab(CreativeTabs.tabBlock);
-		setHardness(2.0F);
-		
+		setHardness(1.0F);
+
 	}
 
 	@Override
@@ -42,24 +43,25 @@ public class BlockTrapRune extends BlockContainer {
 		icon[0] = par1IconRegister.registerIcon("chalith:fireTrapRune");
 		icon[1] = par1IconRegister.registerIcon("chalith:iceTrapRune");
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs tab, List subItems) {
-		
-			subItems.add(new ItemStack(this, 1, 0));
-			subItems.add(new ItemStack(this, 1, 1));
+
+		subItems.add(new ItemStack(this, 1, 0));
+		subItems.add(new ItemStack(this, 1, 1));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int side, int meta) {
-		if(meta == 0)return icon[0];
-		else return icon[1];
+		if (meta == 0)
+			return icon[0];
+		else
+			return icon[1];
 	}
 
 	@Override
-	public boolean hasTileEntity()
-	{
+	public boolean hasTileEntity() {
 		return true;
 	}
 
@@ -88,7 +90,8 @@ public class BlockTrapRune extends BlockContainer {
 	 */
 	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess,
 			int par2, int par3, int par4) {
-		TrapRuneTileEntity ent = (TrapRuneTileEntity) par1IBlockAccess.getBlockTileEntity(par2, par3, par4);
+		TrapRuneTileEntity ent = (TrapRuneTileEntity) par1IBlockAccess
+				.getBlockTileEntity(par2, par3, par4);
 		int l = 0;
 		if (ent != null) {
 			l = ent.side;
@@ -118,7 +121,6 @@ public class BlockTrapRune extends BlockContainer {
 		}
 	}
 
-
 	/**
 	 * Returns the bounding box of the wired rectangular prism to render.
 	 */
@@ -146,11 +148,12 @@ public class BlockTrapRune extends BlockContainer {
 	 * neighbor changed (coordinates passed are their own) Args: x, y, z,
 	 * neighbor blockID
 	 */
-	
+
 	public void onNeighborBlockChange(World par1World, int par2, int par3,
 			int par4, int par5) {
 		boolean flag = true;
-		TrapRuneTileEntity ent = (TrapRuneTileEntity) par1World.getBlockTileEntity(par2, par3, par4);
+		TrapRuneTileEntity ent = (TrapRuneTileEntity) par1World
+				.getBlockTileEntity(par2, par3, par4);
 		int i1 = 0;
 		if (ent != null) {
 			i1 = ent.side;
@@ -186,7 +189,7 @@ public class BlockTrapRune extends BlockContainer {
 					par1World.getBlockMetadata(par2, par3, par4), 0);
 			par1World.setBlockToAir(par2, par3, par4);
 		}
-		
+
 		super.onNeighborBlockChange(par1World, par2, par3, par4, par5);
 	}
 
@@ -197,33 +200,39 @@ public class BlockTrapRune extends BlockContainer {
 	@Override
 	public void onEntityCollidedWithBlock(World par1World, int par2, int par3,
 			int par4, Entity par5Entity) {
-		
-		TrapRuneTileEntity tile = (TrapRuneTileEntity) par1World.getBlockTileEntity(par2, par3, par4);
+
+		TrapRuneTileEntity tile = (TrapRuneTileEntity) par1World
+				.getBlockTileEntity(par2, par3, par4);
 		String owner;
-		if (tile != null)
-		{
-		   owner = tile.owner;
-		}
-		else
-		{
+		if (tile != null) {
+			owner = tile.owner;
+		} else {
 			owner = "";
 		}
 
 		if (!par5Entity.getEntityName().equals(owner)) {
-			
-			par5Entity.setFire(8);
-			par1World.playSoundAtEntity(par5Entity, "fire.fire", 1.0F, 1.0F);
-			par5Entity.attackEntityFrom(DamageSource.onFire, 5.0F);
-			
-			if(tile.uses > 1)
-			{
-				tile.uses--;
+			int meta = par1World.getBlockMetadata(par2, par3, par4);
+
+			if (meta == 0) {
+				par5Entity.setFire(8);
+				par1World
+						.playSoundAtEntity(par5Entity, "fire.fire", 1.0F, 1.0F);
+				par5Entity.attackEntityFrom(DamageSource.onFire, 5.0F);
+			} else {
+				if (par5Entity instanceof EntityLivingBase) {
+					((EntityLivingBase) par5Entity)
+							.addPotionEffect(new PotionEffect(2, 600));
+					par5Entity.attackEntityFrom(DamageSource.generic, 4.0F);
+				}
 			}
-			else
-			{
-			 	if (!par1World.isRemote) {
-					par1World.setBlockToAir(par2, par3, par4);
-					par1World.markBlockForUpdate(par2, par3, par4);
+			if (!par1World.isRemote) {
+				if (tile.uses > 1) {
+					tile.uses--;
+				} else {
+					{
+						par1World.setBlockToAir(par2, par3, par4);
+						par1World.markBlockForUpdate(par2, par3, par4);
+					}
 				}
 			}
 		}
@@ -231,7 +240,7 @@ public class BlockTrapRune extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-	
+
 		return new TrapRuneTileEntity();
 	}
 
