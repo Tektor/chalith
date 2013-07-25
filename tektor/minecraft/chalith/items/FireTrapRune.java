@@ -1,7 +1,7 @@
 package tektor.minecraft.chalith.items;
 
 import tektor.minecraft.chalith.ChalithBase;
-import tektor.minecraft.chalith.entity.FireTrapRuneTileEntity;
+import tektor.minecraft.chalith.entity.TrapRuneTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -80,21 +80,21 @@ public class FireTrapRune extends Item {
 			} else {
 
 				par3World.setBlock(par4, par5, par6,
-						ChalithBase.fireTrapRune.blockID, par7, 3);
+						ChalithBase.fireTrapRune.blockID, 0, 3);
 
 				--par1ItemStack.stackSize;
 				
-				System.out.println("++++++++++++++++++++test++++++++++++++++++" + par4 + par5 + par6);
-				FireTrapRuneTileEntity entity = (FireTrapRuneTileEntity) par3World
+				TrapRuneTileEntity entity = (TrapRuneTileEntity) par3World
 						.getBlockTileEntity(par4, par5, par6);
-				if (entity != null) {
-					System.out.println("++++++++++++++++++++test++++++++++++++++++");
+				if (entity != null) {;
 					entity.owner = par2EntityPlayer.getEntityName();
-					System.out.println(entity.owner);
+					entity.side = par7;
+					par3World.markBlockForUpdate(par4, par5, par6);
+										
 				}
-
-				return true;
+				
 			}
+			return true;
 		}
 	}
 }

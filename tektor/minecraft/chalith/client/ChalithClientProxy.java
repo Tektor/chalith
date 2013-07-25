@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraftforge.client.MinecraftForgeClient;
 import tektor.minecraft.chalith.ChalithBase;
 import tektor.minecraft.chalith.ChalithCommonProxy;
-import tektor.minecraft.chalith.entity.FireTrapRuneTileEntity;
+import tektor.minecraft.chalith.entity.TrapRuneTileEntity;
 
 public class ChalithClientProxy extends ChalithCommonProxy {
 

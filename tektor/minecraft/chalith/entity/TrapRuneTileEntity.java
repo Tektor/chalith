@@ -15,9 +15,10 @@ import net.minecraft.server.management.PlayerManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 
-public class FireTrapRuneTileEntity extends TileEntity {
+public class TrapRuneTileEntity extends TileEntity {
 
 	public int uses = 50;
+	public int side = 0;
 	public String owner = "";
 
 	@Override
@@ -25,6 +26,7 @@ public class FireTrapRuneTileEntity extends TileEntity {
 		super.writeToNBT(par1);
 		par1.setInteger("uses", uses);
 		par1.setString("owner", owner);
+		par1.setInteger("side", side);
 	}
 
 	@Override
@@ -32,6 +34,7 @@ public class FireTrapRuneTileEntity extends TileEntity {
 		super.readFromNBT(par1);
 		uses = par1.getInteger("uses");
 		owner = par1.getString("owner");
+		side = par1.getInteger("side");
 	}
 
 	@Override

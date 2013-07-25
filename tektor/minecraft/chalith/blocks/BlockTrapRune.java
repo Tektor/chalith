@@ -1,11 +1,12 @@
 package tektor.minecraft.chalith.blocks;
 
+import java.util.List;
 import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import tektor.minecraft.chalith.ChalithBase;
-import tektor.minecraft.chalith.entity.FireTrapRuneTileEntity;
+import tektor.minecraft.chalith.entity.TrapRuneTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -24,26 +25,36 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockFireTrapRune extends BlockContainer {
+public class BlockTrapRune extends BlockContainer {
 
-	private Icon icon;
+	private Icon[] icon = new Icon[2];
 
-	public BlockFireTrapRune(int par1) {
+	public BlockTrapRune(int par1) {
 		super(par1, Material.rock);
 		setUnlocalizedName("fireTrapRuneBlock");
 		setCreativeTab(CreativeTabs.tabBlock);
 		setHardness(2.0F);
+		
 	}
 
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
-		icon = par1IconRegister.registerIcon("chalith:fireTrapRune");
+		icon[0] = par1IconRegister.registerIcon("chalith:fireTrapRune");
+		icon[1] = par1IconRegister.registerIcon("chalith:iceTrapRune");
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(int par1, CreativeTabs tab, List subItems) {
+		
+			subItems.add(new ItemStack(this, 1, 0));
+			subItems.add(new ItemStack(this, 1, 1));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int side, int meta) {
-		return icon;
+		if(meta == 0)return icon[0];
+		else return icon[1];
 	}
 
 	@Override
@@ -60,7 +71,7 @@ public class BlockFireTrapRune extends BlockContainer {
 
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
-		return new FireTrapRuneTileEntity();
+		return new TrapRuneTileEntity();
 	}
 
 	/**
@@ -75,10 +86,13 @@ public class BlockFireTrapRune extends BlockContainer {
 	 * Updates the blocks bounds based on its current state. Args: world, x, y,
 	 * z
 	 */
-
 	public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess,
 			int par2, int par3, int par4) {
-		int l = par1IBlockAccess.getBlockMetadata(par2, par3, par4);
+		TrapRuneTileEntity ent = (TrapRuneTileEntity) par1IBlockAccess.getBlockTileEntity(par2, par3, par4);
+		int l = 0;
+		if (ent != null) {
+			l = ent.side;
+		}
 		float f2 = 0.0F;
 		float f3 = 1.0F;
 		float f5 = 0.003F;
@@ -104,7 +118,7 @@ public class BlockFireTrapRune extends BlockContainer {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+
 	/**
 	 * Returns the bounding box of the wired rectangular prism to render.
 	 */
@@ -132,10 +146,15 @@ public class BlockFireTrapRune extends BlockContainer {
 	 * neighbor changed (coordinates passed are their own) Args: x, y, z,
 	 * neighbor blockID
 	 */
+	@SideOnly(Side.SERVER)
 	public void onNeighborBlockChange(World par1World, int par2, int par3,
 			int par4, int par5) {
 		boolean flag = true;
-		int i1 = par1World.getBlockMetadata(par2, par3, par4);
+		TrapRuneTileEntity ent = (TrapRuneTileEntity) par1World.getBlockTileEntity(par2, par3, par4);
+		int i1 = 0;
+		if (ent != null) {
+			i1 = ent.side;
+		}
 
 		if (i1 == 1
 				&& par1World.getBlockMaterial(par2, par3 - 1, par4).isSolid()) {
@@ -175,10 +194,11 @@ public class BlockFireTrapRune extends BlockContainer {
 	 * Triggered whenever an entity collides with this block (enters into the
 	 * block). Args: world, x, y, z, entity
 	 */
+	@SideOnly(Side.SERVER)
 	public void onEntityCollidedWithBlock(World par1World, int par2, int par3,
 			int par4, Entity par5Entity) {
 		
-		FireTrapRuneTileEntity tile = (FireTrapRuneTileEntity) par1World.getBlockTileEntity(par2, par3, par4);
+		TrapRuneTileEntity tile = (TrapRuneTileEntity) par1World.getBlockTileEntity(par2, par3, par4);
 		String owner;
 		if (tile != null)
 		{
@@ -208,7 +228,7 @@ public class BlockFireTrapRune extends BlockContainer {
 	@Override
 	public TileEntity createNewTileEntity(World world) {
 	
-		return new FireTrapRuneTileEntity();
+		return new TrapRuneTileEntity();
 	}
 
 }

@@ -7,7 +7,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import tektor.minecraft.chalith.blocks.AvaeaOre;
-import tektor.minecraft.chalith.blocks.BlockFireTrapRune;
+import tektor.minecraft.chalith.blocks.BlockTrapRune;
 import tektor.minecraft.chalith.blocks.LorynOre;
 import tektor.minecraft.chalith.items.AvaeaIngot;
 import tektor.minecraft.chalith.items.BaseRune;
@@ -30,7 +30,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.2.6")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.2.7")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class ChalithBase {
 
@@ -102,7 +102,7 @@ public class ChalithBase {
 		// blocks
 		avaeaOre = new AvaeaOre(blockID1);
 		lorynOre = new LorynOre(blockID2);
-		fireTrapRune = new BlockFireTrapRune(blockID3);
+		fireTrapRune = new BlockTrapRune(blockID3);
 		// items
 		avaeaIngot = new AvaeaIngot(itemID1);
 		lorynIngot = new LorynIngot(itemID2);
@@ -114,7 +114,7 @@ public class ChalithBase {
 
 	private void registerTileEntities() {
 		GameRegistry.registerTileEntity(
-				tektor.minecraft.chalith.entity.FireTrapRuneTileEntity.class,
+				tektor.minecraft.chalith.entity.TrapRuneTileEntity.class,
 				"Fire Trap Rune");
 
 	}
