@@ -125,7 +125,7 @@ public class TrapRune extends Item {
 				if (entity != null) {;
 					entity.owner = par2EntityPlayer.getEntityName();
 					entity.side = par7;
-					par3World.markBlockForUpdate(par4, par5, par6);
+					//par3World.markBlockForUpdate(par4, par5, par6);
 										
 				}
 				

@@ -30,7 +30,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.3.0")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.3.1")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class ChalithBase {
 
@@ -140,11 +140,11 @@ public class ChalithBase {
 				new Object[] { "ABC", " X ", "   ", 'A', diStack, 'B', inStack,
 						'C', nomStack, 'X', baseRuneStack });
 		//FireTrap
-		GameRegistry.addShapedRecipe(new ItemStack(this.fireTrapRune2, 1),
+		GameRegistry.addShapedRecipe(new ItemStack(this.fireTrapRune2, 1, 0),
 				new Object[] { "ABC", " X ", "   ", 'A', xenStack, 'B',
 						voStack, 'C', borStack, 'X', baseRuneStack });
 		//IceTrap
-		GameRegistry.addShapedRecipe(new ItemStack(this.fireTrapRune2, 1),
+		GameRegistry.addShapedRecipe(new ItemStack(this.fireTrapRune2, 1, 1),
 				new Object[] { "ABC", " X ", "   ", 'A', xenStack, 'B',
 						cesStack, 'C', hirStack, 'X', baseRuneStack });
 		
