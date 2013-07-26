@@ -44,5 +44,11 @@ public class ChalithOreBase extends BlockOre{
 		subItems.add(new ItemStack(this, 1, 0));
 		subItems.add(new ItemStack(this, 1, 1));
 	}
+	
+	@Override
+	public int damageDropped(int par1)
+	{
+		 return par1;
+	}
 
 }
