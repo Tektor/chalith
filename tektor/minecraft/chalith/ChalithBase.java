@@ -32,7 +32,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.3.2")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.4.0")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class ChalithBase {
 
@@ -131,15 +131,21 @@ public class ChalithBase {
 		ItemStack cesStack = new ItemStack(this.runeSymbol, 1, 7);
 		ItemStack hirStack = new ItemStack(this.runeSymbol, 1, 9);
 		ItemStack voStack = new ItemStack(this.runeSymbol, 1, 13);
-		ItemStack avaeaIngotStack = new ItemStack(this.avaeaIngot, 1);
-		ItemStack lorynIngotStack = new ItemStack(this.lorynIngot, 1);
-		ItemStack baseRuneStack = new ItemStack(this.baseRune, 1);
+		ItemStack avaeaIngotStack = new ItemStack(this.avaeaIngot, 1,0);
+		ItemStack lorynIngotStack = new ItemStack(this.lorynIngot, 1,0);
+		ItemStack sorfynIngotStack = new ItemStack(this.lorynIngot, 1,1);
+		ItemStack baseRuneStack = new ItemStack(this.baseRune, 1, 0);
+		ItemStack wildRuneStack = new ItemStack(this.baseRune, 1, 1);
 		ItemStack goldIngotStack = new ItemStack(Item.ingotGold, 1);
 
-		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1),
+		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1, 0),
 				new Object[] { "XXX", "X X", "XXX", 'X', avaeaIngotStack });
+		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1, 1),
+				new Object[] { "XXX", "X X", "XXX", 'X', sorfynIngotStack });
+		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1, 2),
+				new Object[] { "XY", 'X', baseRuneStack, 'Y', wildRuneStack });
 		//Recall
-		GameRegistry.addShapedRecipe(new ItemStack(this.utilRune, 1),
+		GameRegistry.addShapedRecipe(new ItemStack(this.utilRune, 1, 0),
 				new Object[] { "ABC", " X ", "   ", 'A', diStack, 'B', inStack,
 						'C', nomStack, 'X', baseRuneStack });
 		//FireTrap

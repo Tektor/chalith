@@ -2,6 +2,7 @@ package tektor.minecraft.chalith.items;
 
 import java.util.List;
 
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import tektor.minecraft.chalith.ChalithBase;
@@ -121,8 +122,26 @@ public class UtilRune extends Item {
 
 	public void onUpdate(ItemStack par1ItemStack, World par2World,
 			Entity par3Entity, int par4, boolean par5) {
-		if (timer > 0) {
-			timer--;
+		int id = par1ItemStack.getItemDamage();
+		if (id == 0) {
+			if (timer > 0) {
+				timer--;
+			}
+		}
+		else if(id == 1 || id == 2)
+		{
+			if(par3Entity instanceof EntityPlayer)
+			{
+				int firstFree = ((EntityPlayer) par3Entity).inventory.getFirstEmptyStack();
+				if(firstFree == -1)
+				{
+					par1ItemStack.setItemDamage(2);
+				}
+				else
+				{
+					par1ItemStack.setItemDamage(1);
+				}
+			}
 		}
 	}
 	
