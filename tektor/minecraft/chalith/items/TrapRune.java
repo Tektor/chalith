@@ -29,7 +29,6 @@ import net.minecraft.world.World;
 
 public class TrapRune extends Item {
 
-	@SideOnly(Side.CLIENT)
 	private Icon[] icon = new Icon[2];
 
 	public TrapRune(int par1) {

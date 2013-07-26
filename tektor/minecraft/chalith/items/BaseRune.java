@@ -12,7 +12,7 @@ import net.minecraft.util.Icon;
 
 public class BaseRune extends Item{
 
-	@SideOnly(Side.CLIENT)
+
 	private Icon[] icon = new Icon[3];
 	public BaseRune(int id) {
 		super(id);

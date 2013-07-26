@@ -13,7 +13,6 @@ import net.minecraft.util.Icon;
 
 public class ChalithOreBase extends BlockOre{
 
-	@SideOnly(Side.CLIENT)
 	private Icon[] icon = new Icon[2];
 	public ChalithOreBase(int id) {
 		super(id);

@@ -12,7 +12,6 @@ import net.minecraft.util.Icon;
 
 public class ChalithIngotBase extends Item {
 
-	@SideOnly(Side.CLIENT)
 	private Icon[] icon = new Icon[2];
 	
 	public ChalithIngotBase(int id) {

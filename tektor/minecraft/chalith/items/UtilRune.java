@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 public class UtilRune extends Item {
 
 	private int timer;
-	@SideOnly(Side.CLIENT)
+
 	private Icon[] icon = new Icon[3];
 	
 
