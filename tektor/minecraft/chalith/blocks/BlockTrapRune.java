@@ -140,7 +140,7 @@ public class BlockTrapRune extends BlockContainer {
 	 * Returns the ID of the items to drop on destruction.
 	 */
 	public int idDropped(int par1, Random par2Random, int par3) {
-		return ChalithBase.fireTrapRune2.itemID;
+		return ChalithBase.trapRuneItem.itemID;
 	}
 
 	/**
@@ -221,7 +221,7 @@ public class BlockTrapRune extends BlockContainer {
 			} else {
 				if (par5Entity instanceof EntityLivingBase) {
 					((EntityLivingBase) par5Entity)
-							.addPotionEffect(new PotionEffect(2, 600));
+							.addPotionEffect(new PotionEffect(2, 600,2));
 					par5Entity.attackEntityFrom(DamageSource.generic, 4.0F);
 				}
 			}
