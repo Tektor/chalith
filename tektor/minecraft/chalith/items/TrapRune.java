@@ -29,7 +29,7 @@ import net.minecraft.world.World;
 
 public class TrapRune extends Item {
 
-	
+	@SideOnly(Side.CLIENT)
 	private Icon[] icon = new Icon[2];
 
 	public TrapRune(int par1) {
@@ -42,12 +42,14 @@ public class TrapRune extends Item {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public Icon getIconFromDamage(int par1)
 	{
 		return icon[par1];
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
 		icon[0] = par1IconRegister.registerIcon("chalith:fireTrapRune");
 		icon[1] = par1IconRegister.registerIcon("chalith:iceTrapRune");
@@ -116,7 +118,7 @@ public class TrapRune extends Item {
 			} else {
 
 				par3World.setBlock(par4, par5, par6,
-						ChalithBase.fireTrapRune.blockID, par1ItemStack.getItemDamage(), 3);
+						ChalithBase.trapRune.blockID, par1ItemStack.getItemDamage(), 3);
 
 				--par1ItemStack.stackSize;
 				

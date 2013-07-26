@@ -10,16 +10,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 
-public class BaseRune extends Item{
+public class ChalithIngotBase extends Item {
 
 	@SideOnly(Side.CLIENT)
-	private Icon[] icon = new Icon[3];
-	public BaseRune(int id) {
+	private Icon[] icon = new Icon[2];
+	
+	public ChalithIngotBase(int id) {
 		super(id);
 		setMaxStackSize(64);
 		setCreativeTab(CreativeTabs.tabMaterials);
 		setHasSubtypes(true);
 	}
+	
 	@Override
 	public Icon getIcon(ItemStack stack,
 	           int pass)
@@ -46,9 +48,8 @@ public class BaseRune extends Item{
 	{
 		switch(stack.getItemDamage())
 		{
-		case 0: return "baseRune";
-		case 1: return "wildRune";
-		case 2: return "switchingRune";
+		case 0: return "lorynIngot";
+		case 1: return "sorfynOre";
 		default: return "??";
 		}
 		
@@ -59,18 +60,16 @@ public class BaseRune extends Item{
  	{
  		switch(stack.getItemDamage())
  		{
- 		case 0: return "Base Rune";
-		case 1: return "Wild Rune";
-		case 2: return "Switching Rune";
+ 		case 0: return "Loryn Ingot";
+		case 1: return "Sorfyn Ingot";
 		default: return "??";
  		}
  	}
 	
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
-		icon[0] = par1IconRegister.registerIcon("chalith:baseRune");
-		icon[1] = par1IconRegister.registerIcon("chalith:wildRune");
-		icon[2] = par1IconRegister.registerIcon("chalith:switchingRune");
+		icon[0] = par1IconRegister.registerIcon("chalith:lorynIngot");
+		icon[1] = par1IconRegister.registerIcon("chalith:sorfynIngot");
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -79,7 +78,6 @@ public class BaseRune extends Item{
 		
 			subItems.add(new ItemStack(this, 1, 0));
 			subItems.add(new ItemStack(this, 1, 1));
-			subItems.add(new ItemStack(this, 1, 2));
 	}
 
 }
