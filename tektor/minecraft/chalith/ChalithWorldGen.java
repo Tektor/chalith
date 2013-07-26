@@ -10,7 +10,7 @@ import cpw.mods.fml.common.IWorldGenerator;
 public class ChalithWorldGen implements IWorldGenerator {
 
 	@Override
-	//avaea
+	// avaea
 	public void generate(Random random, int chunkX, int chunkZ, World world,
 			IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		for (int k = 0; k < 10; k++) {
@@ -25,9 +25,19 @@ public class ChalithWorldGen implements IWorldGenerator {
 			int firstBlockXCoord = chunkX * 16 + random.nextInt(16);
 			int firstBlockYCoord = random.nextInt(32);
 			int firstBlockZCoord = chunkZ * 16 + random.nextInt(16);
-			(new WorldGenMinable(ChalithBase.lorynOre.blockID, 6)).generate(
+			(new WorldGenMinable(ChalithBase.chalithBaseOre.blockID, 0, 6)).generate(
 					world, random, firstBlockXCoord, firstBlockYCoord,
 					firstBlockZCoord);
+
+		}
+		for (int k = 0; k < 5; k++) {
+			int firstBlockXCoord = chunkX * 16 + random.nextInt(16);
+			int firstBlockYCoord = random.nextInt(32);
+			int firstBlockZCoord = chunkZ * 16 + random.nextInt(16);
+			(new WorldGenMinable(ChalithBase.chalithBaseOre.blockID, 1, 6)).generate(
+					world, random, firstBlockXCoord, firstBlockYCoord,
+					firstBlockZCoord);
+
 		}
 
 	}
