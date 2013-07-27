@@ -10,6 +10,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import tektor.minecraft.chalith.blocks.AvaeaOre;
 import tektor.minecraft.chalith.blocks.BlockTrapRune;
 import tektor.minecraft.chalith.blocks.ChalithOreBase;
+import tektor.minecraft.chalith.blocks.GateBlock;
 import tektor.minecraft.chalith.items.AvaeaIngot;
 import tektor.minecraft.chalith.items.BaseRune;
 import tektor.minecraft.chalith.items.ChalithOreItemBlock;
@@ -37,15 +38,18 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class ChalithBase {
 
+	
+
 	//instance
 	@Instance("ChalithBase")
 	public static ChalithBase instance;
 
 	// blocks
-	public static int blockID1, blockID2, blockID3;
+	public static int blockID1, blockID2, blockID3, blockID4;
 	public static Block avaeaOre;
 	public static Block chalithBaseOre;
 	public static Block trapRune;
+	public static Block gateBlock;
 
 	// items
 	public static int itemID1, itemID2, itemID3, itemID4, itemID5, itemID6;
@@ -70,6 +74,8 @@ public class ChalithBase {
 		blockID2 = config.get(Configuration.CATEGORY_BLOCK, "blockID2", 981)
 				.getInt();
 		blockID3 = config.get(Configuration.CATEGORY_BLOCK, "blockID3", 982)
+				.getInt();
+		blockID4 = config.get(Configuration.CATEGORY_BLOCK, "blockID4", 983)
 				.getInt();
 
 		itemID1 = config.get(Configuration.CATEGORY_ITEM, "itemID1", 7000)
@@ -106,6 +112,7 @@ public class ChalithBase {
 		avaeaOre = new AvaeaOre(blockID1);
 		chalithBaseOre = new ChalithOreBase(blockID2);
 		trapRune = new BlockTrapRune(blockID3);
+		gateBlock = new GateBlock(blockID4);
 		// items
 		avaeaIngot = new AvaeaIngot(itemID1);
 		lorynIngot = new ChalithIngotBase(itemID2);
@@ -120,6 +127,9 @@ public class ChalithBase {
 		GameRegistry.registerTileEntity(
 				tektor.minecraft.chalith.entity.TrapRuneTileEntity.class,
 				"Fire Trap Rune");
+		GameRegistry.registerTileEntity(
+				tektor.minecraft.chalith.entity.GateBlockTileEntity.class,
+				"Gate Block");
 
 	}
 
@@ -233,6 +243,9 @@ public class ChalithBase {
 		// Ice Trap
 		LanguageRegistry
 				.addName(new ItemStack(trapRune, 1, 1), "Ice Trap Rune");
+		
+		//Gate Rune
+		GameRegistry.registerBlock(gateBlock,"goalBlock");
 
 	}
 
