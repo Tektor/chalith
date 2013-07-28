@@ -89,7 +89,7 @@ public class UtilRune extends Item {
 		icon[0] = par1IconRegister.registerIcon("chalith:recallRune");
 		icon[1] = par1IconRegister.registerIcon("chalith:inventoryRune");
 		icon[2] = par1IconRegister.registerIcon("chalith:inventoryRuneAct");
-		icon[3] = par1IconRegister.registerIcon("chalith:gateRune");
+		icon[3] = par1IconRegister.registerIcon("chalith:recallGateRune");
 	}
 
 	@Override

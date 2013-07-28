@@ -164,6 +164,10 @@ public class ChalithBase {
 		GameRegistry.addShapedRecipe(new ItemStack(this.utilRune, 1, 0),
 				new Object[] { "ABC", " X ", "   ", 'A', diStack, 'B', inStack,
 						'C', nomStack, 'X', baseRuneStack });
+		// Recall Gate
+		GameRegistry.addShapedRecipe(new ItemStack(this.utilRune, 1, 3),
+				new Object[] { "ABC", " X ", "   ", 'A', diStack, 'B', alStack,
+						'C', nomStack, 'X', wildRuneStack });
 		// Rune of Inventory
 		GameRegistry.addShapedRecipe(new ItemStack(this.utilRune, 1, 1),
 				new Object[] { "ABC", " X ", "   ", 'A', welStack, 'B',
