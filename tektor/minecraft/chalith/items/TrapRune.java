@@ -112,23 +112,21 @@ public class TrapRune extends Item {
 			if (!par2EntityPlayer.canPlayerEdit(par4, par5, par6, par7,
 					par1ItemStack)) {
 				return false;
-			} else if (par3World.isRemote) {
-				return true;
 			} else {
 
 				par3World.setBlock(par4, par5, par6,
-						ChalithBase.trapRune.blockID, par1ItemStack.getItemDamage(), 3);
+						ChalithBase.trapRune.blockID);
 
 				--par1ItemStack.stackSize;
 				
 				TrapRuneTileEntity entity = (TrapRuneTileEntity) par3World
 						.getBlockTileEntity(par4, par5, par6);
-				if (entity != null) {;
+				if (entity != null) {
 					entity.owner = par2EntityPlayer.getEntityName();
-					entity.side = par7;
-					//par3World.markBlockForUpdate(par4, par5, par6);
-										
+					entity.side = par7;		
 				}
+				par3World.setBlockMetadataWithNotify(par4, par5, par6, par1ItemStack.getItemDamage(), 3);
+				par3World.markBlockForUpdate(par4, par5, par6);
 				
 			}
 			return true;

@@ -119,6 +119,7 @@ public class BlockTrapRune extends BlockContainer {
 		if (l == 5) {
 			this.setBlockBounds(f2, f2, f2, f5, f3, f3);
 		}
+		
 	}
 
 	/**
