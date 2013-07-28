@@ -154,19 +154,18 @@ public class UtilRune extends Item {
 					&& par1ItemStack.stackTagCompound.getBoolean("active")) {
 				if (par3EntityPlayer.inventory
 						.consumeInventoryItem(ChalithBase.lorynIngot.itemID)) {
-					if(!par2World.isRemote)
-					{
-					int startx, starty, startz;
-					int startdimension = par3EntityPlayer.dimension;
-					startx = (int) par3EntityPlayer.posX;
-					starty = (int) par3EntityPlayer.posY;
-					startz = (int) par3EntityPlayer.posZ;
-					int goalx = (int) par1ItemStack.stackTagCompound
-							.getDouble("x");
-					int goaly = (int) par1ItemStack.stackTagCompound
-							.getDouble("y");
-					int goalz = (int) par1ItemStack.stackTagCompound
-							.getDouble("z");
+					if (!par2World.isRemote) {
+						int startx, starty, startz;
+						int startdimension = par3EntityPlayer.dimension;
+						startx = (int) par3EntityPlayer.posX;
+						starty = (int) par3EntityPlayer.posY;
+						startz = (int) par3EntityPlayer.posZ;
+						int goalx = (int) par1ItemStack.stackTagCompound
+								.getDouble("x");
+						int goaly = (int) par1ItemStack.stackTagCompound
+								.getDouble("y");
+						int goalz = (int) par1ItemStack.stackTagCompound
+								.getDouble("z");
 						// set Position
 						EntityPlayerMP player = (EntityPlayerMP) par3EntityPlayer;
 						if (startdimension != par1ItemStack.stackTagCompound
@@ -183,7 +182,7 @@ public class UtilRune extends Item {
 									goalz);
 						}
 						timer = 10;
-					
+
 						// place start gate
 						par2World.setBlock(startx, starty, startz,
 								ChalithBase.gateBlock.blockID);
@@ -204,78 +203,76 @@ public class UtilRune extends Item {
 								.getDouble("z"), par1ItemStack.stackTagCompound
 								.getInteger("dimension"));
 						// place endgate
+						World endworld = player.worldObj;
 						boolean placed = false;
 						boolean placed2 = false;
-						if (par2World.getBlockId(goalx + 2, goaly, goalz) == 0
-								&& par2World.getBlockId(goalx + 2, goaly + 1,
+						if (endworld.getBlockId(goalx + 2, goaly, goalz) == 0
+								&& endworld.getBlockId(goalx + 2, goaly + 1,
 										goalz) == 0) {
-							par2World.setBlock(goalx + 2, goaly, goalz,
+							endworld.setBlock(goalx + 2, goaly, goalz,
 									ChalithBase.gateBlock.blockID);
-							par2World.setBlock(goalx + 2, goaly + 1, goalz,
+							endworld.setBlock(goalx + 2, goaly + 1, goalz,
 									ChalithBase.gateBlock.blockID);
 							goalx = goalx + 2;
 							placed = true;
-						} else if (par2World
-								.getBlockId(goalx - 2, goaly, goalz) == 0
-								&& par2World.getBlockId(goalx - 2, goaly + 1,
+						} else if (endworld.getBlockId(goalx - 2, goaly, goalz) == 0
+								&& endworld.getBlockId(goalx - 2, goaly + 1,
 										goalz) == 0) {
-							par2World.setBlock(goalx - 2, goaly, goalz,
+							endworld.setBlock(goalx - 2, goaly, goalz,
 									ChalithBase.gateBlock.blockID);
-							par2World.setBlock(goalx - 2, goaly + 1, goalz,
+							endworld.setBlock(goalx - 2, goaly + 1, goalz,
 									ChalithBase.gateBlock.blockID);
 							placed = true;
 							goalx = goalx - 2;
-						} else if (par2World
-								.getBlockId(goalx, goaly, goalz + 2) == 0
-								&& par2World.getBlockId(goalx, goaly + 1,
+						} else if (endworld.getBlockId(goalx, goaly, goalz + 2) == 0
+								&& endworld.getBlockId(goalx, goaly + 1,
 										goalz + 2) == 0) {
-							par2World.setBlock(goalx, goaly, goalz + 2,
+							endworld.setBlock(goalx, goaly, goalz + 2,
 									ChalithBase.gateBlock.blockID);
-							par2World.setBlock(goalx, goaly + 1, goalz + 2,
+							endworld.setBlock(goalx, goaly + 1, goalz + 2,
 									ChalithBase.gateBlock.blockID);
 							placed = true;
 							goalz = goalz + 2;
-						} else if (par2World
-								.getBlockId(goalx, goaly, goalz - 2) == 0
-								&& par2World.getBlockId(goalx, goaly + 1,
+						} else if (endworld.getBlockId(goalx, goaly, goalz - 2) == 0
+								&& endworld.getBlockId(goalx, goaly + 1,
 										goalz - 2) == 0) {
-							par2World.setBlock(goalx, goaly, goalz - 2,
+							endworld.setBlock(goalx, goaly, goalz - 2,
 									ChalithBase.gateBlock.blockID);
-							par2World.setBlock(goalx, goaly + 1, goalz - 2,
+							endworld.setBlock(goalx, goaly + 1, goalz - 2,
 									ChalithBase.gateBlock.blockID);
 							placed = true;
 							goalz = goalz - 2;
 						}
-						if (par2World.getBlockId(startx + 2, starty, startz) == 0
-								&& par2World.getBlockId(startx + 2, starty + 1,
+						if (endworld.getBlockId(startx + 2, starty, startz) == 0
+								&& endworld.getBlockId(startx + 2, starty + 1,
 										startz) == 0) {
 							startx = startx + 2;
 							placed2 = true;
-						} else if (par2World.getBlockId(startx - 2, starty,
+						} else if (endworld.getBlockId(startx - 2, starty,
 								startz) == 0
-								&& par2World.getBlockId(startx - 2, starty + 1,
+								&& endworld.getBlockId(startx - 2, starty + 1,
 										startz) == 0) {
 
 							startx = startx - 2;
 							placed2 = true;
-						} else if (par2World.getBlockId(startx, starty,
+						} else if (endworld.getBlockId(startx, starty,
 								startz + 2) == 0
-								&& par2World.getBlockId(startx, starty + 1,
+								&& endworld.getBlockId(startx, starty + 1,
 										startz + 2) == 0) {
 							placed2 = true;
 							startz = startz + 2;
-						} else if (par2World.getBlockId(startx, starty,
+						} else if (endworld.getBlockId(startx, starty,
 								startz - 2) == 0
-								&& par2World.getBlockId(startx, starty + 1,
+								&& endworld.getBlockId(startx, starty + 1,
 										startz - 2) == 0) {
 							placed2 = true;
 							startz = startz - 2;
 						}
 						if (placed && placed2) {
 
-							ent = (GateBlockTileEntity) par2World
+							ent = (GateBlockTileEntity) endworld
 									.getBlockTileEntity(goalx, goaly, goalz);
-							ent2 = (GateBlockTileEntity) par2World
+							ent2 = (GateBlockTileEntity) endworld
 									.getBlockTileEntity(goalx, goaly + 1, goalz);
 
 							ent.setGoal(startx, starty, startz, startdimension);
