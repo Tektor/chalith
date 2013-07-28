@@ -75,7 +75,7 @@ public class TrapRune extends Item {
 		default: return "??";
  		}
  	}
-
+	
 	/**
 	 * Callback for item usage. If the item does something special on right
 	 * clicking, he will have one of those. Return True if something happen and

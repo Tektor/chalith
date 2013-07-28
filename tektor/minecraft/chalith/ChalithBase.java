@@ -14,10 +14,12 @@ import tektor.minecraft.chalith.blocks.GateBlock;
 import tektor.minecraft.chalith.items.AvaeaIngot;
 import tektor.minecraft.chalith.items.BaseRune;
 import tektor.minecraft.chalith.items.ChalithOreItemBlock;
+import tektor.minecraft.chalith.items.SeedBase;
 import tektor.minecraft.chalith.items.TrapRune;
 import tektor.minecraft.chalith.items.ChalithIngotBase;
 import tektor.minecraft.chalith.items.UtilRune;
 import tektor.minecraft.chalith.items.RuneSymbol;
+import tektor.minecraft.chalith.plants.PlantBase;
 import tektor.minecraft.chalith.util.ItemStackFactory;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.Mod;
@@ -44,20 +46,22 @@ public class ChalithBase {
 	public static ChalithBase instance;
 
 	// blocks
-	public static int blockID1, blockID2, blockID3, blockID4;
+	public static int blockID1, blockID2, blockID3, blockID4, blockID5;
 	public static Block avaeaOre;
 	public static Block chalithBaseOre;
 	public static Block trapRune;
 	public static Block gateBlock;
+	public static Block plantBase;
 
 	// items
-	public static int itemID1, itemID2, itemID3, itemID4, itemID5, itemID6;
+	public static int itemID1, itemID2, itemID3, itemID4, itemID5, itemID6, itemID7;
 	public static Item avaeaIngot;
 	public static Item lorynIngot;
 	public static Item utilRune;
 	public static Item trapRuneItem;
 	public static Item baseRune;
 	public static Item runeSymbol;
+	public static Item seedBase;
 
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide = "tektor.minecraft.chalith.client.ChalithClientProxy", serverSide = "tektor.minecraft.chalith.ChalithCommonProxy")
@@ -76,6 +80,8 @@ public class ChalithBase {
 				.getInt();
 		blockID4 = config.get(Configuration.CATEGORY_BLOCK, "blockID4", 983)
 				.getInt();
+		blockID5 = config.get(Configuration.CATEGORY_BLOCK, "blockID5", 984)
+				.getInt();
 
 		itemID1 = config.get(Configuration.CATEGORY_ITEM, "itemID1", 7000)
 				.getInt();
@@ -89,6 +95,8 @@ public class ChalithBase {
 				.getInt();
 		itemID6 = config.get(Configuration.CATEGORY_ITEM, "itemID6", 7005)
 				.getInt();
+		itemID7 = config.get(Configuration.CATEGORY_ITEM, "itemID7", 7006)
+				.getInt();
 
 		config.save();
 	}
@@ -101,9 +109,21 @@ public class ChalithBase {
 		registerIngots();
 		registerRunes();
 		registerTileEntities();
+		registerPlants();
 		smeltingRecipes();
 		runeCrafting();
 		GameRegistry.registerWorldGenerator(new ChalithWorldGen());
+	}
+
+	private void registerPlants() {
+		//Israk
+		GameRegistry.registerBlock(plantBase, "plantBase");
+		LanguageRegistry.addName(new ItemStack(plantBase, 1, 0),
+				"Israk Root");
+		GameRegistry.registerItem(seedBase, "seedBase");
+		LanguageRegistry.addName(new ItemStack(seedBase, 1, 0), "Israk Root");
+		MinecraftForge.addGrassSeed(new ItemStack(seedBase, 1, 0), 7);
+		
 	}
 
 	private void initializeID() {
@@ -112,12 +132,15 @@ public class ChalithBase {
 		chalithBaseOre = new ChalithOreBase(blockID2);
 		trapRune = new BlockTrapRune(blockID3);
 		gateBlock = new GateBlock(blockID4);
+		plantBase = new PlantBase(blockID5);
 		// items
+		seedBase = new SeedBase(itemID7);
 		avaeaIngot = new AvaeaIngot(itemID1);
 		lorynIngot = new ChalithIngotBase(itemID2);
-		utilRune = new UtilRune(itemID3);
 		
+		utilRune = new UtilRune(itemID3);
 		trapRuneItem = new TrapRune(itemID6);
+		
 		baseRune = new BaseRune(itemID4);
 		runeSymbol = new RuneSymbol(itemID5);
 	}

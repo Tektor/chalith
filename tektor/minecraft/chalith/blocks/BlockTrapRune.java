@@ -33,7 +33,6 @@ public class BlockTrapRune extends BlockContainer {
 	public BlockTrapRune(int par1) {
 		super(par1, Material.rock);
 		setUnlocalizedName("fireTrapRuneBlock");
-		setCreativeTab(CreativeTabs.tabBlock);
 		setHardness(1.0F);
 
 	}
