@@ -16,7 +16,7 @@ public class GateBlockTileEntity extends TileEntity {
 	
 	public GateBlockTileEntity()
 	{
-		restTime = 3000;
+		restTime = 300;
 	}
 
 	@Override

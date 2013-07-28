@@ -12,12 +12,14 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldManager;
 import net.minecraft.world.WorldProvider;
 
 public class UtilRune extends Item {
@@ -31,6 +33,7 @@ public class UtilRune extends Item {
 		setMaxStackSize(1);
 		setCreativeTab(CreativeTabs.tabTools);
 		setUnlocalizedName("recallRune");
+		this.setHasSubtypes(true);
 		timer = 0;
 	}
 
@@ -89,27 +92,54 @@ public class UtilRune extends Item {
 		icon[3] = par1IconRegister.registerIcon("chalith:gateRune");
 	}
 
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
-			EntityPlayer par3EntityPlayer) {
+	@Override
+	public boolean onItemUse(ItemStack par1ItemStack,
+			EntityPlayer par3EntityPlayer, World par2World, int par4, int par5,
+			int par6, int par7, float par8, float par9, float par10) {
 		int id = par1ItemStack.getItemDamage();
+
 		if (0 == id) {
 			if (timer == 0) {
-				if ((!(par1ItemStack.stackTagCompound==null))&&par1ItemStack.stackTagCompound.getBoolean("active")) {
+				if ((!(par1ItemStack.stackTagCompound == null))
+						&& par1ItemStack.stackTagCompound.getBoolean("active")) {
 					if (par3EntityPlayer.inventory
 							.consumeInventoryItem(ChalithBase.avaeaIngot.itemID)) {
-						par3EntityPlayer.setPositionAndUpdate(
-								par1ItemStack.stackTagCompound.getDouble("x"),
-								par1ItemStack.stackTagCompound.getDouble("y"),
-								par1ItemStack.stackTagCompound.getDouble("z"));
+						if (!par2World.isRemote) {
+							int goalx = (int) par1ItemStack.stackTagCompound
+									.getDouble("x");
+							int goaly = (int) par1ItemStack.stackTagCompound
+									.getDouble("y");
+							int goalz = (int) par1ItemStack.stackTagCompound
+									.getDouble("z");
+							int startdimension = par3EntityPlayer.dimension;
 
+							// set Position
+							EntityPlayerMP player = (EntityPlayerMP) par3EntityPlayer;
+							if (startdimension != par1ItemStack.stackTagCompound
+									.getInteger("dimension")) {
+								player.mcServer
+										.getConfigurationManager()
+										.transferPlayerToDimension(
+												player,
+												par1ItemStack.stackTagCompound
+														.getInteger("dimension"));
+								par3EntityPlayer.setPositionAndUpdate(goalx,
+										goaly, goalz);
+							} else {
+								par3EntityPlayer.setPositionAndUpdate(goalx,
+										goaly, goalz);
+							}
+
+						}
 					} else {
 						par3EntityPlayer
 								.addChatMessage("Not enough material to use this.");
 					}
-					timer = 100;
 
 				} else {
 					par1ItemStack.stackTagCompound = new NBTTagCompound();
+					par1ItemStack.stackTagCompound.setInteger("dimension",
+							par3EntityPlayer.dimension);
 					par1ItemStack.stackTagCompound.setDouble("x",
 							par3EntityPlayer.posX);
 					par1ItemStack.stackTagCompound.setDouble("y",
@@ -119,10 +149,13 @@ public class UtilRune extends Item {
 					par1ItemStack.stackTagCompound.setBoolean("active", true);
 				}
 			}
-		} else if (3 == id) {
-			if ((!(par1ItemStack.stackTagCompound==null))&&par1ItemStack.stackTagCompound.getBoolean("active")) {
+		} else if (3 == id && timer == 0) {
+			if ((!(par1ItemStack.stackTagCompound == null))
+					&& par1ItemStack.stackTagCompound.getBoolean("active")) {
 				if (par3EntityPlayer.inventory
 						.consumeInventoryItem(ChalithBase.lorynIngot.itemID)) {
+					if(!par2World.isRemote)
+					{
 					int startx, starty, startz;
 					int startdimension = par3EntityPlayer.dimension;
 					startx = (int) par3EntityPlayer.posX;
@@ -134,121 +167,129 @@ public class UtilRune extends Item {
 							.getDouble("y");
 					int goalz = (int) par1ItemStack.stackTagCompound
 							.getDouble("z");
-					// set Position
-					par3EntityPlayer.dimension = par1ItemStack.stackTagCompound
-							.getInteger("dimension");
-					par3EntityPlayer.setPositionAndUpdate(goalx, goaly, goalz);
-					// place start gate
-					par2World.setBlock(startx, starty, startz,
-							ChalithBase.gateBlock.blockID);
-					par2World.setBlock(startx, starty + 1, startz,
-							ChalithBase.gateBlock.blockID);
-					GateBlockTileEntity ent = (GateBlockTileEntity) par2World
-							.getBlockTileEntity(startx, starty, startz);
-					GateBlockTileEntity ent2 = (GateBlockTileEntity) par2World
-							.getBlockTileEntity(startx, starty+1, startz);
-
-					ent.setGoal(par1ItemStack.stackTagCompound.getDouble("x"),
-							par1ItemStack.stackTagCompound.getDouble("y"),
-							par1ItemStack.stackTagCompound.getDouble("z"),
-							par1ItemStack.stackTagCompound
-									.getInteger("dimension"));
-					ent2.setGoal(par1ItemStack.stackTagCompound.getDouble("x"),
-							par1ItemStack.stackTagCompound.getDouble("y"),
-							par1ItemStack.stackTagCompound.getDouble("z"),
-							par1ItemStack.stackTagCompound
-									.getInteger("dimension"));
-					// place endgate
-					boolean placed =false;
-					boolean placed2 = false;
-					if (par2World.getBlockId(goalx + 1, goaly, goalz) == 0
-							&& par2World
-									.getBlockId(goalx + 1, goaly + 1, goalz) == 0) {
-						par2World.setBlock(goalx + 1, goaly, goalz,
-								ChalithBase.gateBlock.blockID);
-						par2World.setBlock(goalx + 1, goaly + 1, goalz,
-								ChalithBase.gateBlock.blockID);
-						goalx++;
-						placed = true;
-					} else if (par2World.getBlockId(goalx - 1, goaly, goalz) == 0
-							&& par2World
-									.getBlockId(goalx - 1, goaly + 1, goalz) == 0) {
-						par2World.setBlock(goalx - 1, goaly, goalz,
-								ChalithBase.gateBlock.blockID);
-						par2World.setBlock(goalx - 1, goaly + 1, goalz,
-								ChalithBase.gateBlock.blockID);
-						placed = true;
-						goalx--;
-					}
-					else if (par2World.getBlockId(goalx, goaly, goalz+1) == 0
-							&& par2World
-									.getBlockId(goalx, goaly + 1, goalz+1) == 0) {
-						par2World.setBlock(goalx, goaly, goalz+1,
-								ChalithBase.gateBlock.blockID);
-						par2World.setBlock(goalx, goaly + 1, goalz+1,
-								ChalithBase.gateBlock.blockID);
-						placed = true;
-						goalz++;
-					}
-					else if (par2World.getBlockId(goalx, goaly, goalz-1) == 0
-							&& par2World
-									.getBlockId(goalx, goaly + 1, goalz-1) == 0) {
-						par2World.setBlock(goalx, goaly, goalz-1,
-								ChalithBase.gateBlock.blockID);
-						par2World.setBlock(goalx, goaly + 1, goalz-1,
-								ChalithBase.gateBlock.blockID);
-						placed = true;
-						goalz--;
-					}
-					if (par2World.getBlockId(startx + 1, starty, startz) == 0
-							&& par2World
-									.getBlockId(startx + 1, starty + 1, startz) == 0) {
-						startx++;
-						placed2 = true;
-					} else if (par2World.getBlockId(startx - 1, starty, startz) == 0
-							&& par2World
-									.getBlockId(startx - 1, starty + 1, startz) == 0) {
-						
-						startx--;
-						placed2 = true;
-					}
-					else if (par2World.getBlockId(startx, starty, startz+1) == 0
-							&& par2World
-									.getBlockId(startx, starty + 1, startz+1) == 0) {
-						placed2 = true;
-						startz++;
-					}
-					else if (par2World.getBlockId(startx, starty,startz-1) == 0
-							&& par2World
-									.getBlockId(startx, starty + 1, startz-1) == 0) {
-						placed2 = true;
-						startz--;
-					}
+						// set Position
+						EntityPlayerMP player = (EntityPlayerMP) par3EntityPlayer;
+						if (startdimension != par1ItemStack.stackTagCompound
+								.getInteger("dimension")) {
+							player.mcServer.getConfigurationManager()
+									.transferPlayerToDimension(
+											player,
+											par1ItemStack.stackTagCompound
+													.getInteger("dimension"));
+							par3EntityPlayer.setPositionAndUpdate(goalx, goaly,
+									goalz);
+						} else {
+							par3EntityPlayer.setPositionAndUpdate(goalx, goaly,
+									goalz);
+						}
+						timer = 10;
 					
-					if(placed && placed2)
-					{
-						
-						ent = (GateBlockTileEntity) par2World
-								.getBlockTileEntity(goalx, goaly, goalz);
-						ent2 = (GateBlockTileEntity) par2World
-								.getBlockTileEntity(goalx, goaly+1, goalz);
+						// place start gate
+						par2World.setBlock(startx, starty, startz,
+								ChalithBase.gateBlock.blockID);
+						par2World.setBlock(startx, starty + 1, startz,
+								ChalithBase.gateBlock.blockID);
+						GateBlockTileEntity ent = (GateBlockTileEntity) par2World
+								.getBlockTileEntity(startx, starty, startz);
+						GateBlockTileEntity ent2 = (GateBlockTileEntity) par2World
+								.getBlockTileEntity(startx, starty + 1, startz);
+						ent.setGoal(par1ItemStack.stackTagCompound
+								.getDouble("x"), par1ItemStack.stackTagCompound
+								.getDouble("y"), par1ItemStack.stackTagCompound
+								.getDouble("z"), par1ItemStack.stackTagCompound
+								.getInteger("dimension"));
+						ent2.setGoal(par1ItemStack.stackTagCompound
+								.getDouble("x"), par1ItemStack.stackTagCompound
+								.getDouble("y"), par1ItemStack.stackTagCompound
+								.getDouble("z"), par1ItemStack.stackTagCompound
+								.getInteger("dimension"));
+						// place endgate
+						boolean placed = false;
+						boolean placed2 = false;
+						if (par2World.getBlockId(goalx + 2, goaly, goalz) == 0
+								&& par2World.getBlockId(goalx + 2, goaly + 1,
+										goalz) == 0) {
+							par2World.setBlock(goalx + 2, goaly, goalz,
+									ChalithBase.gateBlock.blockID);
+							par2World.setBlock(goalx + 2, goaly + 1, goalz,
+									ChalithBase.gateBlock.blockID);
+							goalx = goalx + 2;
+							placed = true;
+						} else if (par2World
+								.getBlockId(goalx - 2, goaly, goalz) == 0
+								&& par2World.getBlockId(goalx - 2, goaly + 1,
+										goalz) == 0) {
+							par2World.setBlock(goalx - 2, goaly, goalz,
+									ChalithBase.gateBlock.blockID);
+							par2World.setBlock(goalx - 2, goaly + 1, goalz,
+									ChalithBase.gateBlock.blockID);
+							placed = true;
+							goalx = goalx - 2;
+						} else if (par2World
+								.getBlockId(goalx, goaly, goalz + 2) == 0
+								&& par2World.getBlockId(goalx, goaly + 1,
+										goalz + 2) == 0) {
+							par2World.setBlock(goalx, goaly, goalz + 2,
+									ChalithBase.gateBlock.blockID);
+							par2World.setBlock(goalx, goaly + 1, goalz + 2,
+									ChalithBase.gateBlock.blockID);
+							placed = true;
+							goalz = goalz + 2;
+						} else if (par2World
+								.getBlockId(goalx, goaly, goalz - 2) == 0
+								&& par2World.getBlockId(goalx, goaly + 1,
+										goalz - 2) == 0) {
+							par2World.setBlock(goalx, goaly, goalz - 2,
+									ChalithBase.gateBlock.blockID);
+							par2World.setBlock(goalx, goaly + 1, goalz - 2,
+									ChalithBase.gateBlock.blockID);
+							placed = true;
+							goalz = goalz - 2;
+						}
+						if (par2World.getBlockId(startx + 2, starty, startz) == 0
+								&& par2World.getBlockId(startx + 2, starty + 1,
+										startz) == 0) {
+							startx = startx + 2;
+							placed2 = true;
+						} else if (par2World.getBlockId(startx - 2, starty,
+								startz) == 0
+								&& par2World.getBlockId(startx - 2, starty + 1,
+										startz) == 0) {
 
-						ent.setGoal(startx,
-								starty,
-								startz,
-								startdimension);
-						ent2.setGoal(startx,
-								starty,
-								startz,
-								startdimension);
+							startx = startx - 2;
+							placed2 = true;
+						} else if (par2World.getBlockId(startx, starty,
+								startz + 2) == 0
+								&& par2World.getBlockId(startx, starty + 1,
+										startz + 2) == 0) {
+							placed2 = true;
+							startz = startz + 2;
+						} else if (par2World.getBlockId(startx, starty,
+								startz - 2) == 0
+								&& par2World.getBlockId(startx, starty + 1,
+										startz - 2) == 0) {
+							placed2 = true;
+							startz = startz - 2;
+						}
+						if (placed && placed2) {
+
+							ent = (GateBlockTileEntity) par2World
+									.getBlockTileEntity(goalx, goaly, goalz);
+							ent2 = (GateBlockTileEntity) par2World
+									.getBlockTileEntity(goalx, goaly + 1, goalz);
+
+							ent.setGoal(startx, starty, startz, startdimension);
+							ent2.setGoal(startx, starty, startz, startdimension);
+							par3EntityPlayer.setItemInUse(par1ItemStack,
+									par1ItemStack.getMaxItemUseDuration());
+						}
 					}
 				} else {
 					par3EntityPlayer
 							.addChatMessage("Not enough material to use this.");
 				}
-				timer = 100;
 			} else {
-				
+
 				par1ItemStack.stackTagCompound = new NBTTagCompound();
 				par1ItemStack.stackTagCompound.setDouble("x",
 						par3EntityPlayer.posX);
@@ -263,8 +304,16 @@ public class UtilRune extends Item {
 			}
 
 		}
-		return par1ItemStack;
+		return true;
 
+	}
+
+	@Override
+	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
+			EntityPlayer par3EntityPlayer) {
+		par3EntityPlayer.setItemInUse(par1ItemStack,
+				par1ItemStack.getMaxItemUseDuration());
+		return par1ItemStack;
 	}
 
 	public void onUpdate(ItemStack par1ItemStack, World par2World,

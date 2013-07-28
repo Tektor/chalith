@@ -7,6 +7,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -56,8 +57,23 @@ public class GateBlock extends BlockContainer {
 		GateBlockTileEntity ent = (GateBlockTileEntity) par1World.getBlockTileEntity(par2, par3, par4);
 		if (ent != null)
 		{
-			par5Entity.setWorld(WorldProvider.getProviderForDimension(ent.dimension).worldObj);
-			par5Entity.setPosition(ent.goalX, ent.goalY, ent.goalZ);
+			if (!par1World.isRemote&&par5Entity instanceof EntityPlayerMP) {
+				// set Position
+				EntityPlayerMP player = (EntityPlayerMP) par5Entity;
+				int startdimension = player.dimension;
+				if (startdimension != ent.dimension) {
+					player.mcServer
+							.getConfigurationManager()
+							.transferPlayerToDimension(
+									player,
+									ent.dimension);
+					player.setPositionAndUpdate(ent.goalX,
+							ent.goalY, ent.goalZ);
+				} else {
+					player.setPositionAndUpdate(ent.goalX,
+							ent.goalY, ent.goalZ);
+				}
+		}
 		}
 	}
 
