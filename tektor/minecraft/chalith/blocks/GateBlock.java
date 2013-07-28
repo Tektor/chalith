@@ -27,9 +27,21 @@ public class GateBlock extends BlockContainer {
 		return true;
 	}
 	
+	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
+	
+	@Override
+	public boolean renderAsNormalBlock()
+	{
+		return false;
+	}
+	
+	public int getRenderBlockPass()
+    {
+        return 1;
+    }
 	/**
      * Returns a bounding box from the pool of bounding boxes (this means this box can change after the pool has been
      * cleared to be reused)
