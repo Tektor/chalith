@@ -14,6 +14,7 @@ import tektor.minecraft.chalith.blocks.GateBlock;
 import tektor.minecraft.chalith.items.AvaeaIngot;
 import tektor.minecraft.chalith.items.BaseRune;
 import tektor.minecraft.chalith.items.ChalithOreItemBlock;
+import tektor.minecraft.chalith.items.HerbalByProducts;
 import tektor.minecraft.chalith.items.SeedBase;
 import tektor.minecraft.chalith.items.TrapRune;
 import tektor.minecraft.chalith.items.ChalithIngotBase;
@@ -54,7 +55,7 @@ public class ChalithBase {
 	public static Block plantBase;
 
 	// items
-	public static int itemID1, itemID2, itemID3, itemID4, itemID5, itemID6, itemID7;
+	public static int itemID1, itemID2, itemID3, itemID4, itemID5, itemID6, itemID7,itemID8;
 	public static Item avaeaIngot;
 	public static Item lorynIngot;
 	public static Item utilRune;
@@ -62,6 +63,7 @@ public class ChalithBase {
 	public static Item baseRune;
 	public static Item runeSymbol;
 	public static Item seedBase;
+	public static Item herbalByProduct;
 
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide = "tektor.minecraft.chalith.client.ChalithClientProxy", serverSide = "tektor.minecraft.chalith.ChalithCommonProxy")
@@ -97,6 +99,8 @@ public class ChalithBase {
 				.getInt();
 		itemID7 = config.get(Configuration.CATEGORY_ITEM, "itemID7", 7006)
 				.getInt();
+		itemID8 = config.get(Configuration.CATEGORY_ITEM, "itemID8", 7007)
+				.getInt();
 
 		config.save();
 	}
@@ -123,6 +127,8 @@ public class ChalithBase {
 		GameRegistry.registerItem(seedBase, "seedBase");
 		LanguageRegistry.addName(new ItemStack(seedBase, 1, 0), "Israk Root");
 		MinecraftForge.addGrassSeed(new ItemStack(seedBase, 1, 0), 7);
+		GameRegistry.registerItem(herbalByProduct, "herbalByProduct");
+		
 		
 	}
 
@@ -135,6 +141,7 @@ public class ChalithBase {
 		plantBase = new PlantBase(blockID5);
 		// items
 		seedBase = new SeedBase(itemID7);
+		herbalByProduct = new HerbalByProducts(itemID8);
 		avaeaIngot = new AvaeaIngot(itemID1);
 		lorynIngot = new ChalithIngotBase(itemID2);
 		
