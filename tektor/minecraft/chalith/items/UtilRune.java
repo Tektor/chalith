@@ -7,7 +7,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import tektor.minecraft.chalith.ChalithBase;
 import tektor.minecraft.chalith.entity.GateBlockTileEntity;
-import tektor.minecraft.chalith.util.ItemStackFactory;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -102,9 +101,32 @@ public class UtilRune extends Item {
 			if (timer == 0) {
 				if ((!(par1ItemStack.stackTagCompound == null))
 						&& par1ItemStack.stackTagCompound.getBoolean("active")) {
-					if (par3EntityPlayer.inventory
-							.consumeInventoryItem(ChalithBase.avaeaIngot.itemID)) {
+					ItemStack[] inv = par3EntityPlayer.inventory.mainInventory;
+					boolean foundA = false;
+					boolean foundB = false;
+					int first = 0;
+					int second = 0;
+					for (int i= 0; i<32; i++) {
+						// Israk Root
+						if (inv[i] != null && inv[i].itemID == ChalithBase.seedBase.itemID
+								&& inv[i].getItemDamage() == 0) {
+							foundA = true;
+							first = i;
+						}
+						//Israk Leaf
+						else if (inv[i] != null && inv[i].itemID == ChalithBase.herbalByProduct.itemID
+								&& inv[i].getItemDamage() == 0) {
+							foundB = true;
+							second = i;
+						}
+						if(foundA && foundB) break;
+					}
+
+					if (foundA && foundB) {
+						par3EntityPlayer.inventory.decrStackSize(first, 1);
+						par3EntityPlayer.inventory.decrStackSize(second, 1);
 						if (!par2World.isRemote) {
+							
 							int goalx = (int) par1ItemStack.stackTagCompound
 									.getDouble("x");
 							int goaly = (int) par1ItemStack.stackTagCompound

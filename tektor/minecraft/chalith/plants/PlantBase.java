@@ -63,7 +63,6 @@ public class PlantBase extends Block{
 	public void updateTick(World world, int x, int y, int z, Random random)
 	{
 		if(world.getBlockMetadata(x,y,z) == 1) return;
-		System.out.println(world.getLightBrightness(x, y, z));
 		if(world.getBlockLightValue(x, y+1, z)<9) return;
 		int grow = 25 - world.getBlockMetadata(x, y-1, z);
 		if(random.nextInt(grow) == 0)
