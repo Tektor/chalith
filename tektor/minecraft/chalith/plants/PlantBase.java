@@ -105,7 +105,7 @@ public class PlantBase extends Block{
         {
             for (int n = 0; n < 3 + fortune; n++)
             {
-                if (world.rand.nextInt(5) <= metadata)
+                if (world.rand.nextInt(2) == 0)
                 {
                     ret.add(new ItemStack(this.getSeedItem(), 1, 0));
                 }
