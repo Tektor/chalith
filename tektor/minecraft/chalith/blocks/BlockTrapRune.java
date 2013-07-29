@@ -83,6 +83,10 @@ public class BlockTrapRune extends BlockContainer {
 		return false;
 	}
 
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
+    {
+        return null;
+    }
 	/**
 	 * Updates the blocks bounds based on its current state. Args: world, x, y,
 	 * z
@@ -97,7 +101,7 @@ public class BlockTrapRune extends BlockContainer {
 		}
 		float f2 = 0.0F;
 		float f3 = 1.0F;
-		float f5 = 0.0003F;
+		float f5 = 0.01F;
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 
 		if (l == 1) {
