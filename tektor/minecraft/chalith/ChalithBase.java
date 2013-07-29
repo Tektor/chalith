@@ -7,13 +7,14 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
-import tektor.minecraft.chalith.blocks.Bloodstone;
+import tektor.minecraft.chalith.blocks.ChalithStoneBase;
 import tektor.minecraft.chalith.blocks.BlockTrapRune;
 import tektor.minecraft.chalith.blocks.ChalithOreBase;
 import tektor.minecraft.chalith.blocks.GateBlock;
 import tektor.minecraft.chalith.items.AvaeaIngot;
 import tektor.minecraft.chalith.items.BaseRune;
 import tektor.minecraft.chalith.items.ChalithOreItemBlock;
+import tektor.minecraft.chalith.items.ChalithStoneItemBlock;
 import tektor.minecraft.chalith.items.HerbalByProducts;
 import tektor.minecraft.chalith.items.SeedBase;
 import tektor.minecraft.chalith.items.TrapRune;
@@ -122,8 +123,12 @@ public class ChalithBase {
 	private void registerMisc() {
 		//bloodstone
 		MinecraftForge.setBlockHarvestLevel(bloodstone, "pickaxe", 1);
-		GameRegistry.registerBlock(bloodstone, "bloodstone");
+		GameRegistry.registerBlock(bloodstone, ChalithStoneItemBlock.class,
+				"bloodstone");
 		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 0), "Bloodstone");
+		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 1), "Bloodstone Cobble");
+		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 2), "Corinnstone");
+		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 3), "Corinnstone Cobble");
 	}
 
 	private void registerPlants() {
@@ -139,7 +144,7 @@ public class ChalithBase {
 
 	private void initializeID() {
 		// blocks
-		bloodstone = new Bloodstone(blockID1);
+		bloodstone = new ChalithStoneBase(blockID1);
 		chalithBaseOre = new ChalithOreBase(blockID2);
 		trapRune = new BlockTrapRune(blockID3);
 		gateBlock = new GateBlock(blockID4);
@@ -319,6 +324,12 @@ public class ChalithBase {
 		FurnaceRecipes.smelting().addSmelting(
 				ChalithBase.chalithBaseOre.blockID, 2,
 				new ItemStack(ChalithBase.lorynIngot, 1, 2), 0.3F);
+		FurnaceRecipes.smelting().addSmelting(
+				ChalithBase.bloodstone.blockID, 1,
+				new ItemStack(ChalithBase.bloodstone, 1, 0), 0.2F);
+		FurnaceRecipes.smelting().addSmelting(
+				ChalithBase.bloodstone.blockID, 3,
+				new ItemStack(ChalithBase.lorynIngot, 1, 2), 0.2F);
 
 	}
 
