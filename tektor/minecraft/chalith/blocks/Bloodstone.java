@@ -2,18 +2,19 @@ package tektor.minecraft.chalith.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 
-public class AvaeaOre extends BlockOre{
+public class Bloodstone extends Block{
 
-	public AvaeaOre(int id) {
-		super(id);
+	public Bloodstone(int id) {
+		super(id,Material.rock);
 
 		setHardness(2.2F);
 		setStepSound(Block.soundStoneFootstep);
-		setUnlocalizedName("avaeaOre");
+		setUnlocalizedName("bloodstone");
 		setCreativeTab(CreativeTabs.tabBlock);
-		func_111022_d("chalith:avaeaOre");
+		func_111022_d("chalith:bloodstone");
 	}
 	
 	

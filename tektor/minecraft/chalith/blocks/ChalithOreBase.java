@@ -13,7 +13,7 @@ import net.minecraft.util.Icon;
 
 public class ChalithOreBase extends BlockOre{
 
-	private Icon[] icon = new Icon[2];
+	private Icon[] icon = new Icon[3];
 	public ChalithOreBase(int id) {
 		super(id);
 		setHardness(3.2F);
@@ -27,6 +27,7 @@ public class ChalithOreBase extends BlockOre{
 	public void registerIcons(IconRegister par1IconRegister) {
 		icon[0] = par1IconRegister.registerIcon("chalith:lorynOre");
 		icon[1] = par1IconRegister.registerIcon("chalith:sorfynOre");
+		icon[2] = par1IconRegister.registerIcon("chalith:avaeaOre");
 	}
 	
 	@Override
@@ -42,6 +43,7 @@ public class ChalithOreBase extends BlockOre{
 
 		subItems.add(new ItemStack(this, 1, 0));
 		subItems.add(new ItemStack(this, 1, 1));
+		subItems.add(new ItemStack(this, 1, 2));
 	}
 	
 	@Override

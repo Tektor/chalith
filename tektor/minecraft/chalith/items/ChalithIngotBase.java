@@ -12,7 +12,7 @@ import net.minecraft.util.Icon;
 
 public class ChalithIngotBase extends Item {
 
-	private Icon[] icon = new Icon[2];
+	private Icon[] icon = new Icon[3];
 	
 	public ChalithIngotBase(int id) {
 		super(id);
@@ -48,7 +48,8 @@ public class ChalithIngotBase extends Item {
 		switch(stack.getItemDamage())
 		{
 		case 0: return "lorynIngot";
-		case 1: return "sorfynOre";
+		case 1: return "sorfynIngot";
+		case 2: return "avaeaIngot";
 		default: return "??";
 		}
 		
@@ -61,6 +62,7 @@ public class ChalithIngotBase extends Item {
  		{
  		case 0: return "Loryn Ingot";
 		case 1: return "Sorfyn Ingot";
+		case 2: return "Avaea Ingot";
 		default: return "??";
  		}
  	}
@@ -69,6 +71,7 @@ public class ChalithIngotBase extends Item {
 	public void registerIcons(IconRegister par1IconRegister) {
 		icon[0] = par1IconRegister.registerIcon("chalith:lorynIngot");
 		icon[1] = par1IconRegister.registerIcon("chalith:sorfynIngot");
+		icon[2] = par1IconRegister.registerIcon("chalith:avaeaIngot");
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -77,6 +80,7 @@ public class ChalithIngotBase extends Item {
 		
 			subItems.add(new ItemStack(this, 1, 0));
 			subItems.add(new ItemStack(this, 1, 1));
+			subItems.add(new ItemStack(this, 1, 2));
 	}
 
 }

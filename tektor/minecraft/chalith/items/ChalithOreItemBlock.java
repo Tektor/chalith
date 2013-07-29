@@ -19,6 +19,7 @@ public class ChalithOreItemBlock extends ItemBlock{
 		{
 		case 0: name = "Loryn Ore";break;
 		case 1: name = "Sorfyn Ore";break;
+		case 2: name = "Avaea Ore";break;
 		}
 		return name;
 		
