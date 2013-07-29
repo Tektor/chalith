@@ -3,9 +3,9 @@ package tektor.minecraft.chalith.items;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
-public class ChalithOreItemBlock extends ItemBlock{
+public class ChalithStoneItemBlock extends ItemBlock{
 
-	public ChalithOreItemBlock(int par1) {
+	public ChalithStoneItemBlock(int par1) {
 		super(par1);
 		setHasSubtypes(true);
 	}
@@ -17,9 +17,10 @@ public class ChalithOreItemBlock extends ItemBlock{
 		
 		switch(stack.getItemDamage())
 		{
-		case 0: name = "Loryn Ore";break;
-		case 1: name = "Sorfyn Ore";break;
-		case 2: name = "Avaea Ore";break;
+		case 0: name = "Bloodstone";break;
+		case 1: name = "Bloodstone Cobble";break;
+		case 2: name = "Corinnstone";break;
+		case 3: name = "Corinnstone Cobble";break;
 		}
 		return name;
 		
@@ -29,5 +30,4 @@ public class ChalithOreItemBlock extends ItemBlock{
 	{
 		return met;
 	}
-
 }

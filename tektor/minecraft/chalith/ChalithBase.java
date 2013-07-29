@@ -7,13 +7,14 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
-import tektor.minecraft.chalith.blocks.AvaeaOre;
+import tektor.minecraft.chalith.blocks.ChalithStoneBase;
 import tektor.minecraft.chalith.blocks.BlockTrapRune;
 import tektor.minecraft.chalith.blocks.ChalithOreBase;
 import tektor.minecraft.chalith.blocks.GateBlock;
 import tektor.minecraft.chalith.items.AvaeaIngot;
 import tektor.minecraft.chalith.items.BaseRune;
 import tektor.minecraft.chalith.items.ChalithOreItemBlock;
+import tektor.minecraft.chalith.items.ChalithStoneItemBlock;
 import tektor.minecraft.chalith.items.HerbalByProducts;
 import tektor.minecraft.chalith.items.SeedBase;
 import tektor.minecraft.chalith.items.TrapRune;
@@ -36,25 +37,25 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.6.0")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.6.3")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class ChalithBase {
 
-
-	//instance
+	// instance
 	@Instance("ChalithBase")
 	public static ChalithBase instance;
 
 	// blocks
 	public static int blockID1, blockID2, blockID3, blockID4, blockID5;
-	public static Block avaeaOre;
+	public static Block bloodstone;
 	public static Block chalithBaseOre;
 	public static Block trapRune;
 	public static Block gateBlock;
 	public static Block plantBase;
 
 	// items
-	public static int itemID1, itemID2, itemID3, itemID4, itemID5, itemID6, itemID7,itemID8;
+	public static int itemID1, itemID2, itemID3, itemID4, itemID5, itemID6,
+			itemID7, itemID8;
 	public static Item avaeaIngot;
 	public static Item lorynIngot;
 	public static Item utilRune;
@@ -113,27 +114,37 @@ public class ChalithBase {
 		registerRunes();
 		registerTileEntities();
 		registerPlants();
+		registerMisc();
 		smeltingRecipes();
 		runeCrafting();
 		GameRegistry.registerWorldGenerator(new ChalithWorldGen());
 	}
 
+	private void registerMisc() {
+		//bloodstone
+		MinecraftForge.setBlockHarvestLevel(bloodstone, "pickaxe", 1);
+		GameRegistry.registerBlock(bloodstone, ChalithStoneItemBlock.class,
+				"bloodstone");
+		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 0), "Bloodstone");
+		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 1), "Bloodstone Cobble");
+		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 2), "Corinnstone");
+		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 3), "Corinnstone Cobble");
+	}
+
 	private void registerPlants() {
-		//Israk
+		// Israk
 		GameRegistry.registerBlock(plantBase, "plantBase");
-		LanguageRegistry.addName(new ItemStack(plantBase, 1, 0),
-				"Israk Root");
+		LanguageRegistry.addName(new ItemStack(plantBase, 1, 0), "Israk Root");
 		GameRegistry.registerItem(seedBase, "seedBase");
 		LanguageRegistry.addName(new ItemStack(seedBase, 1, 0), "Israk Root");
 		MinecraftForge.addGrassSeed(new ItemStack(seedBase, 1, 0), 7);
 		GameRegistry.registerItem(herbalByProduct, "herbalByProduct");
-		
-		
+
 	}
 
 	private void initializeID() {
 		// blocks
-		avaeaOre = new AvaeaOre(blockID1);
+		bloodstone = new ChalithStoneBase(blockID1);
 		chalithBaseOre = new ChalithOreBase(blockID2);
 		trapRune = new BlockTrapRune(blockID3);
 		gateBlock = new GateBlock(blockID4);
@@ -143,10 +154,10 @@ public class ChalithBase {
 		herbalByProduct = new HerbalByProducts(itemID8);
 		avaeaIngot = new AvaeaIngot(itemID1);
 		lorynIngot = new ChalithIngotBase(itemID2);
-		
+
 		utilRune = new UtilRune(itemID3);
 		trapRuneItem = new TrapRune(itemID6);
-		
+
 		baseRune = new BaseRune(itemID4);
 		runeSymbol = new RuneSymbol(itemID5);
 	}
@@ -174,7 +185,7 @@ public class ChalithBase {
 		ItemStack onStack = new ItemStack(this.runeSymbol, 1, 11);
 		ItemStack voStack = new ItemStack(this.runeSymbol, 1, 13);
 		ItemStack welStack = new ItemStack(this.runeSymbol, 1, 15);
-		ItemStack avaeaIngotStack = new ItemStack(this.avaeaIngot, 1, 0);
+		ItemStack avaeaIngotStack = new ItemStack(this.lorynIngot, 1, 2);
 		ItemStack lorynIngotStack = new ItemStack(this.lorynIngot, 1, 0);
 		ItemStack sorfynIngotStack = new ItemStack(this.lorynIngot, 1, 1);
 		ItemStack baseRuneStack = new ItemStack(this.baseRune, 1, 0);
@@ -275,58 +286,75 @@ public class ChalithBase {
 		// Ice Trap
 		LanguageRegistry
 				.addName(new ItemStack(trapRune, 1, 1), "Ice Trap Rune");
-		
-		//Gate Rune
-		GameRegistry.registerBlock(gateBlock,"goalBlock");
+
+		// Gate Rune
+		GameRegistry.registerBlock(gateBlock, "goalBlock");
 
 	}
 
 	private void registerIngots() {
-		// avaea
-		LanguageRegistry.addName(avaeaIngot, "Avaea Ingot");
-		GameRegistry.registerItem(avaeaIngot, "avaeaIngot");
-		OreDictionary.registerOre("ingotAvaea", new ItemStack(avaeaIngot));
+
 		// loryn
 
 		GameRegistry.registerItem(lorynIngot, "lorynIngot");
 		LanguageRegistry
 				.addName(new ItemStack(lorynIngot, 1, 0), "Loryn Ingot");
-		LanguageRegistry.addName(new ItemStack(lorynIngot, 1, 1),
-				"Sorfyn Ingot");
+
 		OreDictionary
 				.registerOre("ingotLoryn", new ItemStack(lorynIngot, 1, 0));
-
+		// sorfyn
+		LanguageRegistry.addName(new ItemStack(lorynIngot, 1, 1),
+				"Sorfyn Ingot");
+		OreDictionary.registerOre("ingotSorfyn",
+				new ItemStack(lorynIngot, 1, 1));
+		// avaea
+		LanguageRegistry
+				.addName(new ItemStack(lorynIngot, 1, 2), "Avaea Ingot");
+		OreDictionary
+				.registerOre("ingotAvaea", new ItemStack(lorynIngot, 1, 2));
 	}
 
 	private void smeltingRecipes() {
-		GameRegistry.addSmelting(ChalithBase.avaeaOre.blockID, new ItemStack(
-				ChalithBase.avaeaIngot), 0.4f);
 		FurnaceRecipes.smelting().addSmelting(
 				ChalithBase.chalithBaseOre.blockID, 0,
 				new ItemStack(ChalithBase.lorynIngot, 1, 0), 0.4F);
 		FurnaceRecipes.smelting().addSmelting(
 				ChalithBase.chalithBaseOre.blockID, 1,
 				new ItemStack(ChalithBase.lorynIngot, 1, 1), 0.6F);
+		FurnaceRecipes.smelting().addSmelting(
+				ChalithBase.chalithBaseOre.blockID, 2,
+				new ItemStack(ChalithBase.lorynIngot, 1, 2), 0.3F);
+		FurnaceRecipes.smelting().addSmelting(
+				ChalithBase.bloodstone.blockID, 1,
+				new ItemStack(ChalithBase.bloodstone, 1, 0), 0.2F);
+		FurnaceRecipes.smelting().addSmelting(
+				ChalithBase.bloodstone.blockID, 3,
+				new ItemStack(ChalithBase.bloodstone, 1, 2), 0.2F);
 
 	}
 
 	private void registerOres() {
-		// avaea
-		LanguageRegistry.addName(avaeaOre, "Avaea Ore");
-		MinecraftForge.setBlockHarvestLevel(avaeaOre, "pickaxe", 1);
-		GameRegistry.registerBlock(avaeaOre, "avaeaOre");
-		OreDictionary.registerOre("oreAvaea", new ItemStack(avaeaOre));
+
 		// loryn
 
 		MinecraftForge.setBlockHarvestLevel(chalithBaseOre, "pickaxe", 1);
 		GameRegistry.registerBlock(chalithBaseOre, ChalithOreItemBlock.class,
 				"lorynOre");
+
 		OreDictionary.registerOre("oreLoryn", new ItemStack(chalithBaseOre, 1,
 				0));
 		LanguageRegistry.addName(new ItemStack(chalithBaseOre, 1, 0),
 				"Loryn Ore");
+		// sorfyn
+		OreDictionary.registerOre("oreSorfyn", new ItemStack(chalithBaseOre, 1,
+				1));
 		LanguageRegistry.addName(new ItemStack(chalithBaseOre, 1, 1),
 				"Sorfyn Ore");
+		// avaea
+		LanguageRegistry.addName(new ItemStack(chalithBaseOre, 1, 2),
+				"Avaea Ore");
+		OreDictionary.registerOre("oreAvaea", new ItemStack(chalithBaseOre, 1,
+				2));
 
 	}
 
