@@ -37,7 +37,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.6.2")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.6.3")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class ChalithBase {
 
@@ -329,7 +329,7 @@ public class ChalithBase {
 				new ItemStack(ChalithBase.bloodstone, 1, 0), 0.2F);
 		FurnaceRecipes.smelting().addSmelting(
 				ChalithBase.bloodstone.blockID, 3,
-				new ItemStack(ChalithBase.lorynIngot, 1, 2), 0.2F);
+				new ItemStack(ChalithBase.bloodstone, 1, 2), 0.2F);
 
 	}
 

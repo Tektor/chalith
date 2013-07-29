@@ -53,6 +53,16 @@ public class ChalithWorldGen implements IWorldGenerator {
 					firstBlockZCoord);
 
 		}
+		//corinnstone
+				for (int k = 0; k < 2; k++) {
+					int firstBlockXCoord = chunkX * 16 + random.nextInt(16);
+					int firstBlockYCoord = random.nextInt(64);
+					int firstBlockZCoord = chunkZ * 16 + random.nextInt(16);
+					(new WorldGenMinable(ChalithBase.bloodstone.blockID,2, 35, Block.stone.blockID)).generate(
+							world, random, firstBlockXCoord, firstBlockYCoord,
+							firstBlockZCoord);
+
+				}
 	
 
 	}
