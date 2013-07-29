@@ -174,8 +174,30 @@ public class UtilRune extends Item {
 		} else if (3 == id && timer == 0) {
 			if ((!(par1ItemStack.stackTagCompound == null))
 					&& par1ItemStack.stackTagCompound.getBoolean("active")) {
-				if (par3EntityPlayer.inventory
-						.consumeInventoryItem(ChalithBase.lorynIngot.itemID)) {
+				ItemStack[] inv = par3EntityPlayer.inventory.mainInventory;
+				boolean foundA = false;
+				boolean foundB = false;
+				int first = 0;
+				int second = 0;
+				for (int i= 0; i<32; i++) {
+					// Israk Root
+					if (inv[i] != null && inv[i].itemID == ChalithBase.seedBase.itemID
+							&& inv[i].getItemDamage() == 0) {
+						foundA = true;
+						first = i;
+					}
+					//Israk Leaf
+					else if (inv[i] != null && inv[i].itemID == ChalithBase.herbalByProduct.itemID
+							&& inv[i].getItemDamage() == 0) {
+						foundB = true;
+						second = i;
+					}
+					if(foundA && foundB) break;
+				}
+
+				if (foundA && foundB) {
+					par3EntityPlayer.inventory.decrStackSize(first, 1);
+					par3EntityPlayer.inventory.decrStackSize(second, 1);
 					if (!par2World.isRemote) {
 						int startx, starty, startz;
 						int startdimension = par3EntityPlayer.dimension;

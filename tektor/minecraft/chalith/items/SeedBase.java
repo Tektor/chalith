@@ -19,7 +19,7 @@ import net.minecraftforge.common.IPlantable;
 
 public class SeedBase extends Item implements IPlantable {
 
-	Icon[] icon = new Icon[2];
+	Icon[] icon = new Icon[1];
 
 	public SeedBase(int par1) {
 		super(par1);
@@ -67,8 +67,6 @@ public class SeedBase extends Item implements IPlantable {
 		switch (stack.getItemDamage()) {
 		case 0:
 			return "israkRoot";
-		case 1:
-			return "blub";
 		default:
 			return "??";
 		}
@@ -80,8 +78,6 @@ public class SeedBase extends Item implements IPlantable {
 		switch (stack.getItemDamage()) {
 		case 0:
 			return "Israk Root";
-		case 1:
-			return "blubb!";
 		default:
 			return "??";
 		}
@@ -90,7 +86,6 @@ public class SeedBase extends Item implements IPlantable {
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
 		icon[0] = par1IconRegister.registerIcon("chalith:israkRoot");
-		icon[1] = par1IconRegister.registerIcon("chalith:blub");
 	}
 
 	@Override
@@ -114,7 +109,6 @@ public class SeedBase extends Item implements IPlantable {
 	public void getSubItems(int par1, CreativeTabs tab, List subItems) {
 
 		subItems.add(new ItemStack(this, 1, 0));
-		subItems.add(new ItemStack(this, 1, 1));
 	}
 
 }
