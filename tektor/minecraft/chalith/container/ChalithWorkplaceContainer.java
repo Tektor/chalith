@@ -149,8 +149,6 @@ public class ChalithWorkplaceContainer extends Container {
 		if (par1IInventory == this.inputSlots) {
 
 			this.updateOutput();
-		} else if (par1IInventory == this.outputSlot) {
-			this.updateInput();
 		}
 
 	}
@@ -168,9 +166,9 @@ public class ChalithWorkplaceContainer extends Container {
 
 	private void updateOutput() {
 
-		if (this.inputSlots.getStackInSlot(0) == null) {
+		
 			this.outputSlot.setInventorySlotContents(0, (ItemStack) null);
-		}
+		
 		if (this.inputSlots.getStackInSlot(0) != null && !worked) {
 			ItemStack itemstack = this.inputSlots.getStackInSlot(0);
 			if (itemstack == null) {
@@ -200,17 +198,9 @@ public class ChalithWorkplaceContainer extends Container {
 								(ItemStack) null);
 					}
 				}
-				else
-				{
-					System.out.println("name in field:" + repairedItemName);
-					if (!StringUtils.isBlank(repairedItemName)) {
-						this.outputSlot.getStackInSlot(0).stackTagCompound.setString("name",
-								repairedItemName);
-						worked = true;
-				}
 				}
 			}
-		}
+		
 		this.detectAndSendChanges();
 
 	}
