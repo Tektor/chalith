@@ -18,6 +18,7 @@ public class ChalithWorkplaces extends BlockContainer{
 	public ChalithWorkplaces(int id) {
 		super(id,Material.rock);
 		setHardness(4.2F);
+        setResistance(5.0F);
 		setUnlocalizedName("workplace");
 		setCreativeTab(CreativeTabs.tabDecorations);
 	}
@@ -27,7 +28,7 @@ public class ChalithWorkplaces extends BlockContainer{
 	public void registerIcons(IconRegister par1IconRegister) {
 		icon[0] = par1IconRegister.registerIcon("chalith:runeWorkbenchTop");
 		icon[1] = par1IconRegister.registerIcon("chalith:runeWorkbenchSide");
-		icon[2] = par1IconRegister.registerIcon("chalith:runeWorkbenchBottom");
+		icon[2] = par1IconRegister.registerIcon("chalith:bloodstone");
 	}
 	
 	@Override
