@@ -88,7 +88,7 @@ protected void mouseClicked(int par1, int par2, int par3)
 
 private void rename()
 {
-    String s = "Recall: " + this.itemNameField.getText();
+    String s = this.itemNameField.getText();
     Slot slot = this.repairContainer.getSlot(0);
 
     if (slot != null && slot.getHasStack() && !slot.getStack().hasDisplayName() && s.equals(slot.getStack().getDisplayName()))
@@ -127,6 +127,8 @@ public void drawScreen(int par1, int par2, float par3)
     GL11.glDisable(GL11.GL_LIGHTING);
     this.itemNameField.drawTextBox();
 }
+
+
 
 
 }

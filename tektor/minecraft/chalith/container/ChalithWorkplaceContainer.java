@@ -10,10 +10,20 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerRepair;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ChalithWorkplaceContainer extends Container {
+	 /** Here comes out item you merged and/or renamed. */
+    private IInventory outputSlot = new InventoryCraftResult();
+    //true -> rename, false -> copy
+    private boolean lastOp = false;
+
+    /**
+     * The 2slots where you put your items in that you want to merge and/or rename.
+     */
+    private IInventory inputSlots = new ChalithWorkbenchContainerInner(this, "Rune Workbench", true, 2);
 
 	protected ChalithWorkplaceTileEntity tileEntity;
 	private String repairedItemName;
@@ -30,15 +40,15 @@ public class ChalithWorkplaceContainer extends Container {
 		ItemStack[] slot1 = new ItemStack[2];
 		slot1[0] = new ItemStack(ChalithBase.utilRune, 1, 0);
 		slot1[1] = new ItemStack(ChalithBase.utilRune, 1, 3);
-		addSlotToContainer(new RestrictingSlot(tileEntity, 0, 29, 32, slot1));
+		addSlotToContainer(new RestrictingSlot(this.inputSlots, 0, 29, 32, slot1));
 		// restrict slot 2
 		ItemStack[] slot2 = new ItemStack[2];
 		slot2[0] = new ItemStack(ChalithBase.utilRune, 1, 0);
 		slot2[1] = new ItemStack(ChalithBase.utilRune, 1, 3);
-		addSlotToContainer(new RestrictingSlot(tileEntity, 1, 29, 54, slot2));
+		addSlotToContainer(new RestrictingSlot(this.inputSlots, 1, 29, 54, slot2));
 		// restrict slot 3
 		ItemStack[] slot3 = new ItemStack[0];
-		addSlotToContainer(new RestrictingSlot(tileEntity, 2, 119, 40, slot3));
+		addSlotToContainer(new RestrictingSlot(this.outputSlot, 2, 119, 40, slot3));
 		bindPlayerInventory(inventoryPlayer);
 	}
 
@@ -92,6 +102,7 @@ public class ChalithWorkplaceContainer extends Container {
 				slotObject.onPickupFromSlot(player, stackInSlot);
 			}
 		}
+		
 		return stack;
 	}
 	@Override
@@ -132,16 +143,73 @@ public class ChalithWorkplaceContainer extends Container {
 	 
 	 public void onCraftMatrixChanged(IInventory par1IInventory)
 	    {
+		 
 	        super.onCraftMatrixChanged(par1IInventory);
 
-	        if (par1IInventory == this.inventorySlots)
+	        if(par1IInventory == this.inputSlots)
 	        {
-	            this.updateOutput();
+	        this.updateOutput();
 	        }
+	        else if(par1IInventory == this.outputSlot)
+	        {
+	        	this.updateInput();
+	        }
+	       
 	    }
 
+	private void updateInput() {
+		if(this.outputSlot.getStackInSlot(0) == null)
+		{
+			if(lastOp)
+			{
+				this.inputSlots.setInventorySlotContents(0, null);
+			}
+			else
+			{
+				this.inputSlots.setInventorySlotContents(1, null);
+			}
+		}
+		
+	}
+
 	private void updateOutput() {
+		if(this.inputSlots.getStackInSlot(0) != null)
+		{
+			ItemStack itemstack = this.inputSlots.getStackInSlot(0);
+			if (itemstack == null)
+	        {
+	            this.outputSlot.setInventorySlotContents(0, (ItemStack)null);
+	        }
+			else
+			{
+				ItemStack itemstack1 = itemstack.copy();
+	            ItemStack itemstack2 = this.inputSlots.getStackInSlot(1);
+	            if(itemstack2 != null && itemstack2.stackTagCompound == null)
+	            {
+	            	this.outputSlot.setInventorySlotContents(1, itemstack.copy());
+	            	lastOp = false;
+	            }
+			}
+		}
 		this.detectAndSendChanges();
 		
 	}
+	public void onContainerClosed(EntityPlayer par1EntityPlayer)
+    {
+        super.onContainerClosed(par1EntityPlayer);
+
+        if (!par1EntityPlayer.worldObj.isRemote)
+        {
+            for (int i = 0; i < this.inputSlots.getSizeInventory(); ++i)
+            {
+                ItemStack itemstack = this.inputSlots.getStackInSlotOnClosing(i);
+
+                if (itemstack != null)
+                {
+                    par1EntityPlayer.dropPlayerItem(itemstack);
+                }
+            }
+        }
+    }
+	
 }
