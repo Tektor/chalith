@@ -38,9 +38,13 @@ public class ChalithWorkplaces extends BlockContainer{
 		if(par2 == 0)
 		{
 			switch(par1){
-			case 0: return icon[0];
-			case 1:return icon[1];
-			case 2:return icon[2];}
+			case 0: return icon[2];
+			case 1:return icon[0];
+			case 2:return icon[1];
+			case 3:return icon[1];
+			case 4:return icon[1];
+			case 5:return icon[1];
+			}
 		}
 		return icon[0];
 	}
