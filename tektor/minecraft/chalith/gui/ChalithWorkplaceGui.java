@@ -1,14 +1,23 @@
 package tektor.minecraft.chalith.gui;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import tektor.minecraft.chalith.container.ChalithWorkplaceContainer;
 import tektor.minecraft.chalith.entity.ChalithWorkplaceTileEntity;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerRepair;
@@ -24,11 +33,15 @@ public class ChalithWorkplaceGui extends GuiContainer implements ICrafting{
 	public GuiTextField itemNameField;
 	private ChalithWorkplaceContainer repairContainer;
 	private InventoryPlayer inventory;
+	public ChalithWorkplaceTileEntity te;
+	public EntityPlayer player;
 	
-	 public ChalithWorkplaceGui (InventoryPlayer inventoryPlayer,
+	 public ChalithWorkplaceGui (EntityPlayer playerEnt, InventoryPlayer inventoryPlayer,
              ChalithWorkplaceTileEntity tileEntity) {
      super(new ChalithWorkplaceContainer(inventoryPlayer, tileEntity));
      repairContainer = (ChalithWorkplaceContainer) this.inventorySlots;
+     te = tileEntity;
+     player = playerEnt;
 }
 
 @Override
@@ -95,9 +108,29 @@ private void rename()
     {
         s = "";
     }
+    ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
+    DataOutputStream outputStream = new DataOutputStream(bos);
+    try {
+            outputStream.writeUTF(s);
+            outputStream.writeInt(te.xCoord);
+            outputStream.writeInt(te.yCoord);
+            outputStream.writeInt(te.zCoord);
+    } catch (Exception ex) {
+            ex.printStackTrace();
+    }
 
-    this.repairContainer.updateItemName(s);
-    this.mc.thePlayer.sendQueue.addToSendQueue(new Packet250CustomPayload("MC|ItemName", s.getBytes()));
+    Packet250CustomPayload packet = new Packet250CustomPayload();
+    packet.channel = "Chalith";
+    packet.data = bos.toByteArray();
+    packet.length = bos.size();
+    if (!te.worldObj.isRemote) {
+            EntityPlayerMP player2 = (EntityPlayerMP) this.player;
+    } else if (te.worldObj.isRemote) {
+            EntityClientPlayerMP player2 = (EntityClientPlayerMP) this.player;
+            PacketDispatcher.sendPacketToServer(packet);
+            te.setName(s);
+    } else {
+    }
 }
 
 public void sendContainerAndContentsToPlayer(Container par1Container, List par2List)

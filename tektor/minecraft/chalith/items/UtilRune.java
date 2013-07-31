@@ -70,16 +70,22 @@ public class UtilRune extends Item {
 
 	@Override
 	public String getItemDisplayName(ItemStack stack) {
-		switch (stack.getItemDamage()) {
-		case 0:
-			return "Recall Rune";
-		case 1:
-		case 2:
-			return "Rune of Inventory";
-		case 3:
-			return "Gate Rune";
-		default:
-			return "??";
+		if(stack.stackTagCompound == null || stack.stackTagCompound.getString("name").equals("")) {
+			switch (stack.getItemDamage()) {
+			case 0:
+				return "Recall Rune";
+			case 1:
+			case 2:
+				return "Rune of Inventory";
+			case 3:
+				return "Gate Rune";
+			default:
+				return "??";
+			}
+		}
+		else
+		{
+			return stack.stackTagCompound.getString("name");
 		}
 	}
 

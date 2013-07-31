@@ -15,15 +15,18 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ChalithWorkplaceContainer extends Container {
-	 /** Here comes out item you merged and/or renamed. */
-    private IInventory outputSlot = new InventoryCraftResult();
-    //true -> rename, false -> copy
-    private boolean lastOp = false;
+	/** Here comes out item you merged and/or renamed. */
+	IInventory outputSlot = new InventoryCraftResult();
+	// true -> rename, false -> copy
+	boolean lastOp = false;
+	boolean worked = false;
 
-    /**
-     * The 2slots where you put your items in that you want to merge and/or rename.
-     */
-    private IInventory inputSlots = new ChalithWorkbenchContainerInner(this, "Rune Workbench", true, 2);
+	/**
+	 * The 2slots where you put your items in that you want to merge and/or
+	 * rename.
+	 */
+	IInventory inputSlots = new ChalithWorkbenchContainerInner(this,
+			"Rune Workbench", true, 2);
 
 	protected ChalithWorkplaceTileEntity tileEntity;
 	private String repairedItemName;
@@ -31,24 +34,24 @@ public class ChalithWorkplaceContainer extends Container {
 	public ChalithWorkplaceContainer(InventoryPlayer inventoryPlayer,
 			ChalithWorkplaceTileEntity te) {
 		tileEntity = te;
-
-		// the Slot constructor takes the IInventory and the slot number in that
-		// it binds to
-		// and the x-y coordinates it resides on-screen
+		te.container = this;
 
 		// restrict slot 1
 		ItemStack[] slot1 = new ItemStack[2];
 		slot1[0] = new ItemStack(ChalithBase.utilRune, 1, 0);
 		slot1[1] = new ItemStack(ChalithBase.utilRune, 1, 3);
-		addSlotToContainer(new RestrictingSlot(this.inputSlots, 0, 29, 32, slot1));
+		addSlotToContainer(new RestrictingSlot(this.inputSlots, 0, 29, 32,
+				slot1, null));
 		// restrict slot 2
 		ItemStack[] slot2 = new ItemStack[2];
 		slot2[0] = new ItemStack(ChalithBase.utilRune, 1, 0);
 		slot2[1] = new ItemStack(ChalithBase.utilRune, 1, 3);
-		addSlotToContainer(new RestrictingSlot(this.inputSlots, 1, 29, 54, slot2));
+		addSlotToContainer(new RestrictingSlot(this.inputSlots, 1, 29, 54,
+				slot2, null));
 		// restrict slot 3
 		ItemStack[] slot3 = new ItemStack[0];
-		addSlotToContainer(new RestrictingSlot(this.outputSlot, 2, 119, 40, slot3));
+		addSlotToContainer(new RestrictingSlot(this.outputSlot, 2, 119, 40,
+				slot3, this));
 		bindPlayerInventory(inventoryPlayer);
 	}
 
@@ -78,15 +81,17 @@ public class ChalithWorkplaceContainer extends Container {
 		// null checks
 		if (slotObject != null) {
 			ItemStack stackInSlot = slotObject.getStack();
-			if (stackInSlot!= null) {
+			if (stackInSlot != null) {
 				stack = stackInSlot.copy();
-				// merges the item into player inventory since its in the tileEntity
+				// merges the item into player inventory since its in the
+				// tileEntity
 				if (slot < 4) {
 					if (!this.mergeItemStack(stackInSlot, 4, 39, true)) {
 						return null;
 					}
 				}
-				// places it into the tileEntity is possible since its in the player
+				// places it into the tileEntity is possible since its in the
+				// player
 				// inventory
 				else if (!this.mergeItemStack(stackInSlot, 0, 4, false)) {
 					return null;
@@ -102,114 +107,127 @@ public class ChalithWorkplaceContainer extends Container {
 				slotObject.onPickupFromSlot(player, stackInSlot);
 			}
 		}
-		
+
 		return stack;
 	}
+
 	@Override
-	protected boolean mergeItemStack(ItemStack par1ItemStack, int par2, int par3, boolean par4)
-	{
+	protected boolean mergeItemStack(ItemStack par1ItemStack, int par2,
+			int par3, boolean par4) {
 		boolean success = false;
-		for(int i = par2; i <par3;i++)
-		{
-			if(!this.getSlot(i).isItemValid(par1ItemStack))
-			{
+		for (int i = par2; i < par3; i++) {
+			if (!this.getSlot(i).isItemValid(par1ItemStack)) {
 				continue;
 			}
-			success = success || super.mergeItemStack(par1ItemStack, i, i+1, par4);
+			success = success
+					|| super.mergeItemStack(par1ItemStack, i, i + 1, par4);
 		}
 		return success;
-		
+
 	}
-	 public void updateItemName(String par1Str)
-	    {
-	        this.repairedItemName = par1Str;
 
-	        if (this.getSlot(2).getHasStack())
-	        {
-	            ItemStack itemstack = this.getSlot(2).getStack();
+	public void updateItemName(String par1Str) {
+		this.repairedItemName = par1Str;
 
-	            if (StringUtils.isBlank(par1Str))
-	            {
-	                itemstack.func_135074_t();
-	            }
-	            else
-	            {
-	                itemstack.setItemName(this.repairedItemName);
-	            }
-	        }
+		if (this.outputSlot.getStackInSlot(0) != null) {
+			ItemStack itemstack = this.outputSlot.getStackInSlot(0);
 
-	        this.updateOutput();
-	    }
-	 
-	 public void onCraftMatrixChanged(IInventory par1IInventory)
-	    {
-		 
-	        super.onCraftMatrixChanged(par1IInventory);
-
-	        if(par1IInventory == this.inputSlots)
-	        {
-	        this.updateOutput();
-	        }
-	        else if(par1IInventory == this.outputSlot)
-	        {
-	        	this.updateInput();
-	        }
-	       
-	    }
-
-	private void updateInput() {
-		if(this.outputSlot.getStackInSlot(0) == null)
-		{
-			if(lastOp)
-			{
-				this.inputSlots.setInventorySlotContents(0, null);
+			if (StringUtils.isBlank(par1Str)) {
+				itemstack.func_135074_t();
+			} else {
+				itemstack.setItemName(this.repairedItemName);
 			}
-			else
-			{
+		}
+		worked =false;
+		this.updateOutput();
+	}
+
+	public void onCraftMatrixChanged(IInventory par1IInventory) {
+
+		super.onCraftMatrixChanged(par1IInventory);
+		worked = false;
+		if (par1IInventory == this.inputSlots) {
+
+			this.updateOutput();
+		} else if (par1IInventory == this.outputSlot) {
+			this.updateInput();
+		}
+
+	}
+
+	public void updateInput() {
+		if (this.outputSlot.getStackInSlot(0) == null) {
+			if (lastOp) {
+				this.inputSlots.setInventorySlotContents(0, null);
+			} else {
 				this.inputSlots.setInventorySlotContents(1, null);
 			}
 		}
-		
+
 	}
 
 	private void updateOutput() {
-		if(this.inputSlots.getStackInSlot(0) != null)
-		{
+
+		if (this.inputSlots.getStackInSlot(0) == null) {
+			this.outputSlot.setInventorySlotContents(0, (ItemStack) null);
+		}
+		if (this.inputSlots.getStackInSlot(0) != null && !worked) {
 			ItemStack itemstack = this.inputSlots.getStackInSlot(0);
-			if (itemstack == null)
-	        {
-	            this.outputSlot.setInventorySlotContents(0, (ItemStack)null);
-	        }
-			else
-			{
-				ItemStack itemstack1 = itemstack.copy();
-	            ItemStack itemstack2 = this.inputSlots.getStackInSlot(1);
-	            if(itemstack2 != null && itemstack2.stackTagCompound == null)
-	            {
-	            	this.outputSlot.setInventorySlotContents(1, itemstack.copy());
-	            	lastOp = false;
-	            }
+			if (itemstack == null) {
+				this.outputSlot.setInventorySlotContents(0, (ItemStack) null);
+			} else {
+				if (this.outputSlot.getStackInSlot(0) == null) {
+					ItemStack itemstack1 = this.inputSlots.getStackInSlot(0)
+							.copy();
+					ItemStack itemstack2 = this.inputSlots.getStackInSlot(1);
+					if (itemstack2 != null
+							&& itemstack2.stackTagCompound == null) {
+						this.outputSlot.setInventorySlotContents(1, itemstack1);
+						lastOp = false;
+						worked = true;
+					} else if (itemstack2 == null) {
+						this.outputSlot.setInventorySlotContents(0, itemstack1);
+						worked = true;
+						lastOp = true;
+						System.out.println("name in field:" + repairedItemName);
+						if (!StringUtils.isBlank(repairedItemName)) {
+							itemstack1.stackTagCompound.setString("name",
+									repairedItemName);
+
+						}
+					} else {
+						this.outputSlot.setInventorySlotContents(0,
+								(ItemStack) null);
+					}
+				}
+				else
+				{
+					System.out.println("name in field:" + repairedItemName);
+					if (!StringUtils.isBlank(repairedItemName)) {
+						this.outputSlot.getStackInSlot(0).stackTagCompound.setString("name",
+								repairedItemName);
+						worked = true;
+				}
+				}
 			}
 		}
 		this.detectAndSendChanges();
-		
+
 	}
-	public void onContainerClosed(EntityPlayer par1EntityPlayer)
-    {
-        super.onContainerClosed(par1EntityPlayer);
 
-        if (!par1EntityPlayer.worldObj.isRemote)
-        {
-            for (int i = 0; i < this.inputSlots.getSizeInventory(); ++i)
-            {
-                ItemStack itemstack = this.inputSlots.getStackInSlotOnClosing(i);
+	public void onContainerClosed(EntityPlayer par1EntityPlayer) {
+		super.onContainerClosed(par1EntityPlayer);
 
-                if (itemstack != null)
-                {
-                    par1EntityPlayer.dropPlayerItem(itemstack);
-                }
-            }
-        }
-    }
-	
+		if (!par1EntityPlayer.worldObj.isRemote) {
+			for (int i = 0; i < this.inputSlots.getSizeInventory(); ++i) {
+				ItemStack itemstack = this.inputSlots
+						.getStackInSlotOnClosing(i);
+
+				if (itemstack != null) {
+					par1EntityPlayer.dropPlayerItem(itemstack);
+				}
+			}
+		}
+	}
+
 }

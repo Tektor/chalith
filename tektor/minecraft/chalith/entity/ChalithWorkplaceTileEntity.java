@@ -1,5 +1,6 @@
 package tektor.minecraft.chalith.entity;
 
+import tektor.minecraft.chalith.container.ChalithWorkplaceContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -13,40 +14,30 @@ import net.minecraft.tileentity.TileEntity;
 public class ChalithWorkplaceTileEntity extends TileEntity implements
 		IInventory {
 
-	private ItemStack[] inv;
+	public String name;
+	public ChalithWorkplaceContainer container;
 
 	public ChalithWorkplaceTileEntity() {
-		inv = new ItemStack[3];
+		
+	}
+	
+	public void setName(String newName)
+	{
+		name = newName;
+		container.updateItemName(name);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound par1) {
 		super.writeToNBT(par1);
-		
-		NBTTagList itemList = new NBTTagList();
-        for (int i = 0; i < inv.length; i++) {
-                ItemStack stack = inv[i];
-                if (stack != null) {
-                        NBTTagCompound tag = new NBTTagCompound();
-                        tag.setByte("Slot", (byte) i);
-                        stack.writeToNBT(tag);
-                        itemList.appendTag(tag);
-                }
-        }
-        par1.setTag("Inventory", itemList);
+		par1.setString("name", name);
+        
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound par1) {
 		super.readFromNBT(par1);
-		NBTTagList tagList = par1.getTagList("Inventory");
-        for (int i = 0; i < tagList.tagCount(); i++) {
-                NBTTagCompound tag = (NBTTagCompound) tagList.tagAt(i);
-                byte slot = tag.getByte("Slot");
-                if (slot >= 0 && slot < inv.length) {
-                        inv[slot] = ItemStack.loadItemStackFromNBT(tag);
-                }
-        }
+		name = par1.getString("name");
 	}
 
 	@Override
@@ -64,12 +55,12 @@ public class ChalithWorkplaceTileEntity extends TileEntity implements
 
 	@Override
 	public int getSizeInventory() {
-		return inv.length;
+		return 0;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return inv[i];
+		return null;
 	}
 
 	@Override
@@ -99,10 +90,7 @@ public class ChalithWorkplaceTileEntity extends TileEntity implements
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		 inv[i] = itemstack;
-         if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
-                 itemstack.stackSize = getInventoryStackLimit();
-         }     
+		    
 
 	}
 

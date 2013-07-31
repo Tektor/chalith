@@ -25,7 +25,7 @@ public class ChalithGuiHandler implements IGuiHandler{
                     int x, int y, int z) {
             TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
             if(tileEntity instanceof ChalithWorkplaceTileEntity){
-                    return new ChalithWorkplaceGui(player.inventory, (ChalithWorkplaceTileEntity) tileEntity);
+                    return new ChalithWorkplaceGui(player, player.inventory, (ChalithWorkplaceTileEntity) tileEntity);
             }
             return null;
 
