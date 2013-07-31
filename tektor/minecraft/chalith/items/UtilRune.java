@@ -385,5 +385,13 @@ public class UtilRune extends Item {
 		subItems.add(new ItemStack(this, 1, 1));
 		subItems.add(new ItemStack(this, 1, 3));
 	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+    {
+        par3List.add("Line I");
+        par3List.add("Line II");
+    }
 
 }

@@ -1,16 +1,22 @@
 package tektor.minecraft.chalith.container;
 
+import org.apache.commons.lang3.StringUtils;
+
 import tektor.minecraft.chalith.ChalithBase;
 import tektor.minecraft.chalith.entity.ChalithWorkplaceTileEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ContainerRepair;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ChalithWorkplaceContainer extends Container {
 
 	protected ChalithWorkplaceTileEntity tileEntity;
+	private String repairedItemName;
 
 	public ChalithWorkplaceContainer(InventoryPlayer inventoryPlayer,
 			ChalithWorkplaceTileEntity te) {
@@ -24,12 +30,12 @@ public class ChalithWorkplaceContainer extends Container {
 		ItemStack[] slot1 = new ItemStack[2];
 		slot1[0] = new ItemStack(ChalithBase.utilRune, 1, 0);
 		slot1[1] = new ItemStack(ChalithBase.utilRune, 1, 3);
-		addSlotToContainer(new RestrictingSlot(tileEntity, 0, 48, 26, slot1));
+		addSlotToContainer(new RestrictingSlot(tileEntity, 0, 29, 32, slot1));
 		// restrict slot 2
 		ItemStack[] slot2 = new ItemStack[2];
 		slot2[0] = new ItemStack(ChalithBase.utilRune, 1, 0);
 		slot2[1] = new ItemStack(ChalithBase.utilRune, 1, 3);
-		addSlotToContainer(new RestrictingSlot(tileEntity, 1, 48, 54, slot2));
+		addSlotToContainer(new RestrictingSlot(tileEntity, 1, 29, 54, slot2));
 		// restrict slot 3
 		ItemStack[] slot3 = new ItemStack[0];
 		addSlotToContainer(new RestrictingSlot(tileEntity, 2, 119, 40, slot3));
@@ -101,6 +107,41 @@ public class ChalithWorkplaceContainer extends Container {
 			success = success || super.mergeItemStack(par1ItemStack, i, i+1, par4);
 		}
 		return success;
+		
+	}
+	 public void updateItemName(String par1Str)
+	    {
+	        this.repairedItemName = par1Str;
+
+	        if (this.getSlot(2).getHasStack())
+	        {
+	            ItemStack itemstack = this.getSlot(2).getStack();
+
+	            if (StringUtils.isBlank(par1Str))
+	            {
+	                itemstack.func_135074_t();
+	            }
+	            else
+	            {
+	                itemstack.setItemName(this.repairedItemName);
+	            }
+	        }
+
+	        this.updateOutput();
+	    }
+	 
+	 public void onCraftMatrixChanged(IInventory par1IInventory)
+	    {
+	        super.onCraftMatrixChanged(par1IInventory);
+
+	        if (par1IInventory == this.inventorySlots)
+	        {
+	            this.updateOutput();
+	        }
+	    }
+
+	private void updateOutput() {
+		this.detectAndSendChanges();
 		
 	}
 }
