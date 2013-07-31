@@ -12,6 +12,7 @@ import tektor.minecraft.chalith.blocks.BlockTrapRune;
 import tektor.minecraft.chalith.blocks.ChalithOreBase;
 import tektor.minecraft.chalith.blocks.ChalithWorkplaces;
 import tektor.minecraft.chalith.blocks.GateBlock;
+import tektor.minecraft.chalith.gui.ChalithGuiHandler;
 import tektor.minecraft.chalith.items.BaseRune;
 import tektor.minecraft.chalith.items.ChalithOreItemBlock;
 import tektor.minecraft.chalith.items.ChalithStoneItemBlock;
@@ -34,15 +35,16 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.6.7")
-@NetworkMod(clientSideRequired = true, serverSideRequired = false)
+@Mod(modid = "Chalith", name = "Chalith", version = "0.6.8")
+@NetworkMod(clientSideRequired = true)
 public class ChalithBase {
 
 	// instance
-	@Instance("ChalithBase")
+	@Instance("Chalith")
 	public static ChalithBase instance;
 
 	// blocks
@@ -121,6 +123,7 @@ public class ChalithBase {
 		smeltingRecipes();
 		runeCrafting();
 		GameRegistry.registerWorldGenerator(new ChalithWorldGen());
+		NetworkRegistry.instance().registerGuiHandler(this, new ChalithGuiHandler());
 	}
 
 	private void registerMisc() {
