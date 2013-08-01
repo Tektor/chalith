@@ -70,16 +70,21 @@ public class UtilRune extends Item {
 
 	@Override
 	public String getItemDisplayName(ItemStack stack) {
-		switch (stack.getItemDamage()) {
-		case 0:
-			return "Recall Rune";
-		case 1:
-		case 2:
-			return "Rune of Inventory";
-		case 3:
-			return "Gate Rune";
-		default:
-			return "??";
+		if (stack.stackTagCompound == null
+				|| stack.stackTagCompound.getString("name").equals("")) {
+			switch (stack.getItemDamage()) {
+			case 0:
+				return "Recall Rune";
+			case 1:
+			case 2:
+				return "Rune of Inventory";
+			case 3:
+				return "Gate Rune";
+			default:
+				return "??";
+			}
+		} else {
+			return stack.stackTagCompound.getString("name");
 		}
 	}
 
@@ -106,27 +111,30 @@ public class UtilRune extends Item {
 					boolean foundB = false;
 					int first = 0;
 					int second = 0;
-					for (int i= 0; i<32; i++) {
+					for (int i = 0; i < 32; i++) {
 						// Israk Root
-						if (inv[i] != null && inv[i].itemID == ChalithBase.seedBase.itemID
+						if (inv[i] != null
+								&& inv[i].itemID == ChalithBase.seedBase.itemID
 								&& inv[i].getItemDamage() == 0) {
 							foundA = true;
 							first = i;
 						}
-						//Israk Leaf
-						else if (inv[i] != null && inv[i].itemID == ChalithBase.herbalByProduct.itemID
+						// Israk Leaf
+						else if (inv[i] != null
+								&& inv[i].itemID == ChalithBase.herbalByProduct.itemID
 								&& inv[i].getItemDamage() == 0) {
 							foundB = true;
 							second = i;
 						}
-						if(foundA && foundB) break;
+						if (foundA && foundB)
+							break;
 					}
 
 					if (foundA && foundB) {
 						par3EntityPlayer.inventory.decrStackSize(first, 1);
 						par3EntityPlayer.inventory.decrStackSize(second, 1);
 						if (!par2World.isRemote) {
-							
+
 							int goalx = (int) par1ItemStack.stackTagCompound
 									.getDouble("x");
 							int goaly = (int) par1ItemStack.stackTagCompound
@@ -179,20 +187,23 @@ public class UtilRune extends Item {
 				boolean foundB = false;
 				int first = 0;
 				int second = 0;
-				for (int i= 0; i<32; i++) {
+				for (int i = 0; i < 32; i++) {
 					// Israk Root
-					if (inv[i] != null && inv[i].itemID == ChalithBase.seedBase.itemID
+					if (inv[i] != null
+							&& inv[i].itemID == ChalithBase.seedBase.itemID
 							&& inv[i].getItemDamage() == 0) {
 						foundA = true;
 						first = i;
 					}
-					//Israk Leaf
-					else if (inv[i] != null && inv[i].itemID == ChalithBase.herbalByProduct.itemID
+					// Israk Leaf
+					else if (inv[i] != null
+							&& inv[i].itemID == ChalithBase.herbalByProduct.itemID
 							&& inv[i].getItemDamage() == 0) {
 						foundB = true;
 						second = i;
 					}
-					if(foundA && foundB) break;
+					if (foundA && foundB)
+						break;
 				}
 
 				if (foundA && foundB) {
@@ -384,6 +395,24 @@ public class UtilRune extends Item {
 		subItems.add(new ItemStack(this, 1, 0));
 		subItems.add(new ItemStack(this, 1, 1));
 		subItems.add(new ItemStack(this, 1, 3));
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack par1ItemStack,
+			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+		if (par1ItemStack.stackTagCompound != null) {
+			if (par1ItemStack.getItemDamage() == 0
+					|| par1ItemStack.getItemDamage() == 3) {
+				par3List.add("X:"
+						+ (int) par1ItemStack.stackTagCompound.getDouble("x"));
+				par3List.add("Y:"
+						+ (int) par1ItemStack.stackTagCompound.getDouble("y"));
+				par3List.add("Z:"
+						+ (int) par1ItemStack.stackTagCompound.getDouble("z"));
+			}
+		}
+
 	}
 
 }

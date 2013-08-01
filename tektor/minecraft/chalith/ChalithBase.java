@@ -10,7 +10,9 @@ import net.minecraftforge.oredict.OreDictionary;
 import tektor.minecraft.chalith.blocks.ChalithStoneBase;
 import tektor.minecraft.chalith.blocks.BlockTrapRune;
 import tektor.minecraft.chalith.blocks.ChalithOreBase;
+import tektor.minecraft.chalith.blocks.ChalithWorkplaces;
 import tektor.minecraft.chalith.blocks.GateBlock;
+import tektor.minecraft.chalith.gui.ChalithGuiHandler;
 import tektor.minecraft.chalith.items.BaseRune;
 import tektor.minecraft.chalith.items.ChalithOreItemBlock;
 import tektor.minecraft.chalith.items.ChalithStoneItemBlock;
@@ -33,24 +35,27 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.6.6")
-@NetworkMod(clientSideRequired = true, serverSideRequired = false)
+@Mod(modid = "Chalith", name = "Chalith", version = "0.6.10")
+@NetworkMod(channels = { "Chalith" }, packetHandler = ChalithPacketHandler.class, clientSideRequired = true)
 public class ChalithBase {
 
 	// instance
-	@Instance("ChalithBase")
+	@Instance("Chalith")
 	public static ChalithBase instance;
 
 	// blocks
-	public static int blockID1, blockID2, blockID3, blockID4, blockID5;
+	public static int blockID1, blockID2, blockID3, blockID4, blockID5,
+			blockID6;
 	public static Block bloodstone;
 	public static Block chalithBaseOre;
 	public static Block trapRune;
 	public static Block gateBlock;
 	public static Block plantBase;
+	public static Block workbench;
 
 	// items
 	public static int itemID1, itemID2, itemID3, itemID4, itemID5, itemID6,
@@ -82,6 +87,8 @@ public class ChalithBase {
 		blockID4 = config.get(Configuration.CATEGORY_BLOCK, "blockID4", 983)
 				.getInt();
 		blockID5 = config.get(Configuration.CATEGORY_BLOCK, "blockID5", 984)
+				.getInt();
+		blockID6 = config.get(Configuration.CATEGORY_BLOCK, "blockID6", 985)
 				.getInt();
 
 		itemID1 = config.get(Configuration.CATEGORY_ITEM, "itemID1", 7000)
@@ -117,17 +124,26 @@ public class ChalithBase {
 		smeltingRecipes();
 		runeCrafting();
 		GameRegistry.registerWorldGenerator(new ChalithWorldGen());
+		NetworkRegistry.instance().registerGuiHandler(this,
+				new ChalithGuiHandler());
 	}
 
 	private void registerMisc() {
-		//bloodstone
+		// bloodstone
 		MinecraftForge.setBlockHarvestLevel(bloodstone, "pickaxe", 1);
 		GameRegistry.registerBlock(bloodstone, ChalithStoneItemBlock.class,
 				"bloodstone");
 		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 0), "Bloodstone");
-		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 1), "Bloodstone Cobble");
-		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 2), "Corinnstone");
-		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 3), "Corinnstone Cobble");
+		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 1),
+				"Bloodstone Cobble");
+		LanguageRegistry
+				.addName(new ItemStack(bloodstone, 1, 2), "Corinnstone");
+		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 3),
+				"Corinnstone Cobble");
+
+		GameRegistry.registerBlock(workbench, "runeWorkbench");
+		LanguageRegistry.addName(new ItemStack(workbench, 1, 0),
+				"Rune Workbench");
 	}
 
 	private void registerPlants() {
@@ -148,6 +164,7 @@ public class ChalithBase {
 		trapRune = new BlockTrapRune(blockID3);
 		gateBlock = new GateBlock(blockID4);
 		plantBase = new PlantBase(blockID5);
+		workbench = new ChalithWorkplaces(blockID6);
 		// items
 		seedBase = new SeedBase(itemID7);
 		herbalByProduct = new HerbalByProducts(itemID8);
@@ -167,6 +184,10 @@ public class ChalithBase {
 		GameRegistry.registerTileEntity(
 				tektor.minecraft.chalith.entity.GateBlockTileEntity.class,
 				"Gate Block");
+		GameRegistry
+				.registerTileEntity(
+						tektor.minecraft.chalith.entity.ChalithWorkplaceTileEntity.class,
+						"Workplace");
 
 	}
 
@@ -183,20 +204,32 @@ public class ChalithBase {
 		ItemStack onStack = new ItemStack(this.runeSymbol, 1, 11);
 		ItemStack voStack = new ItemStack(this.runeSymbol, 1, 13);
 		ItemStack welStack = new ItemStack(this.runeSymbol, 1, 15);
+
 		ItemStack avaeaIngotStack = new ItemStack(this.lorynIngot, 1, 2);
 		ItemStack lorynIngotStack = new ItemStack(this.lorynIngot, 1, 0);
 		ItemStack sorfynIngotStack = new ItemStack(this.lorynIngot, 1, 1);
+		ItemStack goldIngotStack = new ItemStack(Item.ingotGold, 1);
+
 		ItemStack baseRuneStack = new ItemStack(this.baseRune, 1, 0);
 		ItemStack wildRuneStack = new ItemStack(this.baseRune, 1, 1);
 		ItemStack switchingRuneStack = new ItemStack(this.baseRune, 1, 2);
-		ItemStack goldIngotStack = new ItemStack(Item.ingotGold, 1);
 
+		ItemStack bloodstoneStack = new ItemStack(this.bloodstone, 1, 0);
+		ItemStack corinnstoneStack = new ItemStack(this.bloodstone, 1, 2);
+
+		// Base Runes
 		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1, 0),
 				new Object[] { "XXX", "X X", "XXX", 'X', avaeaIngotStack });
 		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1, 1),
 				new Object[] { "XXX", "X X", "XXX", 'X', sorfynIngotStack });
 		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1, 2),
 				new Object[] { "XY", 'X', baseRuneStack, 'Y', wildRuneStack });
+
+		// Workbenches
+		GameRegistry.addShapedRecipe(new ItemStack(this.workbench, 1, 0),
+				new Object[] { "XYX", "ZYZ", "ZZZ", 'X', lorynIngotStack, 'Y',
+						corinnstoneStack, 'Z', bloodstoneStack });
+
 		// Recall
 		GameRegistry.addShapedRecipe(new ItemStack(this.utilRune, 1, 0),
 				new Object[] { "ABC", " X ", "   ", 'A', diStack, 'B', inStack,
@@ -322,12 +355,10 @@ public class ChalithBase {
 		FurnaceRecipes.smelting().addSmelting(
 				ChalithBase.chalithBaseOre.blockID, 2,
 				new ItemStack(ChalithBase.lorynIngot, 1, 2), 0.3F);
-		FurnaceRecipes.smelting().addSmelting(
-				ChalithBase.bloodstone.blockID, 1,
-				new ItemStack(ChalithBase.bloodstone, 1, 0), 0.2F);
-		FurnaceRecipes.smelting().addSmelting(
-				ChalithBase.bloodstone.blockID, 3,
-				new ItemStack(ChalithBase.bloodstone, 1, 2), 0.2F);
+		FurnaceRecipes.smelting().addSmelting(ChalithBase.bloodstone.blockID,
+				1, new ItemStack(ChalithBase.bloodstone, 1, 0), 0.2F);
+		FurnaceRecipes.smelting().addSmelting(ChalithBase.bloodstone.blockID,
+				3, new ItemStack(ChalithBase.bloodstone, 1, 2), 0.2F);
 
 	}
 
