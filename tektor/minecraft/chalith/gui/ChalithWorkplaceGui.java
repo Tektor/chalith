@@ -58,6 +58,7 @@ protected void drawGuiContainerBackgroundLayer(float par1, int par2,
      int x = (width - xSize) / 2;
      int y = (height - ySize) / 2;
      this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+     this.drawTexturedModalRect(x + 71, y + 20, 0, this.ySize + (this.repairContainer.getSlot(0).getHasStack() ? 0 : 12), 100, 12);
 }
 
 public void initGui()
