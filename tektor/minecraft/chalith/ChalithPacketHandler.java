@@ -40,8 +40,6 @@ public class ChalithPacketHandler implements IPacketHandler{
         		ChalithWorkplaceTileEntity ent = (ChalithWorkplaceTileEntity)play.worldObj.getBlockTileEntity(x, y, z);
 			    ent.setName(name);
         	}
-		/* Debug Console Message */
-        System.out.println("Okay, now stage is the name - " + name );
 	}
 
 }

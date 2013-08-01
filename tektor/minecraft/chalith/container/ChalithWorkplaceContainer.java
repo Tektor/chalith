@@ -188,7 +188,6 @@ public class ChalithWorkplaceContainer extends Container {
 						this.outputSlot.setInventorySlotContents(0, itemstack1);
 						worked = true;
 						lastOp = true;
-						System.out.println("name in field:" + repairedItemName);
 						if (!StringUtils.isBlank(repairedItemName)) {
 							if(itemstack1.stackTagCompound == null)
 							{
