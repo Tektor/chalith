@@ -13,6 +13,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class ChalithWorkplaceContainer extends Container {
 	/** Here comes out item you merged and/or renamed. */
@@ -189,6 +190,10 @@ public class ChalithWorkplaceContainer extends Container {
 						lastOp = true;
 						System.out.println("name in field:" + repairedItemName);
 						if (!StringUtils.isBlank(repairedItemName)) {
+							if(itemstack1.stackTagCompound == null)
+							{
+								itemstack1.stackTagCompound = new NBTTagCompound();
+							}
 							itemstack1.stackTagCompound.setString("name",
 									repairedItemName);
 
