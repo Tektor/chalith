@@ -14,7 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 public class ChalithWorkplaceTileEntity extends TileEntity implements
 		IInventory {
 
-	public String name;
+	public String name = "";
 	public ChalithWorkplaceContainer container;
 
 	public ChalithWorkplaceTileEntity() {

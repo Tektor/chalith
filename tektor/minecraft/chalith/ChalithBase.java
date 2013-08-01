@@ -40,7 +40,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid = "Chalith", name = "Chalith", version = "0.6.10")
-@NetworkMod(channels={"Chalith"}, packetHandler = ChalithPacketHandler.class, clientSideRequired = true)
+@NetworkMod(channels = { "Chalith" }, packetHandler = ChalithPacketHandler.class, clientSideRequired = true)
 public class ChalithBase {
 
 	// instance
@@ -48,7 +48,8 @@ public class ChalithBase {
 	public static ChalithBase instance;
 
 	// blocks
-	public static int blockID1, blockID2, blockID3, blockID4, blockID5, blockID6;
+	public static int blockID1, blockID2, blockID3, blockID4, blockID5,
+			blockID6;
 	public static Block bloodstone;
 	public static Block chalithBaseOre;
 	public static Block trapRune;
@@ -123,21 +124,26 @@ public class ChalithBase {
 		smeltingRecipes();
 		runeCrafting();
 		GameRegistry.registerWorldGenerator(new ChalithWorldGen());
-		NetworkRegistry.instance().registerGuiHandler(this, new ChalithGuiHandler());
+		NetworkRegistry.instance().registerGuiHandler(this,
+				new ChalithGuiHandler());
 	}
 
 	private void registerMisc() {
-		//bloodstone
+		// bloodstone
 		MinecraftForge.setBlockHarvestLevel(bloodstone, "pickaxe", 1);
 		GameRegistry.registerBlock(bloodstone, ChalithStoneItemBlock.class,
 				"bloodstone");
 		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 0), "Bloodstone");
-		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 1), "Bloodstone Cobble");
-		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 2), "Corinnstone");
-		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 3), "Corinnstone Cobble");
-		
+		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 1),
+				"Bloodstone Cobble");
+		LanguageRegistry
+				.addName(new ItemStack(bloodstone, 1, 2), "Corinnstone");
+		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 3),
+				"Corinnstone Cobble");
+
 		GameRegistry.registerBlock(workbench, "runeWorkbench");
-		LanguageRegistry.addName(new ItemStack(workbench,1,0), "Rune Workbench");
+		LanguageRegistry.addName(new ItemStack(workbench, 1, 0),
+				"Rune Workbench");
 	}
 
 	private void registerPlants() {
@@ -178,9 +184,10 @@ public class ChalithBase {
 		GameRegistry.registerTileEntity(
 				tektor.minecraft.chalith.entity.GateBlockTileEntity.class,
 				"Gate Block");
-		GameRegistry.registerTileEntity(
-				tektor.minecraft.chalith.entity.ChalithWorkplaceTileEntity.class,
-				"Workplace");
+		GameRegistry
+				.registerTileEntity(
+						tektor.minecraft.chalith.entity.ChalithWorkplaceTileEntity.class,
+						"Workplace");
 
 	}
 
@@ -197,20 +204,32 @@ public class ChalithBase {
 		ItemStack onStack = new ItemStack(this.runeSymbol, 1, 11);
 		ItemStack voStack = new ItemStack(this.runeSymbol, 1, 13);
 		ItemStack welStack = new ItemStack(this.runeSymbol, 1, 15);
+
 		ItemStack avaeaIngotStack = new ItemStack(this.lorynIngot, 1, 2);
 		ItemStack lorynIngotStack = new ItemStack(this.lorynIngot, 1, 0);
 		ItemStack sorfynIngotStack = new ItemStack(this.lorynIngot, 1, 1);
+		ItemStack goldIngotStack = new ItemStack(Item.ingotGold, 1);
+
 		ItemStack baseRuneStack = new ItemStack(this.baseRune, 1, 0);
 		ItemStack wildRuneStack = new ItemStack(this.baseRune, 1, 1);
 		ItemStack switchingRuneStack = new ItemStack(this.baseRune, 1, 2);
-		ItemStack goldIngotStack = new ItemStack(Item.ingotGold, 1);
 
+		ItemStack bloodstoneStack = new ItemStack(this.bloodstone, 1, 0);
+		ItemStack corinnstoneStack = new ItemStack(this.bloodstone, 1, 2);
+
+		// Base Runes
 		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1, 0),
 				new Object[] { "XXX", "X X", "XXX", 'X', avaeaIngotStack });
 		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1, 1),
 				new Object[] { "XXX", "X X", "XXX", 'X', sorfynIngotStack });
 		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1, 2),
 				new Object[] { "XY", 'X', baseRuneStack, 'Y', wildRuneStack });
+
+		// Workbenches
+		GameRegistry.addShapedRecipe(new ItemStack(this.workbench, 1, 0),
+				new Object[] { "XYX", "ZYZ", "ZZZ", 'X', lorynIngotStack, 'Y',
+						corinnstoneStack, 'Z', bloodstoneStack });
+
 		// Recall
 		GameRegistry.addShapedRecipe(new ItemStack(this.utilRune, 1, 0),
 				new Object[] { "ABC", " X ", "   ", 'A', diStack, 'B', inStack,
@@ -336,12 +355,10 @@ public class ChalithBase {
 		FurnaceRecipes.smelting().addSmelting(
 				ChalithBase.chalithBaseOre.blockID, 2,
 				new ItemStack(ChalithBase.lorynIngot, 1, 2), 0.3F);
-		FurnaceRecipes.smelting().addSmelting(
-				ChalithBase.bloodstone.blockID, 1,
-				new ItemStack(ChalithBase.bloodstone, 1, 0), 0.2F);
-		FurnaceRecipes.smelting().addSmelting(
-				ChalithBase.bloodstone.blockID, 3,
-				new ItemStack(ChalithBase.bloodstone, 1, 2), 0.2F);
+		FurnaceRecipes.smelting().addSmelting(ChalithBase.bloodstone.blockID,
+				1, new ItemStack(ChalithBase.bloodstone, 1, 0), 0.2F);
+		FurnaceRecipes.smelting().addSmelting(ChalithBase.bloodstone.blockID,
+				3, new ItemStack(ChalithBase.bloodstone, 1, 2), 0.2F);
 
 	}
 
