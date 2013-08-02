@@ -5,9 +5,15 @@ import java.util.List;
 
 import tektor.minecraft.chalith.ChalithBase;
 
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -58,7 +64,7 @@ public class ShrinkPotionEntity extends EntityThrowable {
 						if (entitylivingbase instanceof EntityPig) {
 							stack.setItemDamage(0);
 							stack.stackTagCompound.setInteger("age",
-									entitylivingbase.getAge());
+									((EntityPig) entitylivingbase).getGrowingAge());
 							entitylivingbase.entityDropItem(stack, 0.0f);
 							entitylivingbase.setDead();
 							break;
@@ -66,10 +72,60 @@ public class ShrinkPotionEntity extends EntityThrowable {
 						else if(entitylivingbase instanceof EntitySheep) {
 							stack.setItemDamage(1);
 							stack.stackTagCompound.setInteger("age",
-									entitylivingbase.getAge());
+									((EntityAgeable) entitylivingbase).getGrowingAge());
+							EntitySheep sheep = (EntitySheep) entitylivingbase;
+							stack.stackTagCompound.setBoolean("sheared",sheep.getSheared());
+							stack.stackTagCompound.setInteger("fleece",sheep.getFleeceColor());
 							entitylivingbase.entityDropItem(stack, 0.0f);
 							entitylivingbase.setDead();
 							break;
+						}
+						else if(entitylivingbase instanceof EntityChicken) {
+							stack.setItemDamage(2);
+							stack.stackTagCompound.setInteger("age",
+									((EntityAgeable) entitylivingbase).getGrowingAge());
+							entitylivingbase.entityDropItem(stack, 0.0f);
+							entitylivingbase.setDead();
+							break;
+						}
+						else if(entitylivingbase instanceof EntityCow) {
+							stack.setItemDamage(3);
+							stack.stackTagCompound.setInteger("age",
+									((EntityAgeable) entitylivingbase).getGrowingAge());
+							entitylivingbase.entityDropItem(stack, 0.0f);
+							entitylivingbase.setDead();
+							break;
+						}
+						else if(entitylivingbase instanceof EntityWolf) {
+							stack.setItemDamage(4);
+							stack.stackTagCompound.setInteger("age",
+									((EntityAgeable) entitylivingbase).getGrowingAge());
+							EntityWolf wolf = (EntityWolf) entitylivingbase;
+							stack.stackTagCompound.setString("owner",wolf.getOwnerName());
+							stack.stackTagCompound.setBoolean("tamed",wolf.isTamed());
+							entitylivingbase.entityDropItem(stack, 0.0f);
+							entitylivingbase.setDead();
+							break;
+							
+						}
+						else if(entitylivingbase instanceof EntityHorse) {
+							stack.setItemDamage(5);
+							stack.stackTagCompound.setInteger("age",
+									((EntityAgeable) entitylivingbase).getGrowingAge());
+							EntityHorse horse = (EntityHorse) entitylivingbase;
+							stack.stackTagCompound.setBoolean("EatingHaystack", horse.func_110204_cc());
+							stack.stackTagCompound.setBoolean("ChestedHorse", horse.func_110261_ca());
+							stack.stackTagCompound.setBoolean("HasReproduced", horse.func_110243_cf());
+							stack.stackTagCompound.setBoolean("Bred", horse.func_110205_ce());
+							stack.stackTagCompound.setInteger("Type", horse.func_110265_bP());
+							stack.stackTagCompound.setInteger("Variant", horse.func_110202_bQ());
+							stack.stackTagCompound.setInteger("Temper", horse.func_110252_cg());
+							stack.stackTagCompound.setBoolean("Tame", horse.func_110248_bS());
+							stack.stackTagCompound.setString("OwnerName", horse.func_142019_cb());
+							entitylivingbase.entityDropItem(stack, 0.0f);
+							entitylivingbase.setDead();
+							break;
+							
 						}
 
 					}
