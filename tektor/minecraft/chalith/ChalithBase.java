@@ -2,6 +2,7 @@ package tektor.minecraft.chalith;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.common.Configuration;
@@ -43,7 +44,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.6.16")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.7.0")
 @NetworkMod(channels = { "Chalith" }, packetHandler = ChalithPacketHandler.class, clientSideRequired = true)
 public class ChalithBase {
 
@@ -240,6 +241,9 @@ public class ChalithBase {
 
 		ItemStack bloodstoneStack = new ItemStack(this.bloodstone, 1, 0);
 		ItemStack corinnstoneStack = new ItemStack(this.bloodstone, 1, 2);
+		
+		ItemStack israkRootStack = new ItemStack(this.seedBase,1,0);
+		ItemStack israkLeafStack = new ItemStack(this.herbalByProduct,1,0);
 
 		// Base Runes
 		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1, 0),
@@ -253,7 +257,11 @@ public class ChalithBase {
 		GameRegistry.addShapedRecipe(new ItemStack(this.workbench, 1, 0),
 				new Object[] { "XYX", "ZYZ", "ZZZ", 'X', lorynIngotStack, 'Y',
 						corinnstoneStack, 'Z', bloodstoneStack });
-
+		
+		//ShrinkPotion
+		GameRegistry.addShapedRecipe(new ItemStack(this.shrinkPotion, 1, 0),
+				new Object[] { "XYX", "YZY", "XYX", 'X', israkRootStack, 'Y',
+						israkLeafStack, 'Z', new ItemStack(ItemPotion.potion.itemID,1,0) });
 		// Recall
 		GameRegistry.addShapedRecipe(new ItemStack(this.utilRune, 1, 0),
 				new Object[] { "ABC", " X ", "   ", 'A', diStack, 'B', inStack,

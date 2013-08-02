@@ -39,8 +39,8 @@ public class ShrinkPotionEntity extends EntityThrowable {
 	protected void onImpact(MovingObjectPosition movingobjectposition) {
 
 		if (!this.worldObj.isRemote) {
-			AxisAlignedBB axisalignedbb = this.boundingBox.expand(1.0D, 1.0D,
-					1.0D);
+			AxisAlignedBB axisalignedbb = this.boundingBox.expand(4.0D, 1.0D,
+					4.0D);
 			List list1 = this.worldObj.getEntitiesWithinAABB(
 					EntityLivingBase.class, axisalignedbb);
 			if (list1 != null && !list1.isEmpty()) {
