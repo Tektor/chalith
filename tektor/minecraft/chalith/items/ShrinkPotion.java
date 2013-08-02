@@ -16,7 +16,7 @@ public class ShrinkPotion extends Item {
 	private Icon icon;
 	public ShrinkPotion(int par1) {
 		super(par1);
-		setMaxStackSize(64);
+		setMaxStackSize(1);
 		setCreativeTab(CreativeTabs.tabBrewing);
 		setUnlocalizedName("shrinkPotion");
 		this.setHasSubtypes(false);

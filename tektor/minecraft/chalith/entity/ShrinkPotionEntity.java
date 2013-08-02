@@ -3,7 +3,11 @@ package tektor.minecraft.chalith.entity;
 import java.util.Iterator;
 import java.util.List;
 
+import tektor.minecraft.chalith.ChalithBase;
+
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,32 +32,51 @@ public class ShrinkPotionEntity extends EntityThrowable {
 	@Override
 	protected void onImpact(MovingObjectPosition movingobjectposition) {
 
-		AxisAlignedBB axisalignedbb = this.boundingBox.expand(1.0D, 1.0D, 1.0D);
-		List list1 = this.worldObj.getEntitiesWithinAABB(
-				EntityLivingBase.class, axisalignedbb);
+		if (!this.worldObj.isRemote) {
+			AxisAlignedBB axisalignedbb = this.boundingBox.expand(1.0D, 1.0D,
+					1.0D);
+			List list1 = this.worldObj.getEntitiesWithinAABB(
+					EntityLivingBase.class, axisalignedbb);
+			if (list1 != null && !list1.isEmpty()) {
+				Iterator iterator = list1.iterator();
 
-		if (list1 != null && !list1.isEmpty()) {
-			Iterator iterator = list1.iterator();
+				while (iterator.hasNext()) {
+					EntityLivingBase entitylivingbase = (EntityLivingBase) iterator
+							.next();
+					double d0 = this.getDistanceSqToEntity(entitylivingbase);
 
-			while (iterator.hasNext()) {
-				EntityLivingBase entitylivingbase = (EntityLivingBase) iterator
-						.next();
-				double d0 = this.getDistanceSqToEntity(entitylivingbase);
+					if (d0 < 16.0D) {
+						double d1 = 1.0D - Math.sqrt(d0) / 4.0D;
 
-				if (d0 < 16.0D) {
-					double d1 = 1.0D - Math.sqrt(d0) / 4.0D;
+						if (entitylivingbase == movingobjectposition.entityHit) {
+							d1 = 1.0D;
+						}
 
-					if (entitylivingbase == movingobjectposition.entityHit) {
-						d1 = 1.0D;
+						ItemStack stack = new ItemStack(
+								ChalithBase.shrinkStatue, 1, 0);
+						stack.stackTagCompound = new NBTTagCompound();
+						if (entitylivingbase instanceof EntityPig) {
+							stack.setItemDamage(0);
+							stack.stackTagCompound.setInteger("age",
+									entitylivingbase.getAge());
+							entitylivingbase.entityDropItem(stack, 0.0f);
+							entitylivingbase.setDead();
+							break;
+						}
+						else if(entitylivingbase instanceof EntitySheep) {
+							stack.setItemDamage(1);
+							stack.stackTagCompound.setInteger("age",
+									entitylivingbase.getAge());
+							entitylivingbase.entityDropItem(stack, 0.0f);
+							entitylivingbase.setDead();
+							break;
+						}
+
 					}
-
-					// entitylivingbase.entityDropItem(par1ItemStack, par2)
-
 				}
+
 			}
-
 		}
-
 		this.worldObj.playAuxSFX(2002, (int) Math.round(this.posX),
 				(int) Math.round(this.posY), (int) Math.round(this.posZ), 1);
 		this.setDead();

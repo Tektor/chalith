@@ -20,6 +20,7 @@ import tektor.minecraft.chalith.items.ChalithStoneItemBlock;
 import tektor.minecraft.chalith.items.HerbalByProducts;
 import tektor.minecraft.chalith.items.SeedBase;
 import tektor.minecraft.chalith.items.ShrinkPotion;
+import tektor.minecraft.chalith.items.ShrinkStatue;
 import tektor.minecraft.chalith.items.TrapRune;
 import tektor.minecraft.chalith.items.ChalithIngotBase;
 import tektor.minecraft.chalith.items.UtilRune;
@@ -42,7 +43,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.6.14")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.6.16")
 @NetworkMod(channels = { "Chalith" }, packetHandler = ChalithPacketHandler.class, clientSideRequired = true)
 public class ChalithBase {
 
@@ -62,7 +63,7 @@ public class ChalithBase {
 
 	// items
 	public static int itemID1, itemID2, itemID3, itemID4, itemID5, itemID6,
-			itemID7, itemID8, itemID9;
+			itemID7, itemID8, itemID9, itemID10;
 	public static Item avaeaIngot;
 	public static Item lorynIngot;
 	public static Item utilRune;
@@ -72,6 +73,7 @@ public class ChalithBase {
 	public static Item seedBase;
 	public static Item herbalByProduct;
 	public static Item shrinkPotion;
+	public static Item shrinkStatue;
 
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide = "tektor.minecraft.chalith.client.ChalithClientProxy", serverSide = "tektor.minecraft.chalith.ChalithCommonProxy")
@@ -112,6 +114,8 @@ public class ChalithBase {
 		itemID8 = config.get(Configuration.CATEGORY_ITEM, "itemID8", 7007)
 				.getInt();
 		itemID9 = config.get(Configuration.CATEGORY_ITEM, "itemID9", 7008)
+				.getInt();
+		itemID10 = config.get(Configuration.CATEGORY_ITEM, "itemID10", 7009)
 				.getInt();
 
 		config.save();
@@ -158,6 +162,9 @@ public class ChalithBase {
 		GameRegistry.registerItem(shrinkPotion, "shrinkPotion");
 		LanguageRegistry.addName(new ItemStack(shrinkPotion, 1, 0),
 				"Shrink Potion");
+		GameRegistry.registerItem(shrinkStatue, "shrinkStatue");
+		LanguageRegistry.addName(new ItemStack(shrinkStatue, 1, 0),
+				"Shrink Statue");
 	}
 
 	private void registerPlants() {
@@ -183,6 +190,8 @@ public class ChalithBase {
 		seedBase = new SeedBase(itemID7);
 		herbalByProduct = new HerbalByProducts(itemID8);
 		shrinkPotion = new ShrinkPotion(itemID9);
+		shrinkStatue = new ShrinkStatue(itemID10);
+		
 		lorynIngot = new ChalithIngotBase(itemID2);
 
 		utilRune = new UtilRune(itemID3);
