@@ -6,11 +6,15 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
+import net.minecraft.world.World;
 
 public class ShrinkStatue extends Item {
 
@@ -54,12 +58,39 @@ public class ShrinkStatue extends Item {
 			case 0:
 				s = "Pig";
 				break;
+			case 1:
+				s = "Sheep";
+				break;
 			}
 			par3List.add("Type: " + s);
 			par3List.add("Age: "
 					+ par1ItemStack.stackTagCompound.getInteger("age"));
 		}
 
+	}
+
+	public boolean onItemUse(ItemStack par1ItemStack,
+			EntityPlayer par3EntityPlayer, World par2World, int par4, int par5,
+			int par6, int par7, float par8, float par9, float par10) {
+		if (!par3EntityPlayer.canPlayerEdit(par4, par5, par6, par7,
+				par1ItemStack)) {
+			return false;
+		}
+		if (!par2World.isRemote) {
+			if (!par3EntityPlayer.capabilities.isCreativeMode) {
+				--par1ItemStack.stackSize;
+			}
+			EntityAnimal ea = null;
+			switch(par1ItemStack.getItemDamage())
+						{
+			case 0: ea = new EntityPig(par2World);break;
+			case 1: ea = new EntitySheep(par2World);break;
+			}
+			ea.setGrowingAge(par1ItemStack.stackTagCompound.getInteger("age"));
+			ea.setLocationAndAngles(par4, par5+1, par6, 0.0F, 0.0F);
+			par2World.spawnEntityInWorld(ea);
+		}
+		return true;
 	}
 
 }
