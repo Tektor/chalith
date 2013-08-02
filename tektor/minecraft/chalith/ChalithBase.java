@@ -12,12 +12,14 @@ import tektor.minecraft.chalith.blocks.BlockTrapRune;
 import tektor.minecraft.chalith.blocks.ChalithOreBase;
 import tektor.minecraft.chalith.blocks.ChalithWorkplaces;
 import tektor.minecraft.chalith.blocks.GateBlock;
+import tektor.minecraft.chalith.entity.ShrinkPotionEntity;
 import tektor.minecraft.chalith.gui.ChalithGuiHandler;
 import tektor.minecraft.chalith.items.BaseRune;
 import tektor.minecraft.chalith.items.ChalithOreItemBlock;
 import tektor.minecraft.chalith.items.ChalithStoneItemBlock;
 import tektor.minecraft.chalith.items.HerbalByProducts;
 import tektor.minecraft.chalith.items.SeedBase;
+import tektor.minecraft.chalith.items.ShrinkPotion;
 import tektor.minecraft.chalith.items.TrapRune;
 import tektor.minecraft.chalith.items.ChalithIngotBase;
 import tektor.minecraft.chalith.items.UtilRune;
@@ -36,10 +38,11 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.6.12")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.6.14")
 @NetworkMod(channels = { "Chalith" }, packetHandler = ChalithPacketHandler.class, clientSideRequired = true)
 public class ChalithBase {
 
@@ -59,7 +62,7 @@ public class ChalithBase {
 
 	// items
 	public static int itemID1, itemID2, itemID3, itemID4, itemID5, itemID6,
-			itemID7, itemID8;
+			itemID7, itemID8, itemID9;
 	public static Item avaeaIngot;
 	public static Item lorynIngot;
 	public static Item utilRune;
@@ -68,6 +71,7 @@ public class ChalithBase {
 	public static Item runeSymbol;
 	public static Item seedBase;
 	public static Item herbalByProduct;
+	public static Item shrinkPotion;
 
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide = "tektor.minecraft.chalith.client.ChalithClientProxy", serverSide = "tektor.minecraft.chalith.ChalithCommonProxy")
@@ -107,6 +111,8 @@ public class ChalithBase {
 				.getInt();
 		itemID8 = config.get(Configuration.CATEGORY_ITEM, "itemID8", 7007)
 				.getInt();
+		itemID9 = config.get(Configuration.CATEGORY_ITEM, "itemID9", 7008)
+				.getInt();
 
 		config.save();
 	}
@@ -124,6 +130,10 @@ public class ChalithBase {
 		smeltingRecipes();
 		runeCrafting();
 		GameRegistry.registerWorldGenerator(new ChalithWorldGen());
+		EntityRegistry.registerModEntity(ShrinkPotionEntity.class,
+				"ShrinkPotion", EntityRegistry.findGlobalUniqueEntityId(),
+				this.instance, 20, 5, true);
+
 		NetworkRegistry.instance().registerGuiHandler(this,
 				new ChalithGuiHandler());
 	}
@@ -144,6 +154,10 @@ public class ChalithBase {
 		GameRegistry.registerBlock(workbench, "runeWorkbench");
 		LanguageRegistry.addName(new ItemStack(workbench, 1, 0),
 				"Rune Workbench");
+
+		GameRegistry.registerItem(shrinkPotion, "shrinkPotion");
+		LanguageRegistry.addName(new ItemStack(shrinkPotion, 1, 0),
+				"Shrink Potion");
 	}
 
 	private void registerPlants() {
@@ -168,6 +182,7 @@ public class ChalithBase {
 		// items
 		seedBase = new SeedBase(itemID7);
 		herbalByProduct = new HerbalByProducts(itemID8);
+		shrinkPotion = new ShrinkPotion(itemID9);
 		lorynIngot = new ChalithIngotBase(itemID2);
 
 		utilRune = new UtilRune(itemID3);
