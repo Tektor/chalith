@@ -1,7 +1,7 @@
 package tektor.minecraft.chalith.gui;
 
 import tektor.minecraft.chalith.container.ChalithWorkplaceContainer;
-import tektor.minecraft.chalith.entity.ChalithWorkplaceTileEntity;
+import tektor.minecraft.chalith.entity.tileentity.ChalithWorkplaceTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

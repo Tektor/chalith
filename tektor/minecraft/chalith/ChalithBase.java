@@ -44,7 +44,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.7.1")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.7.2")
 @NetworkMod(channels = { "Chalith" }, packetHandler = ChalithPacketHandler.class, clientSideRequired = true)
 public class ChalithBase {
 
@@ -210,14 +210,14 @@ public class ChalithBase {
 
 	private void registerTileEntities() {
 		GameRegistry.registerTileEntity(
-				tektor.minecraft.chalith.entity.TrapRuneTileEntity.class,
+				tektor.minecraft.chalith.entity.tileentity.TrapRuneTileEntity.class,
 				"Fire Trap Rune");
 		GameRegistry.registerTileEntity(
-				tektor.minecraft.chalith.entity.GateBlockTileEntity.class,
+				tektor.minecraft.chalith.entity.tileentity.GateBlockTileEntity.class,
 				"Gate Block");
 		GameRegistry
 				.registerTileEntity(
-						tektor.minecraft.chalith.entity.ChalithWorkplaceTileEntity.class,
+						tektor.minecraft.chalith.entity.tileentity.ChalithWorkplaceTileEntity.class,
 						"Workplace");
 
 	}

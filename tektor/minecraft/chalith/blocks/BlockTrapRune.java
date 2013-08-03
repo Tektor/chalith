@@ -6,7 +6,7 @@ import java.util.Random;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import tektor.minecraft.chalith.ChalithBase;
-import tektor.minecraft.chalith.entity.TrapRuneTileEntity;
+import tektor.minecraft.chalith.entity.tileentity.TrapRuneTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

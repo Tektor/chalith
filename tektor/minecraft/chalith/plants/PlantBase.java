@@ -24,7 +24,7 @@ public class PlantBase extends Block{
 	
 	public PlantBase(int par1) {
 		super(par1, Material.plants);
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F , 1.5F, 1.0F);
+		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F , 1.0F, 1.0F);
 		this.setTickRandomly(true);
 		
 	}

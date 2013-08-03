@@ -1,4 +1,4 @@
-package tektor.minecraft.chalith.entity;
+package tektor.minecraft.chalith.entity.tileentity;
 
 import tektor.minecraft.chalith.container.ChalithWorkplaceContainer;
 import net.minecraft.entity.player.EntityPlayer;

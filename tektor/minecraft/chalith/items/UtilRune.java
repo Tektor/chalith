@@ -6,7 +6,7 @@ import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import tektor.minecraft.chalith.ChalithBase;
-import tektor.minecraft.chalith.entity.GateBlockTileEntity;
+import tektor.minecraft.chalith.entity.tileentity.GateBlockTileEntity;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;

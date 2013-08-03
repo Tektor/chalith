@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-import tektor.minecraft.chalith.entity.ChalithWorkplaceTileEntity;
+import tektor.minecraft.chalith.entity.tileentity.ChalithWorkplaceTileEntity;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;

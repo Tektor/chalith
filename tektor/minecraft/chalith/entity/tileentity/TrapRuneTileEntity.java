@@ -1,4 +1,4 @@
-package tektor.minecraft.chalith.entity;
+package tektor.minecraft.chalith.entity.tileentity;
 
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;

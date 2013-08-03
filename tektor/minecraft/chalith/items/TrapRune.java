@@ -3,7 +3,7 @@ package tektor.minecraft.chalith.items;
 import java.util.List;
 
 import tektor.minecraft.chalith.ChalithBase;
-import tektor.minecraft.chalith.entity.TrapRuneTileEntity;
+import tektor.minecraft.chalith.entity.tileentity.TrapRuneTileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;

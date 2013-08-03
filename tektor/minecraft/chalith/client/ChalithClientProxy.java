@@ -10,7 +10,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import tektor.minecraft.chalith.ChalithBase;
 import tektor.minecraft.chalith.ChalithCommonProxy;
 import tektor.minecraft.chalith.entity.ShrinkPotionEntity;
-import tektor.minecraft.chalith.entity.TrapRuneTileEntity;
+import tektor.minecraft.chalith.entity.tileentity.TrapRuneTileEntity;
 import tektor.minecraft.chalith.renderer.RenderShrinkPotion;
 
 public class ChalithClientProxy extends ChalithCommonProxy {

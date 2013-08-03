@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import tektor.minecraft.chalith.container.ChalithWorkplaceContainer;
-import tektor.minecraft.chalith.entity.ChalithWorkplaceTileEntity;
+import tektor.minecraft.chalith.entity.tileentity.ChalithWorkplaceTileEntity;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;

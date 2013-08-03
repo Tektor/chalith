@@ -3,7 +3,7 @@ package tektor.minecraft.chalith.container;
 import org.apache.commons.lang3.StringUtils;
 
 import tektor.minecraft.chalith.ChalithBase;
-import tektor.minecraft.chalith.entity.ChalithWorkplaceTileEntity;
+import tektor.minecraft.chalith.entity.tileentity.ChalithWorkplaceTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
