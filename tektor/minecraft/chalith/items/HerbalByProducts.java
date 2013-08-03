@@ -1,5 +1,9 @@
 package tektor.minecraft.chalith.items;
 
+import java.util.List;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import tektor.minecraft.chalith.ChalithBase;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -45,7 +49,7 @@ public class HerbalByProducts extends Item{
 		case 0:
 			return "israkLeaf";
 		case 1:
-			return "blub";
+			return "utaniNut";
 		default:
 			return "??";
 		}
@@ -58,7 +62,7 @@ public class HerbalByProducts extends Item{
 		case 0:
 			return "Israk Leaf";
 		case 1:
-			return "blubb!";
+			return "Utani Nut";
 		default:
 			return "??";
 		}
@@ -67,7 +71,14 @@ public class HerbalByProducts extends Item{
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
 		icon[0] = par1IconRegister.registerIcon("chalith:israkLeaf");
-		icon[1] = par1IconRegister.registerIcon("chalith:blub");
+		icon[1] = par1IconRegister.registerIcon("chalith:utaniNut");
+	}
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void getSubItems(int par1, CreativeTabs tab, List subItems) {
+
+		subItems.add(new ItemStack(this, 1, 0));
+		subItems.add(new ItemStack(this, 1, 1));
 	}
 
 }

@@ -44,7 +44,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.7.0")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.7.1")
 @NetworkMod(channels = { "Chalith" }, packetHandler = ChalithPacketHandler.class, clientSideRequired = true)
 public class ChalithBase {
 
@@ -169,13 +169,19 @@ public class ChalithBase {
 	}
 
 	private void registerPlants() {
-		// Israk
-		GameRegistry.registerBlock(plantBase, "plantBase");
-		LanguageRegistry.addName(new ItemStack(plantBase, 1, 0), "Israk Root");
 		GameRegistry.registerItem(seedBase, "seedBase");
+		GameRegistry.registerBlock(plantBase, "plantBase");
+		GameRegistry.registerItem(herbalByProduct, "herbalByProduct");
+		// Israk
+		LanguageRegistry.addName(new ItemStack(plantBase, 1, 0), "Israk Root");
 		LanguageRegistry.addName(new ItemStack(seedBase, 1, 0), "Israk Root");
 		MinecraftForge.addGrassSeed(new ItemStack(seedBase, 1, 0), 7);
-		GameRegistry.registerItem(herbalByProduct, "herbalByProduct");
+		// Utani
+		LanguageRegistry.addName(new ItemStack(plantBase, 1, 1), "Utani Sapling");
+		LanguageRegistry.addName(new ItemStack(seedBase, 1, 1), "Utani Nut");
+		MinecraftForge.addGrassSeed(new ItemStack(seedBase, 1, 1), 4);
+		
+		
 
 	}
 

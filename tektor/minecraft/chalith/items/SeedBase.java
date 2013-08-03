@@ -19,7 +19,7 @@ import net.minecraftforge.common.IPlantable;
 
 public class SeedBase extends Item implements IPlantable {
 
-	Icon[] icon = new Icon[1];
+	Icon[] icon = new Icon[2];
 
 	public SeedBase(int par1) {
 		super(par1);
@@ -67,6 +67,8 @@ public class SeedBase extends Item implements IPlantable {
 		switch (stack.getItemDamage()) {
 		case 0:
 			return "israkRoot";
+		case 1:
+			return "utaniSapling";
 		default:
 			return "??";
 		}
@@ -78,6 +80,8 @@ public class SeedBase extends Item implements IPlantable {
 		switch (stack.getItemDamage()) {
 		case 0:
 			return "Israk Root";
+		case 1: 
+			return "Utani Sapling";
 		default:
 			return "??";
 		}
@@ -86,6 +90,7 @@ public class SeedBase extends Item implements IPlantable {
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
 		icon[0] = par1IconRegister.registerIcon("chalith:israkRoot");
+		icon[1] = par1IconRegister.registerIcon("chalith:utaniSapling");
 	}
 
 	@Override
@@ -97,8 +102,15 @@ public class SeedBase extends Item implements IPlantable {
 				|| world.getBlockId(bx, by + 1, bz) != 0) {
 			return false;
 		} else {
-			world.setBlock(bx, by + 1, bz, ChalithBase.plantBase.blockID,
-					itemStack.getItemDamage(), 3);
+			if (itemStack.getItemDamage() == 0) {
+				world.setBlock(bx, by + 1, bz, ChalithBase.plantBase.blockID,
+						0, 3);
+			}
+			else if(itemStack.getItemDamage() == 1)
+			{
+				world.setBlock(bx, by + 1, bz, ChalithBase.plantBase.blockID,
+						2, 3);
+			}
 			itemStack.stackSize--;
 			return true;
 		}
@@ -109,6 +121,7 @@ public class SeedBase extends Item implements IPlantable {
 	public void getSubItems(int par1, CreativeTabs tab, List subItems) {
 
 		subItems.add(new ItemStack(this, 1, 0));
+		subItems.add(new ItemStack(this, 1, 1));
 	}
 
 }

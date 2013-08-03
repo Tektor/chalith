@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 public class PlantBase extends Block{
 
-	private Icon[] icon = new Icon[2];
+	private Icon[] icon = new Icon[4];
 	
 	public PlantBase(int par1) {
 		super(par1, Material.plants);
@@ -45,6 +45,8 @@ public class PlantBase extends Block{
 	public void registerIcons(IconRegister par1IconRegister) {
 		icon[0] = par1IconRegister.registerIcon("chalith:israkPlant");
 		icon[1] = par1IconRegister.registerIcon("chalith:israkPlantGrown");
+		icon[2] = par1IconRegister.registerIcon("chalith:utaniPlant");
+		icon[3] = par1IconRegister.registerIcon("chalith:utaniPlantGrown");
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -52,6 +54,8 @@ public class PlantBase extends Block{
 
 		subItems.add(new ItemStack(this, 1, 0));
 		subItems.add(new ItemStack(this, 1, 1));
+		subItems.add(new ItemStack(this, 1, 2));
+		subItems.add(new ItemStack(this, 1, 3));
 	}
 
 	@Override
@@ -62,12 +66,25 @@ public class PlantBase extends Block{
 	
 	public void updateTick(World world, int x, int y, int z, Random random)
 	{
-		if(world.getBlockMetadata(x,y,z) == 1) return;
+		if(world.getBlockMetadata(x,y,z) == 1 || world.getBlockMetadata(x, y, z) == 3) return;
 		if(world.getBlockLightValue(x, y+1, z)<9) return;
-		int grow = 25 - world.getBlockMetadata(x, y-1, z);
+		int grow = 0;
+		if (world.getBlockMetadata(x,y,z) == 0) {
+			grow = 25 - world.getBlockMetadata(x, y - 1, z);
+		}
+		else if (world.getBlockMetadata(x, y, z)== 2)
+		{
+			grow = 25 - world.getBlockMetadata(x, y - 1, z);
+		}
 		if(random.nextInt(grow) == 0)
 		{
-			world.setBlockMetadataWithNotify(x, y, z, 1, 3);
+			if (world.getBlockMetadata(x,y,z) == 0) {
+				world.setBlockMetadataWithNotify(x, y, z, 1, 3);
+			}
+			else if (world.getBlockMetadata(x,y,z) == 2)
+			{
+				world.setBlockMetadataWithNotify(x, y, z, 3, 3);
+			}
 		}
 		else return;
 	}
@@ -101,6 +118,7 @@ public class PlantBase extends Block{
     {
         ArrayList<ItemStack> ret = super.getBlockDropped(world, x, y, z, metadata, fortune);
 
+        //Israk
         if (metadata == 1)
         {
             for (int n = 0; n < 3 + fortune; n++)
@@ -110,6 +128,36 @@ public class PlantBase extends Block{
                     ret.add(new ItemStack(this.getSeedItem(), 1, 0));
                 }
             }
+            ret.add(new ItemStack(this.getSeedItem(), 1, 0));
+            ret.add(new ItemStack(this.getCropItem(), 1, 0));
+        }
+        else if(metadata == 0)
+        {
+        	ret.add(new ItemStack(this.getSeedItem(), 1, 0));
+        }
+        //Utani
+        else if (metadata == 3)
+        {
+            for (int n = 0; n < 1 + fortune; n++)
+            {
+                if (world.rand.nextInt(2) == 0)
+                {
+                    ret.add(new ItemStack(this.getSeedItem(), 1, 1));
+                }
+            }
+            ret.add(new ItemStack(this.getSeedItem(), 1, 1));
+            for (int n = 0; n < 2 + fortune; n++)
+            {
+                if (world.rand.nextInt(2) == 0)
+                {
+                    ret.add(new ItemStack(this.getCropItem(), 1, 1));
+                }
+            }
+            ret.add(new ItemStack(this.getCropItem(), 1, 1));
+        }
+        else if(metadata == 2)
+        {
+        	ret.add(new ItemStack(this.getSeedItem(), 1, 1));
         }
 
         return ret;
@@ -128,7 +176,7 @@ public class PlantBase extends Block{
      */
     public int quantityDropped(Random par1Random)
     {
-        return par1Random.nextInt(1)+1;
+        return 0;
     }
 
 }
