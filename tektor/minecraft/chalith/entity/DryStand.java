@@ -8,6 +8,10 @@ import net.minecraft.world.WorldProvider;
 
 public class DryStand extends Entity {
 
+	public DryStand(World par1World, EntityPlayer par3EntityPlayer) {
+		super(par1World);
+	}
+	
 	public DryStand(World par1World) {
 		super(par1World);
 	}
@@ -23,7 +27,6 @@ public class DryStand extends Entity {
 		this.posX = nbt.getDouble("posX");
 		this.posY = nbt.getDouble("posY");
 		this.posZ = nbt.getDouble("posZ");
-		this.worldObj = WorldProvider.getProviderForDimension(nbt.getInteger("world")).worldObj;
 		
 
 	}
@@ -33,7 +36,6 @@ public class DryStand extends Entity {
 		nbt.setDouble("posX", posX);
 		nbt.setDouble("posY", posY);
 		nbt.setDouble("posZ", posZ);
-		nbt.setInteger("world", worldObj.provider.dimensionId);
 
 	}
 

@@ -13,11 +13,13 @@ import tektor.minecraft.chalith.blocks.BlockTrapRune;
 import tektor.minecraft.chalith.blocks.ChalithOreBase;
 import tektor.minecraft.chalith.blocks.ChalithWorkplaces;
 import tektor.minecraft.chalith.blocks.GateBlock;
+import tektor.minecraft.chalith.entity.DryStand;
 import tektor.minecraft.chalith.entity.ShrinkPotionEntity;
 import tektor.minecraft.chalith.gui.ChalithGuiHandler;
 import tektor.minecraft.chalith.items.BaseRune;
 import tektor.minecraft.chalith.items.ChalithOreItemBlock;
 import tektor.minecraft.chalith.items.ChalithStoneItemBlock;
+import tektor.minecraft.chalith.items.EntityPlacer;
 import tektor.minecraft.chalith.items.HerbalByProducts;
 import tektor.minecraft.chalith.items.SeedBase;
 import tektor.minecraft.chalith.items.ShrinkPotion;
@@ -64,7 +66,7 @@ public class ChalithBase {
 
 	// items
 	public static int itemID1, itemID2, itemID3, itemID4, itemID5, itemID6,
-			itemID7, itemID8, itemID9, itemID10;
+			itemID7, itemID8, itemID9, itemID10, itemID11;
 	public static Item avaeaIngot;
 	public static Item lorynIngot;
 	public static Item utilRune;
@@ -75,6 +77,7 @@ public class ChalithBase {
 	public static Item herbalByProduct;
 	public static Item shrinkPotion;
 	public static Item shrinkStatue;
+	public static Item entityPlacer;
 
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide = "tektor.minecraft.chalith.client.ChalithClientProxy", serverSide = "tektor.minecraft.chalith.ChalithCommonProxy")
@@ -118,6 +121,8 @@ public class ChalithBase {
 				.getInt();
 		itemID10 = config.get(Configuration.CATEGORY_ITEM, "itemID10", 7009)
 				.getInt();
+		itemID11 = config.get(Configuration.CATEGORY_ITEM, "itemID11", 7010)
+				.getInt();
 
 		config.save();
 	}
@@ -135,12 +140,20 @@ public class ChalithBase {
 		smeltingRecipes();
 		runeCrafting();
 		GameRegistry.registerWorldGenerator(new ChalithWorldGen());
-		EntityRegistry.registerModEntity(ShrinkPotionEntity.class,
-				"ShrinkPotion", EntityRegistry.findGlobalUniqueEntityId(),
-				this.instance, 20, 5, true);
+		registerEntities();
 
 		NetworkRegistry.instance().registerGuiHandler(this,
 				new ChalithGuiHandler());
+	}
+
+	private void registerEntities() {
+		
+		EntityRegistry.registerModEntity(ShrinkPotionEntity.class,
+				"ShrinkPotion", EntityRegistry.findGlobalUniqueEntityId(),
+				this.instance, 20, 5, true);
+		EntityRegistry.registerModEntity(DryStand.class,
+				"DryStand", EntityRegistry.findGlobalUniqueEntityId()+1,
+				this.instance, 20, 5, false);
 	}
 
 	private void registerMisc() {
@@ -166,6 +179,10 @@ public class ChalithBase {
 		GameRegistry.registerItem(shrinkStatue, "shrinkStatue");
 		LanguageRegistry.addName(new ItemStack(shrinkStatue, 1, 0),
 				"Shrink Statue");
+		GameRegistry.registerItem(entityPlacer, "entityPlacer");
+		LanguageRegistry.addName(new ItemStack(entityPlacer, 1, 0),
+				"Entity Placer");
+		
 	}
 
 	private void registerPlants() {
@@ -196,8 +213,11 @@ public class ChalithBase {
 		// items
 		seedBase = new SeedBase(itemID7);
 		herbalByProduct = new HerbalByProducts(itemID8);
+		
 		shrinkPotion = new ShrinkPotion(itemID9);
 		shrinkStatue = new ShrinkStatue(itemID10);
+		
+		entityPlacer = new EntityPlacer(itemID11);
 		
 		lorynIngot = new ChalithIngotBase(itemID2);
 

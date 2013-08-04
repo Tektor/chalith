@@ -2,6 +2,8 @@ package tektor.minecraft.chalith.items;
 
 import java.util.List;
 
+import tektor.minecraft.chalith.entity.DryStand;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -60,6 +62,12 @@ public class EntityPlacer extends Item{
 	public boolean onItemUse(ItemStack par1ItemStack,
 			EntityPlayer par2EntityPlayer, World par3World, int par4, int par5,
 			int par6, int par7, float par8, float par9, float par10) {
+		if (!par3World.isRemote) {
+			DryStand stand = new DryStand(par3World);
+			stand.setLocationAndAngles(par4, par5 + 1, par6, 0.0F, 0.0F);
+			
+			par3World.spawnEntityInWorld(stand);
+		}
 		return true;
 	}
 	
