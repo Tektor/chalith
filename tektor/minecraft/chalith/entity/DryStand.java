@@ -40,6 +40,7 @@ public class DryStand extends Entity implements IInventory {
 	public int hangingDirection;
 	public ItemStack[] inv = new ItemStack[2];
 	public DryStandContainer container;
+	public DryIsrakLeaf israk;
 
 	public DryStand(World par1World) {
 		super(par1World);
@@ -62,8 +63,6 @@ public class DryStand extends Entity implements IInventory {
 		this.stepHeight = 0;
 		calledOnce = false;
 	}
-	
-
 
 	@Override
 	public AxisAlignedBB getBoundingBox() {
@@ -99,28 +98,37 @@ public class DryStand extends Entity implements IInventory {
 	 */
 	public void onUpdate() {
 		super.onUpdate();
-		
+
 		Random rand = worldObj.rand;
-		if(!worldObj.isRemote && rand.nextInt(500) == 0)
-		{
-			if(this.inv[0] != null && inv[1] != null && inv[1].stackSize < this.getInventoryStackLimit())
-			{
+		if (!worldObj.isRemote && rand.nextInt(500) == 0) {
+			if (this.inv[0] != null && inv[1] != null
+					&& inv[1].stackSize < this.getInventoryStackLimit()) {
 				this.decrStackSize(0, 1);
 				this.inv[1].stackSize++;
-			}
-			else if(this.inv[0] != null && inv[1] == null)
-			{
-				if(inv[0].getItem().itemID == ChalithBase.herbalByProduct.itemID)
-				{
-					switch(inv[0].getItemDamage())
-					{
-					case 0: inv[1] = new ItemStack(ChalithBase.herbalByProduct.itemID,1,2);
-					break;
-					
+			} else if (this.inv[0] != null && inv[1] == null) {
+				if (inv[0].getItem().itemID == ChalithBase.herbalByProduct.itemID) {
+					switch (inv[0].getItemDamage()) {
+					case 0:
+						inv[1] = new ItemStack(
+								ChalithBase.herbalByProduct.itemID, 1, 2);
+						break;
+
 					}
 					this.decrStackSize(0, 1);
 				}
 			}
+
+		}
+		if (this.inv[0] != null
+				&& this.inv[0].itemID == ChalithBase.herbalByProduct.itemID
+				&& this.inv[0].getItemDamage() == 0 && israk == null
+				&& !worldObj.isRemote) {
+			israk = new DryIsrakLeaf(worldObj, this);
+			israk.setPositionParent(posX, posY + 1, posZ);
+			worldObj.spawnEntityInWorld(israk);
+		} else if (this.inv[0] == null && israk != null && !worldObj.isRemote) {
+			israk.setDead();
+			israk = null;
 		}
 
 	}
@@ -196,34 +204,32 @@ public class DryStand extends Entity implements IInventory {
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 
 	}
-	
-	public void readFromNBT(NBTTagCompound nbt)
-	{
+
+	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		NBTTagList tagList = nbt.getTagList("Inventory");
-        for (int i = 0; i < tagList.tagCount(); i++) {
-                NBTTagCompound tag = (NBTTagCompound) tagList.tagAt(i);
-                byte slot = tag.getByte("Slot");
-                if (slot >= 0 && slot < inv.length) {
-                        inv[slot] = ItemStack.loadItemStackFromNBT(tag);
-                }
-        }
+		for (int i = 0; i < tagList.tagCount(); i++) {
+			NBTTagCompound tag = (NBTTagCompound) tagList.tagAt(i);
+			byte slot = tag.getByte("Slot");
+			if (slot >= 0 && slot < inv.length) {
+				inv[slot] = ItemStack.loadItemStackFromNBT(tag);
+			}
+		}
 	}
-	
-	public void writeToNBT(NBTTagCompound nbt)
-	{
+
+	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		NBTTagList itemList = new NBTTagList();
-        for (int i = 0; i < inv.length; i++) {
-                ItemStack stack = inv[i];
-                if (stack != null) {
-                        NBTTagCompound tag = new NBTTagCompound();
-                        tag.setByte("Slot", (byte) i);
-                        stack.writeToNBT(tag);
-                        itemList.appendTag(tag);
-                }
-        }
-        nbt.setTag("Inventory", itemList);
+		for (int i = 0; i < inv.length; i++) {
+			ItemStack stack = inv[i];
+			if (stack != null) {
+				NBTTagCompound tag = new NBTTagCompound();
+				tag.setByte("Slot", (byte) i);
+				stack.writeToNBT(tag);
+				itemList.appendTag(tag);
+			}
+		}
+		nbt.setTag("Inventory", itemList);
 	}
 
 	protected boolean func_142008_O() {
@@ -247,12 +253,13 @@ public class DryStand extends Entity implements IInventory {
 			}
 		}
 
-		this.entityDropItem(new ItemStack(ChalithBase.entityPlacer,1,0), 0.0F);
+		this.entityDropItem(new ItemStack(ChalithBase.entityPlacer, 1, 0), 0.0F);
 	}
 
 	public boolean func_130002_c(EntityPlayer player) {
 
-		player.openGui(ChalithBase.instance, 1, worldObj, (int)posX, (int)posY, (int)posZ);
+		player.openGui(ChalithBase.instance, 1, worldObj, (int) posX,
+				(int) posY, (int) posZ);
 
 		return true;
 	}
@@ -268,72 +275,77 @@ public class DryStand extends Entity implements IInventory {
 				par1 + (double) f + 0.5D, par3 - (double) this.yOffset
 						+ (double) this.ySize + (double) f1, par5 + (double) f
 						+ 0.5D);
+		if (israk != null) {
+			israk.setPositionParent(par1, par3 + 1, par5);
+		}
 
 	}
 
 	@Override
-    public int getSizeInventory() {
-            return inv.length;
-    }
+	public int getSizeInventory() {
+		return inv.length;
+	}
 
-    @Override
-    public ItemStack getStackInSlot(int slot) {
-            return inv[slot];
-    }
-   
-    @Override
-    public void setInventorySlotContents(int slot, ItemStack stack) {
-            inv[slot] = stack;
-            if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-                    stack.stackSize = getInventoryStackLimit();
-            }              
-    }
+	@Override
+	public ItemStack getStackInSlot(int slot) {
+		return inv[slot];
+	}
 
-    @Override
-    public ItemStack decrStackSize(int slot, int amt) {
-            ItemStack stack = getStackInSlot(slot);
-            if (stack != null) {
-                    if (stack.stackSize <= amt) {
-                            setInventorySlotContents(slot, null);
-                    } else {
-                            stack = stack.splitStack(amt);
-                            if (stack.stackSize == 0) {
-                                    setInventorySlotContents(slot, null);
-                            }
-                    }
-            }
-            return stack;
-    }
+	@Override
+	public void setInventorySlotContents(int slot, ItemStack stack) {
+		inv[slot] = stack;
+		if (stack != null && stack.stackSize > getInventoryStackLimit()) {
+			stack.stackSize = getInventoryStackLimit();
+		}
+	}
 
-    @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
-            ItemStack stack = getStackInSlot(slot);
-            if (stack != null) {
-                    setInventorySlotContents(slot, null);
-            }
-            return stack;
-    }
-   
-    @Override
-    public int getInventoryStackLimit() {
-            return 64;
-    }
+	@Override
+	public ItemStack decrStackSize(int slot, int amt) {
+		ItemStack stack = getStackInSlot(slot);
+		if (stack != null) {
+			if (stack.stackSize <= amt) {
+				setInventorySlotContents(slot, null);
+			} else {
+				stack = stack.splitStack(amt);
+				if (stack.stackSize == 0) {
+					setInventorySlotContents(slot, null);
+				}
+			}
+		}
+		return stack;
+	}
 
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-            return player.getDistanceSq(posX + 0.5, posY + 0.5, posZ + 0.5) < 64;
-    }
+	@Override
+	public ItemStack getStackInSlotOnClosing(int slot) {
+		ItemStack stack = getStackInSlot(slot);
+		if (stack != null) {
+			setInventorySlotContents(slot, null);
+		}
+		return stack;
+	}
 
-    @Override
-    public void openChest() {}
+	@Override
+	public int getInventoryStackLimit() {
+		return 64;
+	}
 
-    @Override
-    public void closeChest() {}
-    
-    @Override
-    public String getInvName() {
-            return "chalith.dryStand";
-    }
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		return player.getDistanceSq(posX + 0.5, posY + 0.5, posZ + 0.5) < 64;
+	}
+
+	@Override
+	public void openChest() {
+	}
+
+	@Override
+	public void closeChest() {
+	}
+
+	@Override
+	public String getInvName() {
+		return "chalith.dryStand";
+	}
 
 	@Override
 	public boolean isInvNameLocalized() {
@@ -344,7 +356,7 @@ public class DryStand extends Entity implements IInventory {
 	@Override
 	public void onInventoryChanged() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import tektor.minecraft.chalith.blocks.BlockTrapRune;
 import tektor.minecraft.chalith.blocks.ChalithOreBase;
 import tektor.minecraft.chalith.blocks.ChalithWorkplaces;
 import tektor.minecraft.chalith.blocks.GateBlock;
+import tektor.minecraft.chalith.entity.DryIsrakLeaf;
 import tektor.minecraft.chalith.entity.DryStand;
 import tektor.minecraft.chalith.entity.ShrinkPotionEntity;
 import tektor.minecraft.chalith.entity.WoodAwning;
@@ -20,6 +21,7 @@ import tektor.minecraft.chalith.gui.ChalithGuiHandler;
 import tektor.minecraft.chalith.items.BaseRune;
 import tektor.minecraft.chalith.items.ChalithOreItemBlock;
 import tektor.minecraft.chalith.items.ChalithStoneItemBlock;
+import tektor.minecraft.chalith.items.CraftingStuff;
 import tektor.minecraft.chalith.items.EntityPlacer;
 import tektor.minecraft.chalith.items.HerbalByProducts;
 import tektor.minecraft.chalith.items.SeedBase;
@@ -47,7 +49,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.7.5")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.7.7")
 @NetworkMod(channels = { "Chalith" }, packetHandler = ChalithPacketHandler.class, clientSideRequired = true)
 public class ChalithBase {
 
@@ -68,7 +70,6 @@ public class ChalithBase {
 	// items
 	public static int itemID1, itemID2, itemID3, itemID4, itemID5, itemID6,
 			itemID7, itemID8, itemID9, itemID10, itemID11;
-	public static Item avaeaIngot;
 	public static Item lorynIngot;
 	public static Item utilRune;
 	public static Item trapRuneItem;
@@ -79,6 +80,7 @@ public class ChalithBase {
 	public static Item shrinkPotion;
 	public static Item shrinkStatue;
 	public static Item entityPlacer;
+	public static Item craftingStuff;
 
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide = "tektor.minecraft.chalith.client.ChalithClientProxy", serverSide = "tektor.minecraft.chalith.ChalithCommonProxy")
@@ -148,14 +150,24 @@ public class ChalithBase {
 	}
 
 	private void registerEntities() {
+		//DryStand
 		EntityRegistry.registerGlobalEntityID(DryStand.class, "DryStand",
 				EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(DryStand.class, "DryStand", 0,
 				this.instance, 40, 5, true);
+		///Sub: DryIsrakLeaf
+		EntityRegistry.registerGlobalEntityID(DryIsrakLeaf.class, "DryIsrakLeaf",
+				EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(DryIsrakLeaf.class, "DryIsrakLeaf", 3,
+				this.instance, 40, 5, true);
+		
+		//Wood Awning
 		EntityRegistry.registerGlobalEntityID(WoodAwning.class, "WoodAwning",
 				EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(WoodAwning.class, "WoodAwning", 2,
 				this.instance, 40, 5, true);
+		
+		//Shrink Potion
 		EntityRegistry.registerGlobalEntityID(ShrinkPotionEntity.class,
 				"ShrinkPotion", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(ShrinkPotionEntity.class,
@@ -171,24 +183,32 @@ public class ChalithBase {
 		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 0), "Bloodstone");
 		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 1),
 				"Bloodstone Cobble");
+		// corinnstone
 		LanguageRegistry
 				.addName(new ItemStack(bloodstone, 1, 2), "Corinnstone");
 		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 3),
 				"Corinnstone Cobble");
 
+		//rune renamer
 		GameRegistry.registerBlock(workbench, "runeWorkbench");
 		LanguageRegistry.addName(new ItemStack(workbench, 1, 0),
 				"Rune Workbench");
 
+		//shrink stuff
 		GameRegistry.registerItem(shrinkPotion, "shrinkPotion");
 		LanguageRegistry.addName(new ItemStack(shrinkPotion, 1, 0),
 				"Shrink Potion");
 		GameRegistry.registerItem(shrinkStatue, "shrinkStatue");
 		LanguageRegistry.addName(new ItemStack(shrinkStatue, 1, 0),
 				"Shrink Statue");
+		//entity placer base
 		GameRegistry.registerItem(entityPlacer, "entityPlacer");
 		LanguageRegistry.addName(new ItemStack(entityPlacer, 1, 0),
-				"Entity Placer");
+				"Dry Stand");
+		
+		GameRegistry.registerItem(craftingStuff, "craftingStuff");
+		LanguageRegistry.addName(new ItemStack(craftingStuff, 1, 0),
+				"String Grid");
 
 	}
 
@@ -224,7 +244,8 @@ public class ChalithBase {
 		shrinkStatue = new ShrinkStatue(itemID10);
 
 		entityPlacer = new EntityPlacer(itemID11);
-
+		craftingStuff = new CraftingStuff(itemID1);
+		
 		lorynIngot = new ChalithIngotBase(itemID2);
 
 		utilRune = new UtilRune(itemID3);
@@ -279,6 +300,9 @@ public class ChalithBase {
 		ItemStack israkRootStack = new ItemStack(this.seedBase, 1, 0);
 		ItemStack israkLeafStack = new ItemStack(this.herbalByProduct, 1, 0);
 		ItemStack israkLeafDriedStack = new ItemStack(this.herbalByProduct, 1, 2);
+		
+		ItemStack woodStick = new ItemStack(Item.stick,1,0);
+		ItemStack string = new ItemStack(Item.silk,1,0);
 
 		// Base Runes
 		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1, 0),
@@ -289,9 +313,20 @@ public class ChalithBase {
 				new Object[] { "XY", 'X', baseRuneStack, 'Y', wildRuneStack });
 
 		// Workbenches
+		/// Rune Renamer
 		GameRegistry.addShapedRecipe(new ItemStack(this.workbench, 1, 0),
 				new Object[] { "XYX", "ZYZ", "ZZZ", 'X', lorynIngotStack, 'Y',
 						corinnstoneStack, 'Z', bloodstoneStack });
+		/// Dry Stand
+		GameRegistry.addShapedRecipe(new ItemStack(this.entityPlacer, 1, 0),
+				new Object[] { "X X", " Y ", "X X", 'X', woodStick, 'Y',
+						new ItemStack(this.craftingStuff,1,0) });
+		
+		//Crafting Stuff
+		/// String Grid
+		GameRegistry.addShapedRecipe(new ItemStack(this.craftingStuff, 1, 0),
+				new Object[] { "XYX", "XYX", "XYX", 'X', woodStick, 'Y',
+						string});
 
 		// ShrinkPotion
 		GameRegistry.addShapedRecipe(new ItemStack(this.shrinkPotion, 1, 0),

@@ -2,6 +2,7 @@ package tektor.minecraft.chalith.items;
 
 import java.util.List;
 
+import tektor.minecraft.chalith.entity.DryIsrakLeaf;
 import tektor.minecraft.chalith.entity.DryStand;
 import tektor.minecraft.chalith.entity.WoodAwning;
 
@@ -95,7 +96,7 @@ public class EntityPlacer extends Item {
 	public void getSubItems(int par1, CreativeTabs tab, List subItems) {
 
 		subItems.add(new ItemStack(this, 1, 0));
-		subItems.add(new ItemStack(this, 1, 1));
+	//	subItems.add(new ItemStack(this, 1, 1));
 	}
 
 }
