@@ -15,7 +15,7 @@ import net.minecraftforge.common.EnumPlantType;
 
 public class HerbalByProducts extends Item{
 
-	Icon[] icon = new Icon[2];
+	Icon[] icon = new Icon[3];
 
 	public HerbalByProducts(int par1) {
 		super(par1);
@@ -50,6 +50,8 @@ public class HerbalByProducts extends Item{
 			return "israkLeaf";
 		case 1:
 			return "utaniNut";
+		case 2:
+			return "driedIsrakLeaf";
 		default:
 			return "??";
 		}
@@ -63,6 +65,8 @@ public class HerbalByProducts extends Item{
 			return "Israk Leaf";
 		case 1:
 			return "Utani Nut";
+		case 2:
+			return "Dried Israk Leaf";
 		default:
 			return "??";
 		}
@@ -72,6 +76,7 @@ public class HerbalByProducts extends Item{
 	public void registerIcons(IconRegister par1IconRegister) {
 		icon[0] = par1IconRegister.registerIcon("chalith:israkLeaf");
 		icon[1] = par1IconRegister.registerIcon("chalith:utaniNut");
+		icon[2] = par1IconRegister.registerIcon("chalith:israkLeafDried");
 	}
 	@SideOnly(Side.CLIENT)
 	@Override
@@ -79,6 +84,7 @@ public class HerbalByProducts extends Item{
 
 		subItems.add(new ItemStack(this, 1, 0));
 		subItems.add(new ItemStack(this, 1, 1));
+		subItems.add(new ItemStack(this, 1, 2));
 	}
 
 }

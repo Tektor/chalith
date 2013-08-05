@@ -22,10 +22,6 @@ public class ChalithWorkplaceContainer extends Container {
 	boolean lastOp = false;
 	boolean worked = false;
 
-	/**
-	 * The 2slots where you put your items in that you want to merge and/or
-	 * rename.
-	 */
 	IInventory inputSlots = new ChalithWorkbenchContainerInner(this,
 			"Rune Workbench", true, 2);
 

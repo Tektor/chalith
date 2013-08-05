@@ -46,7 +46,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.7.3")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.7.5")
 @NetworkMod(channels = { "Chalith" }, packetHandler = ChalithPacketHandler.class, clientSideRequired = true)
 public class ChalithBase {
 
@@ -147,13 +147,15 @@ public class ChalithBase {
 	}
 
 	private void registerEntities() {
-		
+		EntityRegistry.registerGlobalEntityID(DryStand.class, "DryStand",
+				EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(DryStand.class, "DryStand", 0,
+				this.instance, 40, 5, true);
+		EntityRegistry.registerGlobalEntityID(ShrinkPotionEntity.class,
+				"ShrinkPotion", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(ShrinkPotionEntity.class,
-				"ShrinkPotion", EntityRegistry.findGlobalUniqueEntityId(),
-				this.instance, 20, 5, true);
-		EntityRegistry.registerModEntity(DryStand.class,
-				"DryStand", EntityRegistry.findGlobalUniqueEntityId()+1,
-				this.instance, 20, 5, false);
+				"ShrinkPotion", 1, this.instance, 20, 5, true);
+
 	}
 
 	private void registerMisc() {
@@ -182,7 +184,7 @@ public class ChalithBase {
 		GameRegistry.registerItem(entityPlacer, "entityPlacer");
 		LanguageRegistry.addName(new ItemStack(entityPlacer, 1, 0),
 				"Entity Placer");
-		
+
 	}
 
 	private void registerPlants() {
@@ -194,11 +196,10 @@ public class ChalithBase {
 		LanguageRegistry.addName(new ItemStack(seedBase, 1, 0), "Israk Root");
 		MinecraftForge.addGrassSeed(new ItemStack(seedBase, 1, 0), 7);
 		// Utani
-		LanguageRegistry.addName(new ItemStack(plantBase, 1, 1), "Utani Sapling");
+		LanguageRegistry.addName(new ItemStack(plantBase, 1, 1),
+				"Utani Sapling");
 		LanguageRegistry.addName(new ItemStack(seedBase, 1, 1), "Utani Nut");
 		MinecraftForge.addGrassSeed(new ItemStack(seedBase, 1, 1), 4);
-		
-		
 
 	}
 
@@ -213,12 +214,12 @@ public class ChalithBase {
 		// items
 		seedBase = new SeedBase(itemID7);
 		herbalByProduct = new HerbalByProducts(itemID8);
-		
+
 		shrinkPotion = new ShrinkPotion(itemID9);
 		shrinkStatue = new ShrinkStatue(itemID10);
-		
+
 		entityPlacer = new EntityPlacer(itemID11);
-		
+
 		lorynIngot = new ChalithIngotBase(itemID2);
 
 		utilRune = new UtilRune(itemID3);
@@ -229,12 +230,14 @@ public class ChalithBase {
 	}
 
 	private void registerTileEntities() {
-		GameRegistry.registerTileEntity(
-				tektor.minecraft.chalith.entity.tileentity.TrapRuneTileEntity.class,
-				"Fire Trap Rune");
-		GameRegistry.registerTileEntity(
-				tektor.minecraft.chalith.entity.tileentity.GateBlockTileEntity.class,
-				"Gate Block");
+		GameRegistry
+				.registerTileEntity(
+						tektor.minecraft.chalith.entity.tileentity.TrapRuneTileEntity.class,
+						"Fire Trap Rune");
+		GameRegistry
+				.registerTileEntity(
+						tektor.minecraft.chalith.entity.tileentity.GateBlockTileEntity.class,
+						"Gate Block");
 		GameRegistry
 				.registerTileEntity(
 						tektor.minecraft.chalith.entity.tileentity.ChalithWorkplaceTileEntity.class,
@@ -267,9 +270,10 @@ public class ChalithBase {
 
 		ItemStack bloodstoneStack = new ItemStack(this.bloodstone, 1, 0);
 		ItemStack corinnstoneStack = new ItemStack(this.bloodstone, 1, 2);
-		
-		ItemStack israkRootStack = new ItemStack(this.seedBase,1,0);
-		ItemStack israkLeafStack = new ItemStack(this.herbalByProduct,1,0);
+
+		ItemStack israkRootStack = new ItemStack(this.seedBase, 1, 0);
+		ItemStack israkLeafStack = new ItemStack(this.herbalByProduct, 1, 0);
+		ItemStack israkLeafDriedStack = new ItemStack(this.herbalByProduct, 1, 2);
 
 		// Base Runes
 		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1, 0),
@@ -283,11 +287,12 @@ public class ChalithBase {
 		GameRegistry.addShapedRecipe(new ItemStack(this.workbench, 1, 0),
 				new Object[] { "XYX", "ZYZ", "ZZZ", 'X', lorynIngotStack, 'Y',
 						corinnstoneStack, 'Z', bloodstoneStack });
-		
-		//ShrinkPotion
+
+		// ShrinkPotion
 		GameRegistry.addShapedRecipe(new ItemStack(this.shrinkPotion, 1, 0),
 				new Object[] { "XYX", "YZY", "XYX", 'X', israkRootStack, 'Y',
-						israkLeafStack, 'Z', new ItemStack(ItemPotion.potion.itemID,1,0) });
+						israkLeafDriedStack, 'Z',
+						new ItemStack(ItemPotion.potion.itemID, 1, 0) });
 		// Recall
 		GameRegistry.addShapedRecipe(new ItemStack(this.utilRune, 1, 0),
 				new Object[] { "ABC", " X ", "   ", 'A', diStack, 'B', inStack,
