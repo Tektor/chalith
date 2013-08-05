@@ -15,6 +15,7 @@ import tektor.minecraft.chalith.blocks.ChalithWorkplaces;
 import tektor.minecraft.chalith.blocks.GateBlock;
 import tektor.minecraft.chalith.entity.DryStand;
 import tektor.minecraft.chalith.entity.ShrinkPotionEntity;
+import tektor.minecraft.chalith.entity.WoodAwning;
 import tektor.minecraft.chalith.gui.ChalithGuiHandler;
 import tektor.minecraft.chalith.items.BaseRune;
 import tektor.minecraft.chalith.items.ChalithOreItemBlock;
@@ -150,6 +151,10 @@ public class ChalithBase {
 		EntityRegistry.registerGlobalEntityID(DryStand.class, "DryStand",
 				EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(DryStand.class, "DryStand", 0,
+				this.instance, 40, 5, true);
+		EntityRegistry.registerGlobalEntityID(WoodAwning.class, "WoodAwning",
+				EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(WoodAwning.class, "WoodAwning", 2,
 				this.instance, 40, 5, true);
 		EntityRegistry.registerGlobalEntityID(ShrinkPotionEntity.class,
 				"ShrinkPotion", EntityRegistry.findGlobalUniqueEntityId());

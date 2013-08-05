@@ -3,6 +3,7 @@ package tektor.minecraft.chalith.items;
 import java.util.List;
 
 import tektor.minecraft.chalith.entity.DryStand;
+import tektor.minecraft.chalith.entity.WoodAwning;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -16,7 +17,7 @@ import net.minecraft.world.World;
 
 public class EntityPlacer extends Item {
 
-	private Icon[] icon = new Icon[1];
+	private Icon[] icon = new Icon[2];
 
 	public EntityPlacer(int par1) {
 		super(par1);
@@ -36,6 +37,7 @@ public class EntityPlacer extends Item {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
 		icon[0] = par1IconRegister.registerIcon("chalith:dryStand");
+		icon[1] = par1IconRegister.registerIcon("chalith:woodAwning");
 	}
 
 	@Override
@@ -43,6 +45,8 @@ public class EntityPlacer extends Item {
 		switch (stack.getItemDamage()) {
 		case 0:
 			return "dryStand";
+		case 1: 
+			return "woodAwning";
 		default:
 			return "??";
 		}
@@ -54,6 +58,8 @@ public class EntityPlacer extends Item {
 		switch (par1ItemStack.getItemDamage()) {
 		case 0:
 			return "Dry Stand";
+		case 1:
+			return "Wood Awning";
 		default:
 			return "??";
 		}
@@ -65,10 +71,21 @@ public class EntityPlacer extends Item {
 		
 		if (!par3World.isRemote) {
 			--par1ItemStack.stackSize;
-			DryStand stand = new DryStand(par3World);
-			stand.setLocationAndAngles(par4, par5 + 1, par6, 0.0F, 0.0F);
+			if(par1ItemStack.getItemDamage() == 0)
+			{
+				DryStand stand = new DryStand(par3World);
+				stand.setLocationAndAngles(par4, par5 + 1, par6, 0.0F, 0.0F);
 
-			par3World.spawnEntityInWorld(stand);
+				par3World.spawnEntityInWorld(stand);
+			}
+			else if(par1ItemStack.getItemDamage() == 1)
+			{
+				WoodAwning aw = new WoodAwning(par3World);
+				aw.setLocationAndAngles(par4, par5 + 1, par6, 0.0F, 0.0F);
+
+				par3World.spawnEntityInWorld(aw);
+			}
+			
 		}
 		return true;
 	}
@@ -78,6 +95,7 @@ public class EntityPlacer extends Item {
 	public void getSubItems(int par1, CreativeTabs tab, List subItems) {
 
 		subItems.add(new ItemStack(this, 1, 0));
+		subItems.add(new ItemStack(this, 1, 1));
 	}
 
 }
