@@ -4,7 +4,9 @@ import java.util.List;
 
 import tektor.minecraft.chalith.container.ChalithWorkplaceContainer;
 import tektor.minecraft.chalith.container.DryStandContainer;
+import tektor.minecraft.chalith.container.OilPressContainer;
 import tektor.minecraft.chalith.entity.DryStand;
+import tektor.minecraft.chalith.entity.OilPress;
 import tektor.minecraft.chalith.entity.tileentity.ChalithWorkplaceTileEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,6 +40,19 @@ public class ChalithGuiHandler implements IGuiHandler {
 
 			}
 		}
+		if (id == 2) {
+			List<Entity> list = world.getEntitiesWithinAABB(Entity.class,
+					AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1));
+			if (!list.isEmpty()) {
+				for (Entity ent : list) {
+					if (ent instanceof OilPress) {
+						return new OilPressContainer(player.inventory,
+								(OilPress) ent);
+					}
+				}
+
+			}
+		}
 		return null;
 	}
 
@@ -59,6 +74,18 @@ public class ChalithGuiHandler implements IGuiHandler {
 				for (Entity ent : list) {
 					if (ent instanceof DryStand) {
 						return new DryStandGui(player.inventory, (DryStand) ent);
+					}
+				}
+
+			}
+		}
+		if (id == 2) {
+			List<Entity> list = world.getEntitiesWithinAABB(Entity.class,
+					AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1));
+			if (!list.isEmpty()) {
+				for (Entity ent : list) {
+					if (ent instanceof OilPress) {
+						return new OilPressGui(player.inventory, (OilPress) ent);
 					}
 				}
 

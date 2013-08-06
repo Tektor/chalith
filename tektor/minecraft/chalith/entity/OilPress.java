@@ -13,15 +13,17 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import tektor.minecraft.chalith.ChalithBase;
 import tektor.minecraft.chalith.container.DryStandContainer;
+import tektor.minecraft.chalith.container.OilPressContainer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class OilPress extends Entity {
+public class OilPress extends Entity implements IInventory{
 
 	OilPressStair stair;
 	OilPressOut out;
 	OilPressMiddle middle;
 	OilPressPresser presser;
+	public OilPressContainer container;
 
 	public OilPress(World par1World) {
 		super(par1World);
@@ -240,8 +242,9 @@ public class OilPress extends Entity {
 	}
 
 	public boolean func_130002_c(EntityPlayer player) {
-
-		return false;
+		player.openGui(ChalithBase.instance, 2, worldObj, (int) posX,
+				(int) posY, (int) posZ);
+		return true;
 	}
 
 	public void setPosition(double par1, double par3, double par5) {
@@ -255,5 +258,83 @@ public class OilPress extends Entity {
 				- (double) this.yOffset + (double) this.ySize + (double) f1,
 				par5 + (double) f + 1D);
 
+	}
+
+	@Override
+	public int getSizeInventory() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ItemStack decrStackSize(int i, int j) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getInvName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isInvNameLocalized() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void onInventoryChanged() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void openChest() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void closeChest() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
