@@ -4,6 +4,7 @@ import java.util.List;
 
 import tektor.minecraft.chalith.entity.DryIsrakLeaf;
 import tektor.minecraft.chalith.entity.DryStand;
+import tektor.minecraft.chalith.entity.OilPress;
 import tektor.minecraft.chalith.entity.WoodAwning;
 
 import cpw.mods.fml.relauncher.Side;
@@ -18,7 +19,7 @@ import net.minecraft.world.World;
 
 public class EntityPlacer extends Item {
 
-	private Icon[] icon = new Icon[2];
+	private Icon[] icon = new Icon[3];
 
 	public EntityPlacer(int par1) {
 		super(par1);
@@ -39,6 +40,7 @@ public class EntityPlacer extends Item {
 	public void registerIcons(IconRegister par1IconRegister) {
 		icon[0] = par1IconRegister.registerIcon("chalith:dryStand");
 		icon[1] = par1IconRegister.registerIcon("chalith:woodAwning");
+		icon[1] = par1IconRegister.registerIcon("chalith:oilPress");
 	}
 
 	@Override
@@ -48,6 +50,8 @@ public class EntityPlacer extends Item {
 			return "dryStand";
 		case 1: 
 			return "woodAwning";
+		case 2:
+			return "oilPress";
 		default:
 			return "??";
 		}
@@ -61,6 +65,8 @@ public class EntityPlacer extends Item {
 			return "Dry Stand";
 		case 1:
 			return "Wood Awning";
+		case 2:
+			return "Oil Press";
 		default:
 			return "??";
 		}
@@ -86,6 +92,13 @@ public class EntityPlacer extends Item {
 
 				par3World.spawnEntityInWorld(aw);
 			}
+			else if(par1ItemStack.getItemDamage() == 2)
+			{
+				OilPress aw = new OilPress(par3World);
+				aw.setLocationAndAngles(par4, par5 + 1, par6, 0.0F, 0.0F);
+
+				par3World.spawnEntityInWorld(aw);
+			}
 			
 		}
 		return true;
@@ -97,6 +110,7 @@ public class EntityPlacer extends Item {
 
 		subItems.add(new ItemStack(this, 1, 0));
 	//	subItems.add(new ItemStack(this, 1, 1));
+		subItems.add(new ItemStack(this, 1, 2));
 	}
 
 }

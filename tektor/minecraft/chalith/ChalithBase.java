@@ -15,6 +15,9 @@ import tektor.minecraft.chalith.blocks.ChalithWorkplaces;
 import tektor.minecraft.chalith.blocks.GateBlock;
 import tektor.minecraft.chalith.entity.DryIsrakLeaf;
 import tektor.minecraft.chalith.entity.DryStand;
+import tektor.minecraft.chalith.entity.OilPress;
+import tektor.minecraft.chalith.entity.OilPressOut;
+import tektor.minecraft.chalith.entity.OilPressStair;
 import tektor.minecraft.chalith.entity.ShrinkPotionEntity;
 import tektor.minecraft.chalith.entity.WoodAwning;
 import tektor.minecraft.chalith.gui.ChalithGuiHandler;
@@ -49,7 +52,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.7.7")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.7.8")
 @NetworkMod(channels = { "Chalith" }, packetHandler = ChalithPacketHandler.class, clientSideRequired = true)
 public class ChalithBase {
 
@@ -154,18 +157,35 @@ public class ChalithBase {
 		EntityRegistry.registerGlobalEntityID(DryStand.class, "DryStand",
 				EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(DryStand.class, "DryStand", 0,
-				this.instance, 40, 5, true);
+				this.instance, 40, 5, false);
 		///Sub: DryIsrakLeaf
 		EntityRegistry.registerGlobalEntityID(DryIsrakLeaf.class, "DryIsrakLeaf",
 				EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(DryIsrakLeaf.class, "DryIsrakLeaf", 3,
-				this.instance, 40, 5, true);
+				this.instance, 40, 5, false);
+		
+		//Oil Press
+		///Oil Press Base
+		EntityRegistry.registerGlobalEntityID(OilPress.class, "OilPress",
+				EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(OilPress.class, "OilPress", 4,
+				this.instance, 40, 5, false);
+		///Oil Press Stair
+		EntityRegistry.registerGlobalEntityID(OilPressStair.class, "OilPressStair",
+				EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(OilPressStair.class, "OilPressStair", 5,
+				this.instance, 40, 5, false);
+		///Oil Press Out
+		EntityRegistry.registerGlobalEntityID(OilPressOut.class, "OilPressOut",
+				EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(OilPressOut.class, "OilPressOut", 6,
+				this.instance, 40, 5, false);
 		
 		//Wood Awning
 		EntityRegistry.registerGlobalEntityID(WoodAwning.class, "WoodAwning",
 				EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(WoodAwning.class, "WoodAwning", 2,
-				this.instance, 40, 5, true);
+				this.instance, 40, 5, false);
 		
 		//Shrink Potion
 		EntityRegistry.registerGlobalEntityID(ShrinkPotionEntity.class,
