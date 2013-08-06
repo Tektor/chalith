@@ -17,10 +17,11 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class OilPress extends Entity {
-	
+
 	OilPressStair stair;
 	OilPressOut out;
-
+	OilPressMiddle middle;
+	OilPressPresser presser;
 
 	public OilPress(World par1World) {
 		super(par1World);
@@ -29,12 +30,7 @@ public class OilPress extends Entity {
 		this.preventEntitySpawning = true;
 		this.noClip = true;
 		this.setSize(2f, 0.875f);
-		stair = new OilPressStair(par1World,this);
-		stair.setPositionParent(posX, posY, posZ-1);
-		par1World.spawnEntityInWorld(stair);
-		out = new OilPressOut(par1World,this);
-		out.setPositionParent(posX+1, posY, posZ);
-		par1World.spawnEntityInWorld(out);
+		
 
 	}
 
@@ -44,12 +40,26 @@ public class OilPress extends Entity {
 		this.preventEntitySpawning = true;
 		this.noClip = true;
 		this.setSize(2f, 0.875f);
-		stair = new OilPressStair(par1World,this);
-		stair.setPositionParent(posX, posY, posZ-1);
-		par1World.spawnEntityInWorld(stair);
-		out = new OilPressOut(par1World,this);
-		out.setPositionParent(posX+1, posY, posZ);
-		par1World.spawnEntityInWorld(out);
+	}
+
+	public void createSubEntities(World par1World) {
+		if (!worldObj.isRemote) {
+			stair = new OilPressStair(par1World, this);
+			stair.setPosition(posX, posY, posZ - 1);
+			par1World.spawnEntityInWorld(stair);
+
+			out = new OilPressOut(par1World, this);
+			out.setPosition(posX + 1, posY, posZ);
+			par1World.spawnEntityInWorld(out);
+			
+			middle = new OilPressMiddle(par1World, this);
+			middle.setPosition(posX - 0.5D, posY + 0.3125D, posZ + 0.5D);
+			par1World.spawnEntityInWorld(middle);
+			
+			presser = new OilPressPresser(par1World, this);
+			presser.setPositionParent(posX - 0.5D, posY + 0.875D, posZ + 0.5D);
+			par1World.spawnEntityInWorld(presser);
+		}
 	}
 
 	@Override
@@ -86,23 +96,30 @@ public class OilPress extends Entity {
 	 */
 	public void onUpdate() {
 		super.onUpdate();
-		
-		if ( stair == null
-				&& !worldObj.isRemote) {
-			stair = new OilPressStair(worldObj, this);
-			stair.setPositionParent(posX, posY, posZ-1);
-			worldObj.spawnEntityInWorld(stair);
-		}
-		if ( out == null
-				&& !worldObj.isRemote) {
-		out = new OilPressOut(worldObj,this);
-		out.setPositionParent(posX+1, posY, posZ);
-		worldObj.spawnEntityInWorld(out);
+
+		if (stair == null) {
+			if (!worldObj.isRemote) {
+				stair = new OilPressStair(worldObj, this);
+				stair.setPosition(posX, posY, posZ - 1);
+				worldObj.spawnEntityInWorld(stair);
+			}
 		}
 
-	}
-
-	public void onEntityUpdate() {
+		if (out == null && !worldObj.isRemote) {
+			out = new OilPressOut(worldObj, this);
+			out.setPosition(posX + 1, posY, posZ);
+			worldObj.spawnEntityInWorld(out);
+		}
+		if (middle == null && !worldObj.isRemote) {
+			middle = new OilPressMiddle(worldObj, this);
+			middle.setPosition(posX - 0.5D, posY + 0.3125D, posZ + 0.5D);
+			worldObj.spawnEntityInWorld(middle);
+		}
+		if (presser == null && !worldObj.isRemote) {
+			presser = new OilPressPresser(worldObj, this);
+			presser.setPositionParent(posX - 0.5D, posY + 0.875D, posZ + 0.5D);
+			worldObj.spawnEntityInWorld(presser);
+		}
 
 	}
 
@@ -140,6 +157,11 @@ public class OilPress extends Entity {
 			return false;
 		} else {
 			if (!this.isDead && !this.worldObj.isRemote) {
+				
+				this.worldObj.removeEntity(stair);
+				this.worldObj.removeEntity(out);
+				this.worldObj.removeEntity(middle);
+				this.worldObj.removeEntity(presser);
 				this.setDead();
 				this.setBeenAttacked();
 				this.func_110128_b(par1DamageSource.getEntity());
@@ -159,7 +181,7 @@ public class OilPress extends Entity {
 			this.func_110128_b((Entity) null);
 		}
 	}
-	
+
 	public int func_82329_d() {
 		return 32;
 	}
@@ -184,12 +206,20 @@ public class OilPress extends Entity {
 
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		
+		stair = (OilPressStair) worldObj.getEntityByID(nbt.getInteger("stair"));
+		out = (OilPressOut) worldObj.getEntityByID(nbt.getInteger("out"));
+		middle = (OilPressMiddle) worldObj.getEntityByID(nbt.getInteger("middle"));
+		presser = (OilPressPresser) worldObj.getEntityByID(nbt.getInteger("presser"));
+
 	}
 
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		
+		nbt.setInteger("stair", this.stair.entityId);
+		nbt.setInteger("out", this.out.entityId);
+		nbt.setInteger("middle", this.middle.entityId);
+		nbt.setInteger("presser", this.presser.entityId);
+
 	}
 
 	protected boolean func_142008_O() {
@@ -201,6 +231,7 @@ public class OilPress extends Entity {
 			EntityPlayer entityplayer = (EntityPlayer) par1Entity;
 
 			if (entityplayer.capabilities.isCreativeMode) {
+
 				return;
 			}
 		}
@@ -209,7 +240,6 @@ public class OilPress extends Entity {
 	}
 
 	public boolean func_130002_c(EntityPlayer player) {
-
 
 		return false;
 	}
@@ -220,19 +250,10 @@ public class OilPress extends Entity {
 		this.posZ = par5;
 		float f = this.width / 2.0F;
 		float f1 = this.height;
-		this.boundingBox.setBounds(par1 - f , par3
-				- (double) this.yOffset + (double) this.ySize, par5 - f +1D ,
-				par1 + (double) f , par3 - (double) this.yOffset
-						+ (double) this.ySize + (double) f1, par5 + (double) f
-						+1D);
-		
-		if (stair != null) {
-			stair.setPositionParent(par1, par3, par5-1);
-		}
-		if (out != null) {
-			out.setPositionParent(par1+1, par3, par5);
-		}
-		
+		this.boundingBox.setBounds(par1 - f, par3 - (double) this.yOffset
+				+ (double) this.ySize, par5 - f + 1D, par1 + (double) f, par3
+				- (double) this.yOffset + (double) this.ySize + (double) f1,
+				par5 + (double) f + 1D);
 
 	}
 }

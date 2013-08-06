@@ -48,7 +48,7 @@ public class EntityPlacer extends Item {
 		switch (stack.getItemDamage()) {
 		case 0:
 			return "dryStand";
-		case 1: 
+		case 1:
 			return "woodAwning";
 		case 2:
 			return "oilPress";
@@ -75,31 +75,26 @@ public class EntityPlacer extends Item {
 	public boolean onItemUse(ItemStack par1ItemStack,
 			EntityPlayer par2EntityPlayer, World par3World, int par4, int par5,
 			int par6, int par7, float par8, float par9, float par10) {
-		
+
 		if (!par3World.isRemote) {
 			--par1ItemStack.stackSize;
-			if(par1ItemStack.getItemDamage() == 0)
-			{
+			if (par1ItemStack.getItemDamage() == 0) {
 				DryStand stand = new DryStand(par3World);
 				stand.setLocationAndAngles(par4, par5 + 1, par6, 0.0F, 0.0F);
 
 				par3World.spawnEntityInWorld(stand);
-			}
-			else if(par1ItemStack.getItemDamage() == 1)
-			{
+			} else if (par1ItemStack.getItemDamage() == 1) {
 				WoodAwning aw = new WoodAwning(par3World);
 				aw.setLocationAndAngles(par4, par5 + 1, par6, 0.0F, 0.0F);
 
 				par3World.spawnEntityInWorld(aw);
-			}
-			else if(par1ItemStack.getItemDamage() == 2)
-			{
+			} else if (par1ItemStack.getItemDamage() == 2) {
 				OilPress aw = new OilPress(par3World);
 				aw.setLocationAndAngles(par4, par5 + 1, par6, 0.0F, 0.0F);
-
+				aw.createSubEntities(par3World);
 				par3World.spawnEntityInWorld(aw);
 			}
-			
+
 		}
 		return true;
 	}
@@ -109,7 +104,7 @@ public class EntityPlacer extends Item {
 	public void getSubItems(int par1, CreativeTabs tab, List subItems) {
 
 		subItems.add(new ItemStack(this, 1, 0));
-	//	subItems.add(new ItemStack(this, 1, 1));
+		// subItems.add(new ItemStack(this, 1, 1));
 		subItems.add(new ItemStack(this, 1, 2));
 	}
 
