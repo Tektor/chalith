@@ -7,6 +7,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidContainerRegistry.FluidContainerData;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import tektor.minecraft.chalith.blocks.ChalithStoneBase;
 import tektor.minecraft.chalith.blocks.BlockTrapRune;
@@ -22,6 +26,8 @@ import tektor.minecraft.chalith.entity.OilPressPresser;
 import tektor.minecraft.chalith.entity.OilPressStair;
 import tektor.minecraft.chalith.entity.ShrinkPotionEntity;
 import tektor.minecraft.chalith.entity.WoodAwning;
+import tektor.minecraft.chalith.fluids.BlockFluidUtaniNutOil;
+import tektor.minecraft.chalith.fluids.FluidUtaniNutOil;
 import tektor.minecraft.chalith.gui.ChalithGuiHandler;
 import tektor.minecraft.chalith.items.BaseRune;
 import tektor.minecraft.chalith.items.ChalithOreItemBlock;
@@ -34,6 +40,7 @@ import tektor.minecraft.chalith.items.ShrinkPotion;
 import tektor.minecraft.chalith.items.ShrinkStatue;
 import tektor.minecraft.chalith.items.TrapRune;
 import tektor.minecraft.chalith.items.ChalithIngotBase;
+import tektor.minecraft.chalith.items.UtaniNutOilBucket;
 import tektor.minecraft.chalith.items.UtilRune;
 import tektor.minecraft.chalith.items.RuneSymbol;
 import tektor.minecraft.chalith.plants.PlantBase;
@@ -54,7 +61,7 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "Chalith", name = "Chalith", version = "0.7.8")
+@Mod(modid = "Chalith", name = "Chalith", version = "0.7.9")
 @NetworkMod(channels = { "Chalith" }, packetHandler = ChalithPacketHandler.class, clientSideRequired = true)
 public class ChalithBase {
 
@@ -64,17 +71,18 @@ public class ChalithBase {
 
 	// blocks
 	public static int blockID1, blockID2, blockID3, blockID4, blockID5,
-			blockID6;
+			blockID6, blockID7;
 	public static Block bloodstone;
 	public static Block chalithBaseOre;
 	public static Block trapRune;
 	public static Block gateBlock;
 	public static Block plantBase;
 	public static Block workbench;
+	public static Block utaniNutOilBlock;
 
 	// items
 	public static int itemID1, itemID2, itemID3, itemID4, itemID5, itemID6,
-			itemID7, itemID8, itemID9, itemID10, itemID11;
+			itemID7, itemID8, itemID9, itemID10, itemID11,itemID12;
 	public static Item lorynIngot;
 	public static Item utilRune;
 	public static Item trapRuneItem;
@@ -86,6 +94,9 @@ public class ChalithBase {
 	public static Item shrinkStatue;
 	public static Item entityPlacer;
 	public static Item craftingStuff;
+	public static Item utaniNutOilBucket;
+	//fluids
+	public static Fluid utaniNutOil;
 
 	// Says where the client and server 'proxy' code is loaded.
 	@SidedProxy(clientSide = "tektor.minecraft.chalith.client.ChalithClientProxy", serverSide = "tektor.minecraft.chalith.ChalithCommonProxy")
@@ -107,6 +118,8 @@ public class ChalithBase {
 		blockID5 = config.get(Configuration.CATEGORY_BLOCK, "blockID5", 984)
 				.getInt();
 		blockID6 = config.get(Configuration.CATEGORY_BLOCK, "blockID6", 985)
+				.getInt();
+		blockID7 = config.get(Configuration.CATEGORY_BLOCK, "blockID7", 986)
 				.getInt();
 
 		itemID1 = config.get(Configuration.CATEGORY_ITEM, "itemID1", 7000)
@@ -131,6 +144,8 @@ public class ChalithBase {
 				.getInt();
 		itemID11 = config.get(Configuration.CATEGORY_ITEM, "itemID11", 7010)
 				.getInt();
+		itemID12 = config.get(Configuration.CATEGORY_ITEM, "itemID12", 7011)
+				.getInt();
 
 		config.save();
 	}
@@ -149,9 +164,26 @@ public class ChalithBase {
 		runeCrafting();
 		GameRegistry.registerWorldGenerator(new ChalithWorldGen());
 		registerEntities();
+		registerFluids();
 
 		NetworkRegistry.instance().registerGuiHandler(this,
 				new ChalithGuiHandler());
+	}
+
+	private void registerFluids() {
+		
+		utaniNutOil = new FluidUtaniNutOil("utaniNutOil");
+		FluidRegistry.registerFluid(utaniNutOil);
+		utaniNutOilBlock = new BlockFluidUtaniNutOil(blockID7, utaniNutOil);
+		utaniNutOilBucket = new UtaniNutOilBucket(itemID12);
+		
+		FluidContainerRegistry.registerFluidContainer(
+				new FluidContainerData(
+					FluidRegistry.getFluidStack( ChalithBase.utaniNutOil.getName(), FluidContainerRegistry.BUCKET_VOLUME ),
+					new ItemStack( ChalithBase.utaniNutOilBucket ),
+					new ItemStack( Item.bucketEmpty )
+				)
+			);	
 	}
 
 	private void registerEntities() {
