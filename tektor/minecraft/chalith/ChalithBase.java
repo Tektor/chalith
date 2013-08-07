@@ -182,6 +182,7 @@ public class ChalithBase {
 		utaniNutOil = new FluidUtaniNutOil("utaniNutOil");
 		FluidRegistry.registerFluid(utaniNutOil);
 		utaniNutOilBlock = new BlockFluidUtaniNutOil(blockID7, utaniNutOil);
+		utaniNutOil.setBlockID(utaniNutOilBlock);
 		utaniNutOilBucket = new UtaniNutOilBucket(itemID12);
 
 		FluidContainerRegistry.registerFluidContainer(new FluidContainerData(
@@ -190,6 +191,8 @@ public class ChalithBase {
 						ChalithBase.utaniNutOilBucket), new ItemStack(
 						Item.bucketEmpty)));
 		MinecraftForge.EVENT_BUS.register(new ChalithBucketHandler());
+		GameRegistry.registerBlock(this.utaniNutOilBlock, "nutOilBlock");
+		LanguageRegistry.addName(new ItemStack(this.utaniNutOilBlock,1,0), "Utani Nut Oil");
 	}
 
 	private void registerEntities() {
