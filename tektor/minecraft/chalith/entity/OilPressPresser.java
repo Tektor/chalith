@@ -177,7 +177,7 @@ public class OilPressPresser extends Entity {
 
 	public void setPositionParent(double d, double e, double f) {
 		this.posX = d;
-		this.posY = e  - (0.3D * rot);
+		this.posY = e;
 		this.posZ = f;
 
 	}

@@ -25,7 +25,7 @@ public class RenderOilPressPresser extends Render {
 	    GL11.glPushMatrix();
 	 
 	    // Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
-	    GL11.glTranslatef((float)x + 0.5f, (float)y + 1.5f, (float)z + 0.5f);
+	    GL11.glTranslatef((float)x + 0.5f, (float)y + 1.5f-0.0625f*((OilPressPresser)entity).rot, (float)z + 0.5f);
 	 
 	    GL11.glRotatef(180f,0f,0f,1f);
 	    GL11.glRotatef(((OilPressPresser)entity).rot*45f, 0f, 1f, 0f);

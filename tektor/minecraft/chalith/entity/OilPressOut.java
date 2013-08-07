@@ -4,6 +4,8 @@ import tektor.minecraft.chalith.ChalithBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumEntitySize;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -235,7 +237,26 @@ public class OilPressOut extends Entity {
 	
 	public boolean func_130002_c(EntityPlayer player) {
 		if (!this.worldObj.isRemote) {
-			System.out.println("Actual amount: " + this.parent.getFluidAmount());
+			int i = player.inventory.currentItem;
+			ItemStack stack = player.inventory.getStackInSlot(i);
+			if(stack == null)
+			{
+				System.out.println("Actual amount: " + this.parent.getFluidAmount());
+			}
+			else if(stack.itemID == Item.bucketEmpty.itemID)
+			{
+				if(this.parent.getFluidAmount() >= 1000)
+				{
+					boolean test = player.inventory.addItemStackToInventory(new ItemStack(ChalithBase.utaniNutOilBucket.itemID,1,0));
+					if(test)
+					{
+						this.parent.drain(1000, true);
+						player.inventory.decrStackSize(i, 1);
+					}
+					
+				}
+			}
+			
 		}
 		return true;
 	}
