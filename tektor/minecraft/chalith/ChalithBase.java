@@ -2,6 +2,7 @@ package tektor.minecraft.chalith;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -414,6 +415,14 @@ public class ChalithBase {
 		GameRegistry.addShapedRecipe(new ItemStack(this.entityPlacer, 1, 0),
 				new Object[] { "X X", " Y ", "X X", 'X', woodStick, 'Y',
 						new ItemStack(this.craftingStuff, 1, 0) });
+		/// Oil Press
+		GameRegistry
+		.addShapedRecipe(new ItemStack(this.entityPlacer, 1, 2),
+				new Object[] { " X ", "ABC", " Y ", 'X', new ItemStack(this.craftingStuff,1,3),
+						'Y', new ItemStack(Block.stairsWoodOak), 'A', new ItemStack(this.craftingStuff,1,2),
+						'B', new ItemStack(Block.chest), 'C', new ItemStack(this.craftingStuff,1,4)});
+		
+		
 
 		// Crafting Stuff
 		// / String Grid
@@ -421,6 +430,22 @@ public class ChalithBase {
 				.addShapedRecipe(new ItemStack(this.craftingStuff, 1, 0),
 						new Object[] { "XYX", "XYX", "XYX", 'X', woodStick,
 								'Y', string });
+		
+		///Oil Press Middle
+		GameRegistry
+		.addShapedRecipe(new ItemStack(this.craftingStuff, 1, 4),
+				new Object[] { "XXX", "Y Y", "XXX", 'X', new ItemStack(Block.planks),
+						'Y', woodStick });
+		///Oil Press Presser
+		GameRegistry
+		.addShapedRecipe(new ItemStack(this.craftingStuff, 1, 3),
+				new Object[] { " Y ", "YXY", " Y ", 'X', new ItemStack(Block.planks),
+						'Y', woodStick });
+		///Oil Press Basin
+		GameRegistry
+		.addShapedRecipe(new ItemStack(this.craftingStuff, 1, 2),
+				new Object[] { "XXX", "X  ", "XXX", 'X', new ItemStack(Block.planks)});
+		
 
 		// ShrinkPotion
 		GameRegistry.addShapedRecipe(new ItemStack(this.shrinkPotion, 1, 0),

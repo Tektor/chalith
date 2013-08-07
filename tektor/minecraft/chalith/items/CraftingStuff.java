@@ -13,7 +13,7 @@ import net.minecraftforge.client.model.AdvancedModelLoader;
 
 public class CraftingStuff extends Item{
 
-	Icon[] icon = new Icon[2];
+	Icon[] icon = new Icon[5];
 
 	public CraftingStuff(int par1) {
 		super(par1);
@@ -48,6 +48,10 @@ public class CraftingStuff extends Item{
 			return "stringGrid";
 		case 1:
 			return "utaniNutOilBottle";
+		case 2:
+			return "oilPressOut";
+		case 3: return "oilPressPresser";
+		case 4: return "oilPressMiddle";
 		default:
 			return "??";
 		}
@@ -61,6 +65,9 @@ public class CraftingStuff extends Item{
 			return "String Grid";
 		case 1:
 			return "Utani Nut Oil Bottle";
+		case 2: return "Oil Press Basin";
+		case 3: return "Oil Press Presser";
+		case 4: return "Oil Press Middle";
 		default:
 			return "??";
 		}
@@ -70,6 +77,9 @@ public class CraftingStuff extends Item{
 	public void registerIcons(IconRegister par1IconRegister) {
 		icon[0] = par1IconRegister.registerIcon("chalith:stringGrid");
 		icon[1] = par1IconRegister.registerIcon("chalith:utaniNutOilBottle");
+		icon[2] = par1IconRegister.registerIcon("chalith:oilPressBasin");
+		icon[3] = par1IconRegister.registerIcon("chalith:oilPressPresser");
+		icon[4] = par1IconRegister.registerIcon("chalith:oilPressMiddle");
 	}
 	@SideOnly(Side.CLIENT)
 	@Override
@@ -77,6 +87,9 @@ public class CraftingStuff extends Item{
 
 		subItems.add(new ItemStack(this, 1, 0));
 		subItems.add(new ItemStack(this, 1, 1));
+		subItems.add(new ItemStack(this, 1, 2));
+		subItems.add(new ItemStack(this, 1, 3));
+		subItems.add(new ItemStack(this, 1, 4));
 	}
 
 }

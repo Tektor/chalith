@@ -54,6 +54,7 @@ public class OilPress extends Entity implements IInventory, IFluidTank {
 		this.noClip = true;
 		this.setSize(2f, 0.875f);
 		amount = 0;
+
 	}
 
 	public void createSubEntities(World par1World) {
@@ -148,12 +149,13 @@ public class OilPress extends Entity implements IInventory, IFluidTank {
 			if (this.getFluidAmount() > 0) {
 				if (this.fill == null) {
 					fill = new OilPressOutFilling(worldObj, this);
-					fill.setPositionParent(this.posX + 1, this.posY + 0.125D
-							, this.posZ);
+					fill.setPositionParent(this.posX + 1, this.posY + 0.125D,
+							this.posZ);
 					fill.setAmount(this.getFluidAmount());
 					worldObj.spawnEntityInWorld(fill);
 				} else {
-					fill.setPositionParent(this.posX + 1, this.posY + 0.125D, this.posZ);
+					fill.setPositionParent(this.posX + 1, this.posY + 0.125D,
+							this.posZ);
 					fill.setAmount(this.getFluidAmount());
 				}
 			} else if (!(this.getFluidAmount() > 0) && this.fill != null) {
@@ -194,6 +196,7 @@ public class OilPress extends Entity implements IInventory, IFluidTank {
 	 * Called when the entity is attacked.
 	 */
 	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) {
+
 		if (this.isEntityInvulnerable()) {
 			return false;
 		} else {
