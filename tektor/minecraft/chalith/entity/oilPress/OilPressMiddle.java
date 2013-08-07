@@ -1,4 +1,4 @@
-package tektor.minecraft.chalith.entity;
+package tektor.minecraft.chalith.entity.oilPress;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumEntitySize;

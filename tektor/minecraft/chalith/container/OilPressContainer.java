@@ -2,7 +2,7 @@ package tektor.minecraft.chalith.container;
 
 import tektor.minecraft.chalith.ChalithBase;
 import tektor.minecraft.chalith.entity.DryStand;
-import tektor.minecraft.chalith.entity.OilPress;
+import tektor.minecraft.chalith.entity.oilPress.OilPress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

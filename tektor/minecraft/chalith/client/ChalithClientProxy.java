@@ -11,25 +11,25 @@ import tektor.minecraft.chalith.ChalithBase;
 import tektor.minecraft.chalith.ChalithCommonProxy;
 import tektor.minecraft.chalith.entity.DryIsrakLeaf;
 import tektor.minecraft.chalith.entity.DryStand;
-import tektor.minecraft.chalith.entity.OilPress;
-import tektor.minecraft.chalith.entity.OilPressMiddle;
-import tektor.minecraft.chalith.entity.OilPressOut;
-import tektor.minecraft.chalith.entity.OilPressOutFilling;
-import tektor.minecraft.chalith.entity.OilPressPresser;
-import tektor.minecraft.chalith.entity.OilPressStair;
 import tektor.minecraft.chalith.entity.ShrinkPotionEntity;
 import tektor.minecraft.chalith.entity.WoodAwning;
+import tektor.minecraft.chalith.entity.oilPress.OilPress;
+import tektor.minecraft.chalith.entity.oilPress.OilPressMiddle;
+import tektor.minecraft.chalith.entity.oilPress.OilPressOut;
+import tektor.minecraft.chalith.entity.oilPress.OilPressOutFilling;
+import tektor.minecraft.chalith.entity.oilPress.OilPressPresser;
+import tektor.minecraft.chalith.entity.oilPress.OilPressStair;
 import tektor.minecraft.chalith.entity.tileentity.TrapRuneTileEntity;
 import tektor.minecraft.chalith.renderer.RenderDryIsrakLeaf;
 import tektor.minecraft.chalith.renderer.RenderDryStand;
-import tektor.minecraft.chalith.renderer.RenderOilPress;
-import tektor.minecraft.chalith.renderer.RenderOilPressMiddle;
-import tektor.minecraft.chalith.renderer.RenderOilPressOut;
-import tektor.minecraft.chalith.renderer.RenderOilPressOutFilling;
-import tektor.minecraft.chalith.renderer.RenderOilPressPresser;
-import tektor.minecraft.chalith.renderer.RenderOilPressStair;
 import tektor.minecraft.chalith.renderer.RenderShrinkPotion;
 import tektor.minecraft.chalith.renderer.RenderWoodAwning;
+import tektor.minecraft.chalith.renderer.oilPress.RenderOilPress;
+import tektor.minecraft.chalith.renderer.oilPress.RenderOilPressMiddle;
+import tektor.minecraft.chalith.renderer.oilPress.RenderOilPressOut;
+import tektor.minecraft.chalith.renderer.oilPress.RenderOilPressOutFilling;
+import tektor.minecraft.chalith.renderer.oilPress.RenderOilPressPresser;
+import tektor.minecraft.chalith.renderer.oilPress.RenderOilPressStair;
 
 public class ChalithClientProxy extends ChalithCommonProxy {
 

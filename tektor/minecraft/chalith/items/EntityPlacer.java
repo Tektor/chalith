@@ -4,8 +4,8 @@ import java.util.List;
 
 import tektor.minecraft.chalith.entity.DryIsrakLeaf;
 import tektor.minecraft.chalith.entity.DryStand;
-import tektor.minecraft.chalith.entity.OilPress;
 import tektor.minecraft.chalith.entity.WoodAwning;
+import tektor.minecraft.chalith.entity.oilPress.OilPress;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

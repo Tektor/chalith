@@ -1,4 +1,4 @@
-package tektor.minecraft.chalith.entity;
+package tektor.minecraft.chalith.entity.oilPress;
 
 import java.util.Random;
 

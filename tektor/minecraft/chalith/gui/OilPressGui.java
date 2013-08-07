@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 import tektor.minecraft.chalith.container.DryStandContainer;
 import tektor.minecraft.chalith.container.OilPressContainer;
 import tektor.minecraft.chalith.entity.DryStand;
-import tektor.minecraft.chalith.entity.OilPress;
+import tektor.minecraft.chalith.entity.oilPress.OilPress;
 
 public class OilPressGui extends GuiContainer{
 	

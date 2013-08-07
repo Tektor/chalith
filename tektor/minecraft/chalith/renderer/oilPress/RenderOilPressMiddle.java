@@ -1,22 +1,21 @@
-package tektor.minecraft.chalith.renderer;
+package tektor.minecraft.chalith.renderer.oilPress;
 
+import org.lwjgl.opengl.GL11;
+
+import tektor.minecraft.chalith.model.oilPress.ModelOilPressMiddle;
+import tektor.minecraft.chalith.model.oilPress.ModelOilPressOut;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.opengl.GL11;
+public class RenderOilPressMiddle extends Render {
 
-import tektor.minecraft.chalith.model.ModelOilPressOut;
-import tektor.minecraft.chalith.model.ModelOilPressStair;
-
-public class RenderOilPressOut extends Render {
-
-	public RenderOilPressOut()
+	public RenderOilPressMiddle()
 	{
-		modelOilPressOut = new ModelOilPressOut();
+		modelOilPressMiddle = new ModelOilPressMiddle();
 	}
 
-	protected ModelOilPressOut modelOilPressOut;
+	protected ModelOilPressMiddle modelOilPressMiddle;
 	@Override
 	public void doRender(Entity entity, double x, double y, double z,
 			float f, float f1) {
@@ -30,7 +29,7 @@ public class RenderOilPressOut extends Render {
 	    // Scale our object to about half-size in all directions (the OBJ file is a little large)
 	    GL11.glScalef(1f, 1f, 1f);
 		this.func_110776_a(this.func_110775_a(entity));
-		this.modelOilPressOut.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+		this.modelOilPressMiddle.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		GL11.glPopMatrix();
 		
 	}

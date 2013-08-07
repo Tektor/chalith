@@ -1,6 +1,6 @@
 package tektor.minecraft.chalith.container;
 
-import tektor.minecraft.chalith.entity.OilPress;
+import tektor.minecraft.chalith.entity.oilPress.OilPress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
