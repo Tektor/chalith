@@ -1,23 +1,22 @@
 package tektor.minecraft.chalith.renderer;
 
-import org.lwjgl.opengl.GL11;
-
-import tektor.minecraft.chalith.entity.OilPress;
-import tektor.minecraft.chalith.entity.OilPressPresser;
-import tektor.minecraft.chalith.model.ModelOilPressMiddle;
-import tektor.minecraft.chalith.model.ModelOilPressPresser;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderOilPressPresser extends Render {
+import org.lwjgl.opengl.GL11;
 
-	public RenderOilPressPresser()
+import tektor.minecraft.chalith.model.ModelOilPressOut;
+import tektor.minecraft.chalith.model.ModelOilPressOutFilling;
+
+public class RenderOilPressOutFilling extends Render {
+
+	public RenderOilPressOutFilling()
 	{
-		modelOilPressPresser = new ModelOilPressPresser();
+		modelOilPressOutFilling = new ModelOilPressOutFilling();
 	}
 
-	protected ModelOilPressPresser modelOilPressPresser;
+	protected ModelOilPressOutFilling modelOilPressOutFilling;
 	@Override
 	public void doRender(Entity entity, double x, double y, double z,
 			float f, float f1) {
@@ -27,19 +26,18 @@ public class RenderOilPressPresser extends Render {
 	    // Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
 	    GL11.glTranslatef((float)x + 0.5f, (float)y + 1.5f, (float)z + 0.5f);
 	 
-	    GL11.glRotatef(180f,0f,0f,1f);
-	    GL11.glRotatef(((OilPressPresser)entity).rot*45f, 0f, 1f, 0f);
+	    GL11.glRotatef(180f, 0f, 0f, 1f);
 	    // Scale our object to about half-size in all directions (the OBJ file is a little large)
 	    GL11.glScalef(1f, 1f, 1f);
 		this.func_110776_a(this.func_110775_a(entity));
-		this.modelOilPressPresser.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+		this.modelOilPressOutFilling.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		GL11.glPopMatrix();
 		
 	}
 
 	@Override
 	protected ResourceLocation func_110775_a(Entity entity) {
-		return new ResourceLocation("chalith:textures/entities/oilPressBase.png");
+		return new ResourceLocation("chalith:textures/entities/filling.png");
 	}
 
 }

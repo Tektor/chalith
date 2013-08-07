@@ -18,8 +18,10 @@ public class ChalithPacketHandler implements IPacketHandler{
         if (packet.channel.equals("Chalith")) {
             handle(packet,player);
     }
+        
 	}
 	
+
 	private void handle(Packet250CustomPayload packet, Player player) {
         DataInputStream inputStream = new DataInputStream(new ByteArrayInputStream(packet.data));
        

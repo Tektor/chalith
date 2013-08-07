@@ -11,19 +11,29 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidEvent;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidTank;
 import tektor.minecraft.chalith.ChalithBase;
 import tektor.minecraft.chalith.container.DryStandContainer;
 import tektor.minecraft.chalith.container.OilPressContainer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class OilPress extends Entity implements IInventory{
+public class OilPress extends Entity implements IInventory, IFluidTank {
 
 	OilPressStair stair;
 	OilPressOut out;
 	OilPressMiddle middle;
 	OilPressPresser presser;
+	OilPressOutFilling fill;
 	public OilPressContainer container;
+	public boolean isLocked = false;
+	private ItemStack[] inv = new ItemStack[1];
+	private int amount;
+	public int pressings;
+	private FluidStack fluidStack;
 
 	public OilPress(World par1World) {
 		super(par1World);
@@ -32,7 +42,8 @@ public class OilPress extends Entity implements IInventory{
 		this.preventEntitySpawning = true;
 		this.noClip = true;
 		this.setSize(2f, 0.875f);
-		
+		amount = 0;
+		pressings = 0;
 
 	}
 
@@ -42,22 +53,28 @@ public class OilPress extends Entity implements IInventory{
 		this.preventEntitySpawning = true;
 		this.noClip = true;
 		this.setSize(2f, 0.875f);
+		amount = 0;
 	}
 
 	public void createSubEntities(World par1World) {
 		if (!worldObj.isRemote) {
-			stair = new OilPressStair(par1World, this);
-			stair.setPosition(posX, posY, posZ - 1);
-			par1World.spawnEntityInWorld(stair);
-
+			stair = (OilPressStair) this.worldObj.findNearestEntityWithinAABB(
+					OilPressStair.class, boundingBox.getBoundingBox(posX + 1,
+							posY + 1, posZ + 1, posX - 1, posY - 1, posZ - 1),
+					this);
+			if (stair == null) {
+				stair = new OilPressStair(par1World, this);
+				stair.setPosition(posX, posY, posZ - 1);
+				par1World.spawnEntityInWorld(stair);
+			}
 			out = new OilPressOut(par1World, this);
 			out.setPosition(posX + 1, posY, posZ);
 			par1World.spawnEntityInWorld(out);
-			
+
 			middle = new OilPressMiddle(par1World, this);
 			middle.setPosition(posX - 0.5D, posY + 0.3125D, posZ + 0.5D);
 			par1World.spawnEntityInWorld(middle);
-			
+
 			presser = new OilPressPresser(par1World, this);
 			presser.setPositionParent(posX - 0.5D, posY + 0.875D, posZ + 0.5D);
 			par1World.spawnEntityInWorld(presser);
@@ -82,6 +99,8 @@ public class OilPress extends Entity implements IInventory{
 	}
 
 	protected void entityInit() {
+			dataWatcher.addObject(30, 0);
+
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -98,7 +117,10 @@ public class OilPress extends Entity implements IInventory{
 	 */
 	public void onUpdate() {
 		super.onUpdate();
-
+		if(this.worldObj.isRemote)
+		{
+			isLocked = this.dataWatcher.getWatchableObjectInt(30) > 0 ? true: false;
+		}
 		if (stair == null) {
 			if (!worldObj.isRemote) {
 				stair = new OilPressStair(worldObj, this);
@@ -121,6 +143,27 @@ public class OilPress extends Entity implements IInventory{
 			presser = new OilPressPresser(worldObj, this);
 			presser.setPositionParent(posX - 0.5D, posY + 0.875D, posZ + 0.5D);
 			worldObj.spawnEntityInWorld(presser);
+		}
+		if(!this.worldObj.isRemote)
+		{
+			if(this.getFluidAmount() > 0)
+			{
+			if(this.fill == null)
+			{
+				fill = new OilPressOutFilling(worldObj,this);
+				fill.setPositionParent(this.posX+1, this.posY+0.5D, this.posZ);
+				worldObj.spawnEntityInWorld(fill);
+			}
+			else
+			{
+				fill.setPositionParent(this.posX+1, this.posY+0.5D, this.posZ);
+			}
+		}
+		else if(!(this.getFluidAmount() > 0) && this.fill != null)
+		{
+			this.fill.setDead();
+			this.fill = null;
+		}
 		}
 
 	}
@@ -159,7 +202,7 @@ public class OilPress extends Entity implements IInventory{
 			return false;
 		} else {
 			if (!this.isDead && !this.worldObj.isRemote) {
-				
+
 				this.worldObj.removeEntity(stair);
 				this.worldObj.removeEntity(out);
 				this.worldObj.removeEntity(middle);
@@ -210,8 +253,33 @@ public class OilPress extends Entity implements IInventory{
 		super.readFromNBT(nbt);
 		stair = (OilPressStair) worldObj.getEntityByID(nbt.getInteger("stair"));
 		out = (OilPressOut) worldObj.getEntityByID(nbt.getInteger("out"));
-		middle = (OilPressMiddle) worldObj.getEntityByID(nbt.getInteger("middle"));
-		presser = (OilPressPresser) worldObj.getEntityByID(nbt.getInteger("presser"));
+		middle = (OilPressMiddle) worldObj.getEntityByID(nbt
+				.getInteger("middle"));
+		presser = (OilPressPresser) worldObj.getEntityByID(nbt
+				.getInteger("presser"));
+
+		NBTTagList tagList = nbt.getTagList("Inventory");
+		for (int i = 0; i < tagList.tagCount(); i++) {
+			NBTTagCompound tag = (NBTTagCompound) tagList.tagAt(i);
+			byte slot = tag.getByte("Slot");
+			if (slot >= 0 && slot < inv.length) {
+				inv[slot] = ItemStack.loadItemStackFromNBT(tag);
+			}
+		}
+		this.isLocked = nbt.getBoolean("lock");
+		int i = isLocked ? 1:0;
+		this.dataWatcher.updateObject(30, i);
+		this.amount = nbt.getInteger("amount");
+		this.pressings = nbt.getInteger("pressings");
+		if (!nbt.hasKey("Empty"))
+        {
+            FluidStack fluid = FluidStack.loadFluidStackFromNBT(nbt);
+
+            if (fluid != null)
+            {
+                setFluid(fluid);
+            }
+        }
 
 	}
 
@@ -222,6 +290,28 @@ public class OilPress extends Entity implements IInventory{
 		nbt.setInteger("middle", this.middle.entityId);
 		nbt.setInteger("presser", this.presser.entityId);
 
+		NBTTagList itemList = new NBTTagList();
+		for (int i = 0; i < inv.length; i++) {
+			ItemStack stack = inv[i];
+			if (stack != null) {
+				NBTTagCompound tag = new NBTTagCompound();
+				tag.setByte("Slot", (byte) i);
+				stack.writeToNBT(tag);
+				itemList.appendTag(tag);
+			}
+		}
+		nbt.setTag("Inventory", itemList);
+		nbt.setBoolean("lock", this.isLocked);
+		nbt.setInteger("amount", this.amount);
+		nbt.setInteger("pressings", pressings);
+		if (fluidStack != null)
+        {
+            fluidStack.writeToNBT(nbt);
+        }
+        else
+        {
+            nbt.setString("Empty", "");
+        }
 	}
 
 	protected boolean func_142008_O() {
@@ -262,38 +352,68 @@ public class OilPress extends Entity implements IInventory{
 
 	@Override
 	public int getSizeInventory() {
-		// TODO Auto-generated method stub
-		return 0;
+		return inv.length;
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int i) {
-		// TODO Auto-generated method stub
-		return null;
+	public ItemStack getStackInSlot(int slot) {
+		return inv[slot];
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		// TODO Auto-generated method stub
-		return null;
+	public void setInventorySlotContents(int slot, ItemStack stack) {
+		inv[slot] = stack;
+		if (stack != null && stack.stackSize > getInventoryStackLimit()) {
+			stack.stackSize = getInventoryStackLimit();
+		}
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
-		// TODO Auto-generated method stub
-		return null;
+	public ItemStack decrStackSize(int slot, int amt) {
+		ItemStack stack = getStackInSlot(slot);
+		if (stack != null) {
+			if (stack.stackSize <= amt) {
+				setInventorySlotContents(slot, null);
+			} else {
+				stack = stack.splitStack(amt);
+				if (stack.stackSize == 0) {
+					setInventorySlotContents(slot, null);
+				}
+			}
+		}
+		return stack;
 	}
 
 	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
-		
+	public ItemStack getStackInSlotOnClosing(int slot) {
+		ItemStack stack = getStackInSlot(slot);
+		if (stack != null) {
+			setInventorySlotContents(slot, null);
+		}
+		return stack;
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return 64;
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		return player.getDistanceSq(posX + 0.5, posY + 0.5, posZ + 0.5) < 64;
+	}
+
+	@Override
+	public void openChest() {
+	}
+
+	@Override
+	public void closeChest() {
 	}
 
 	@Override
 	public String getInvName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "chalith.oilPress";
 	}
 
 	@Override
@@ -303,38 +423,147 @@ public class OilPress extends Entity implements IInventory{
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public void onInventoryChanged() {
 		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void openChest() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void closeChest() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
+	}
+
+	public void pressing() {
+		if (!this.worldObj.isRemote && this.container != null
+				&& this.isLocked) {
+			this.fill(new FluidStack(ChalithBase.utaniNutOil, amount * 20),
+					true);
+			this.pressings++;
+			this.presser.rotate(pressings);
+			if (pressings > 8) {
+				this.amount = 0;
+				this.isLocked = false;
+				this.dataWatcher.updateObject(30,0);
+				this.pressings = 0;
+				this.presser.rotate(0);
+			}
+
+		} else if (!this.worldObj.isRemote
+				&& (this.inv[0] != null
+						&& this.inv[0].itemID == ChalithBase.herbalByProduct.itemID && this.inv[0]
+						.getItemDamage() == 1)) {
+			this.isLocked = true;
+			this.dataWatcher.updateObject(30, 1);
+			this.amount = this.inv[0].stackSize;
+			this.inv[0] = null;
+			this.fill(new FluidStack(ChalithBase.utaniNutOil, amount * 20),
+					true);
+			this.pressings = 1;
+			this.presser.rotate(1);
+		}
+
+	}
+
+	@Override
+	public FluidStack getFluid() {
+		return fluidStack;
+	}
+
+	@Override
+	public int getFluidAmount() {
+		if (fluidStack != null)
+			return this.fluidStack.amount;
+		else
+			return 0;
+	}
+
+	@Override
+	public int getCapacity() {
+		return 10000;
+	}
+
+	@Override
+	public FluidTankInfo getInfo() {
+		return new FluidTankInfo(fluidStack, getCapacity());
+	}
+
+	@Override
+	public int fill(FluidStack resource, boolean doFill) {
+		if (resource == null) {
+			return 0;
+		}
+
+		if (!doFill) {
+			if (fluidStack == null) {
+				return Math.min(getCapacity(), resource.amount);
+			}
+
+			if (!fluidStack.isFluidEqual(resource)) {
+				return 0;
+			}
+
+			return Math.min(getCapacity() - fluidStack.amount, resource.amount);
+		}
+
+		if (fluidStack == null) {
+			fluidStack = new FluidStack(resource, Math.min(getCapacity(),
+					resource.amount));
+
+			FluidEvent.fireEvent(new FluidEvent.FluidFillingEvent(fluidStack,
+					this.worldObj, (int) this.posX, (int) this.posY,
+					(int) this.posZ, this));
+
+			return fluidStack.amount;
+		}
+
+		if (!fluidStack.isFluidEqual(resource)) {
+			return 0;
+		}
+		int filled = getCapacity() - fluidStack.amount;
+
+		if (resource.amount < filled) {
+			fluidStack.amount += resource.amount;
+			filled = resource.amount;
+		} else {
+			fluidStack.amount = getCapacity();
+		}
+
+		FluidEvent.fireEvent(new FluidEvent.FluidFillingEvent(fluidStack,
+				this.worldObj, (int) this.posX, (int) this.posY,
+				(int) this.posZ, this));
+
+		return filled;
+	}
+
+	@Override
+	public FluidStack drain(int maxDrain, boolean doDrain) {
+		if (fluidStack == null) {
+			return null;
+		}
+
+		int drained = maxDrain;
+		if (fluidStack.amount < drained) {
+			drained = fluidStack.amount;
+		}
+
+		FluidStack stack = new FluidStack(fluidStack, drained);
+		if (doDrain) {
+			fluidStack.amount -= drained;
+			if (fluidStack.amount <= 0) {
+				fluidStack = null;
+			}
+
+			FluidEvent.fireEvent(new FluidEvent.FluidDrainingEvent(fluidStack,
+					this.worldObj, (int) this.posX, (int) this.posY,
+					(int) this.posZ, this));
+
+		}
+		return stack;
+	}
+	
+	private void setFluid(FluidStack fluid) {
+		this.fluidStack = fluid;
+		
 	}
 }

@@ -8,6 +8,7 @@ public class FluidUtaniNutOil extends Fluid{
 
 	public FluidUtaniNutOil(String fluidName) {
 		super(fluidName);
+		this.density = 800;
 	}
 
 }

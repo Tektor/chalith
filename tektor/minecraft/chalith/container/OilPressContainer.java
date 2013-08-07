@@ -11,17 +11,16 @@ import net.minecraft.item.ItemStack;
 
 public class OilPressContainer extends Container {
 
-	protected OilPress ent;
-	public boolean isLocked;
+	public OilPress ent;
+	
 
 	public OilPressContainer(InventoryPlayer inventoryPlayer, OilPress e) {
 		ent = e;
 		e.container = this;
 		ItemStack[] slot2 = new ItemStack[1];
 		slot2[0] = new ItemStack(ChalithBase.herbalByProduct.itemID,1,1);
-		addSlotToContainer(new RestrictingSlot(this.ent, 0, 81, 34, slot2, null,true));
+		addSlotToContainer(new RestrictingSlot(this.ent, 0, 81, 34, slot2, this,true));
 		bindPlayerInventory(inventoryPlayer);
-		isLocked = false;
 	}
 
 	@Override
@@ -48,7 +47,7 @@ public class OilPressContainer extends Container {
 		Slot slotObject = (Slot) inventorySlots.get(slot);
 
 		// null checks
-		if (slotObject != null && !isLocked) {
+		if (slotObject != null &&!ent.worldObj.isRemote && !ent.isLocked) {
 			ItemStack stackInSlot = slotObject.getStack();
 			if (stackInSlot != null) {
 				stack = stackInSlot.copy();

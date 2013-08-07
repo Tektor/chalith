@@ -1,5 +1,6 @@
 package tektor.minecraft.chalith.entity;
 
+import tektor.minecraft.chalith.ChalithBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumEntitySize;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,12 +8,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidEvent;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidTank;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class OilPressOut extends Entity {
 
 	OilPress parent;
+	
 
 	public OilPressOut(World par1World) {
 		super(par1World);
@@ -115,9 +121,11 @@ public class OilPressOut extends Entity {
 	 */
 	public void onUpdate() {
 		super.onUpdate();
-		if (parent == null && !worldObj.isRemote) {
+		if(parent == null&&!this.worldObj.isRemote)
+		{
 			this.setDead();
 		}
+		
 	}
 
 	/**
@@ -150,17 +158,7 @@ public class OilPressOut extends Entity {
 	 * Called when the entity is attacked.
 	 */
 	public boolean attackEntityFrom(DamageSource par1DamageSource, float par2) {
-		if (this.isEntityInvulnerable()) {
-			return false;
-		} else {
-			if (!this.isDead && !this.worldObj.isRemote) {
-				this.setDead();
-				this.setBeenAttacked();
-				this.func_110128_b(par1DamageSource.getEntity());
-			}
-
-			return true;
-		}
+		return false;
 	}
 
 	/**
@@ -191,12 +189,16 @@ public class OilPressOut extends Entity {
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		parent = (OilPress) worldObj.getEntityByID(nbt.getInteger("parent"));
+		
 
 	}
+
+	
 
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setInteger("parent",parent.entityId);
+		
 	}
 
 	protected boolean func_142008_O() {
@@ -228,5 +230,13 @@ public class OilPressOut extends Entity {
 				par1 + (double) f2 +0.5D, par3 - (double) this.yOffset
 						+ (double) this.ySize + (double) f1, par5 + (double) f
 						+ 1D);
+	}
+
+	
+	public boolean func_130002_c(EntityPlayer player) {
+		if (!this.worldObj.isRemote) {
+			System.out.println("Actual amount: " + this.parent.getFluidAmount());
+		}
+		return true;
 	}
 }

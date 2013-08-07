@@ -5,7 +5,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import net.minecraftforge.event.Event.Result;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.fluids.ItemFluidContainer;
 
 public class UtaniNutOilBucket extends ItemBucket{
@@ -19,5 +23,34 @@ public class UtaniNutOilBucket extends ItemBucket{
     {
         super(itemID,ChalithBase.utaniNutOilBlock.blockID);
     }
+	
+	@ForgeSubscribe
+	public void onBucketFill( FillBucketEvent event )
+	{
+		ItemStack result = attemptFill( event.world, event.target );
+		
+		if ( result != null )
+		{
+			event.result = result;
+			event.setResult( Result.ALLOW );
+		}
+	}
+	
+	private ItemStack attemptFill( World world, MovingObjectPosition p )
+	{
+		int id = world.getBlockId( p.blockX, p.blockY, p.blockZ );
+		
+		if ( id == ChalithBase.utaniNutOilBlock.blockID )
+		{
+			if ( world.getBlockMetadata( p.blockX, p.blockY, p.blockZ ) == 0 ) // Check that it is a source block
+			{
+				world.setBlock( p.blockX, p.blockY, p.blockZ, 0 ); // Remove the fluid block
+				
+				return new ItemStack( ChalithBase.utaniNutOilBucket );
+			}
+		}
+		
+		return null;
+	}
 	
 }

@@ -22,11 +22,13 @@ import tektor.minecraft.chalith.entity.DryStand;
 import tektor.minecraft.chalith.entity.OilPress;
 import tektor.minecraft.chalith.entity.OilPressMiddle;
 import tektor.minecraft.chalith.entity.OilPressOut;
+import tektor.minecraft.chalith.entity.OilPressOutFilling;
 import tektor.minecraft.chalith.entity.OilPressPresser;
 import tektor.minecraft.chalith.entity.OilPressStair;
 import tektor.minecraft.chalith.entity.ShrinkPotionEntity;
 import tektor.minecraft.chalith.entity.WoodAwning;
 import tektor.minecraft.chalith.fluids.BlockFluidUtaniNutOil;
+import tektor.minecraft.chalith.fluids.ChalithBucketHandler;
 import tektor.minecraft.chalith.fluids.FluidUtaniNutOil;
 import tektor.minecraft.chalith.gui.ChalithGuiHandler;
 import tektor.minecraft.chalith.items.BaseRune;
@@ -184,6 +186,7 @@ public class ChalithBase {
 					new ItemStack( Item.bucketEmpty )
 				)
 			);	
+		MinecraftForge.EVENT_BUS.register(new ChalithBucketHandler());
 	}
 
 	private void registerEntities() {
@@ -223,6 +226,11 @@ public class ChalithBase {
 		EntityRegistry.registerGlobalEntityID(OilPressPresser.class, "OilPressPresser",
 				EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(OilPressPresser.class, "OilPressPresser", 8,
+				this.instance, 40, 5, true);
+		///Oil Press Filler
+		EntityRegistry.registerGlobalEntityID(OilPressOutFilling.class, "OilPressOutFilling",
+				EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(OilPressOutFilling.class, "OilPressOutFilling", 9,
 				this.instance, 40, 5, true);
 		
 		//Wood Awning

@@ -9,35 +9,40 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class OilPressStair extends Entity {
+public class OilPressOutFilling extends Entity {
 
 	OilPress parent;
 
-	public OilPressStair(World par1World) {
+	public OilPressOutFilling(World par1World) {
 		super(par1World);
 
 		this.ignoreFrustumCheck = true;
 		this.noClip = true;
 		this.stepHeight = 0;
-		this.setSize(1f, 0.5f);
+		this.setSize(0.1f, 0.1f);
+		this.isDead =false ;
 
 	}
 
-	public OilPressStair(World par1World, int par2, int par3, int par4) {
+	public OilPressOutFilling(World par1World, int par2, int par3, int par4) {
 		super(par1World);
 		this.ignoreFrustumCheck = true;
 		this.noClip = true;
-		this.setSize(1f, 0.5f);
+		this.setSize(0.1f, 0.1f);
+		this.isDead =false ;
 	}
 
-	public OilPressStair(World worldObj, OilPress dryStand) {
+	public OilPressOutFilling(World worldObj, OilPress dryStand) {
 		this(worldObj);
 		this.parent = dryStand;
+		this.isDead =false ;
 	}
+	
+	
 
 	@Override
 	public AxisAlignedBB getBoundingBox() {
-		return this.boundingBox;
+		return null;
 	}
 
 	@Override
@@ -65,17 +70,18 @@ public class OilPressStair extends Entity {
 	 */
 	public void onUpdate() {
 		super.onUpdate();
-		if (parent == null && !this.worldObj.isRemote) {
+		if (parent == null && !worldObj.isRemote) {
 			this.setDead();
 		}
 	}
+
 
 	/**
 	 * Returns true if other Entities should be prevented from moving through
 	 * this Entity.
 	 */
 	public boolean canBeCollidedWith() {
-		return true;
+		return false;
 	}
 
 	public boolean func_85031_j(Entity par1Entity) {
@@ -137,7 +143,6 @@ public class OilPressStair extends Entity {
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 
 	}
-
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		parent = (OilPress) worldObj.getEntityByID(nbt.getInteger("parent"));
@@ -146,7 +151,7 @@ public class OilPressStair extends Entity {
 
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setInteger("parent", parent.entityId);
+		nbt.setInteger("parent",parent.entityId);
 	}
 
 	protected boolean func_142008_O() {
@@ -164,16 +169,15 @@ public class OilPressStair extends Entity {
 	public void func_110128_b(Entity par1Entity) {
 	}
 
+
 	public void setPosition(double par1, double par3, double par5) {
-		this.posX = par1;
-		this.posY = par3;
-		this.posZ = par5;
-		float f = this.width / 2.0F;
-		float f1 = this.height;
-		this.boundingBox.setBounds(par1 - f + 0.5D, par3
-				- (double) this.yOffset + (double) this.ySize, par5 - f + 0.5D,
-				par1 + (double) f + 0.5D, par3 - (double) this.yOffset
-						+ (double) this.ySize + (double) f1, par5 + (double) f
-						+ 0.5D);
+		
+	}
+
+	public void setPositionParent(double d, double e, double f) {
+		this.posX = d;
+		this.posY = e;
+		this.posZ = f;
+		
 	}
 }

@@ -36,8 +36,6 @@ public class OilPressMiddle extends Entity {
 		this(worldObj);
 		this.parent = dryStand;
 	}
-	
-	
 
 	@Override
 	public AxisAlignedBB getBoundingBox() {
@@ -69,11 +67,10 @@ public class OilPressMiddle extends Entity {
 	 */
 	public void onUpdate() {
 		super.onUpdate();
-		if (parent == null && !worldObj.isRemote) {
+		if (parent == null && !this.worldObj.isRemote) {
 			this.setDead();
 		}
 	}
-
 
 	/**
 	 * Returns true if other Entities should be prevented from moving through
@@ -142,6 +139,7 @@ public class OilPressMiddle extends Entity {
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 
 	}
+
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		parent = (OilPress) worldObj.getEntityByID(nbt.getInteger("parent"));
@@ -150,7 +148,7 @@ public class OilPressMiddle extends Entity {
 
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setInteger("parent",parent.entityId);
+		nbt.setInteger("parent", parent.entityId);
 	}
 
 	protected boolean func_142008_O() {
@@ -168,6 +166,12 @@ public class OilPressMiddle extends Entity {
 	public void func_110128_b(Entity par1Entity) {
 	}
 
+	public boolean func_130002_c(EntityPlayer player) {
+		if (!this.worldObj.isRemote) {
+			this.parent.pressing();
+		}
+		return true;
+	}
 
 	public void setPosition(double par1, double par3, double par5) {
 		this.posX = par1;
@@ -175,10 +179,10 @@ public class OilPressMiddle extends Entity {
 		this.posZ = par5;
 		float f = this.width / 2.0F;
 		float f1 = this.height;
-		this.boundingBox.setBounds(par1 - f+ 0.5D, par3
-				- (double) this.yOffset + (double) this.ySize +1.0D, par5 - f+0.5D,
-				par1 + (double) f + 0.5D, par3 - (double) this.yOffset
-						+ (double) this.ySize + (double) f1 +1.0D, par5 + (double) f
-						+0.5D);
+		this.boundingBox.setBounds(par1 - f + 0.5D, par3
+				- (double) this.yOffset + (double) this.ySize + 1.0D, par5 - f
+				+ 0.5D, par1 + (double) f + 0.5D, par3 - (double) this.yOffset
+				+ (double) this.ySize + (double) f1 + 1.0D, par5 + (double) f
+				+ 0.5D);
 	}
 }

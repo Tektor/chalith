@@ -31,7 +31,7 @@ public class RestrictingSlot extends Slot{
 	   public boolean isItemValid(ItemStack itemstack) {
 		if(lockable && container instanceof OilPressContainer)
 		{
-			if(!((OilPressContainer)container).isLocked)
+			if(!((OilPressContainer)container).ent.isLocked)
 			{
 				for(ItemStack item: items)
 			      {

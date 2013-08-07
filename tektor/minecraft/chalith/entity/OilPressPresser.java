@@ -11,7 +11,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class OilPressPresser extends Entity {
 
-	OilPress parent;
+	public OilPress parent;
+	public int rot;
 
 	public OilPressPresser(World par1World) {
 		super(par1World);
@@ -33,10 +34,8 @@ public class OilPressPresser extends Entity {
 	public OilPressPresser(World worldObj, OilPress dryStand) {
 		this(worldObj);
 		this.parent = dryStand;
-		this.isDead =false ;
+		this.isDead = false;
 	}
-	
-	
 
 	@Override
 	public AxisAlignedBB getBoundingBox() {
@@ -52,6 +51,7 @@ public class OilPressPresser extends Entity {
 	}
 
 	protected void entityInit() {
+		this.dataWatcher.addObject(30,0);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -68,11 +68,14 @@ public class OilPressPresser extends Entity {
 	 */
 	public void onUpdate() {
 		super.onUpdate();
-		if (parent == null && !worldObj.isRemote) {
+		if (parent == null && !this.worldObj.isRemote) {
 			this.setDead();
 		}
+		if(this.worldObj.isRemote)
+		{
+			rot = this.dataWatcher.getWatchableObjectInt(30);
+		}
 	}
-
 
 	/**
 	 * Returns true if other Entities should be prevented from moving through
@@ -141,6 +144,7 @@ public class OilPressPresser extends Entity {
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 
 	}
+
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		parent = (OilPress) worldObj.getEntityByID(nbt.getInteger("parent"));
@@ -149,7 +153,7 @@ public class OilPressPresser extends Entity {
 
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setInteger("parent",parent.entityId);
+		nbt.setInteger("parent", parent.entityId);
 	}
 
 	protected boolean func_142008_O() {
@@ -167,15 +171,20 @@ public class OilPressPresser extends Entity {
 	public void func_110128_b(Entity par1Entity) {
 	}
 
-
-	public void setPosition(double par1, double par3, double par5) {
+	public void setPosition(double d, double e, double f) {
 		
 	}
 
 	public void setPositionParent(double d, double e, double f) {
 		this.posX = d;
-		this.posY = e;
+		this.posY = e  - (0.3D * rot);
 		this.posZ = f;
+
+	}
+
+	public void rotate(int i) {
+		rot = i;
+		this.dataWatcher.updateObject(30, i);
 		
 	}
 }
