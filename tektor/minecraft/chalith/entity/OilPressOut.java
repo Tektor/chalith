@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumEntitySize;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -251,6 +252,19 @@ public class OilPressOut extends Entity {
 					if(test)
 					{
 						this.parent.drain(1000, true);
+						player.inventory.decrStackSize(i, 1);
+					}
+					
+				}
+			}
+			else if(stack.itemID == Item.glassBottle.itemID)
+			{
+				if(this.parent.getFluidAmount() >= 100)
+				{
+					boolean test = player.inventory.addItemStackToInventory(new ItemStack(ChalithBase.craftingStuff.itemID,1,1));
+					if(test)
+					{
+						this.parent.drain(100, true);
 						player.inventory.decrStackSize(i, 1);
 					}
 					

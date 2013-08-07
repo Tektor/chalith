@@ -13,7 +13,7 @@ import net.minecraftforge.client.model.AdvancedModelLoader;
 
 public class CraftingStuff extends Item{
 
-	Icon[] icon = new Icon[1];
+	Icon[] icon = new Icon[2];
 
 	public CraftingStuff(int par1) {
 		super(par1);
@@ -46,6 +46,8 @@ public class CraftingStuff extends Item{
 		switch (stack.getItemDamage()) {
 		case 0:
 			return "stringGrid";
+		case 1:
+			return "utaniNutOilBottle";
 		default:
 			return "??";
 		}
@@ -57,6 +59,8 @@ public class CraftingStuff extends Item{
 		switch (stack.getItemDamage()) {
 		case 0:
 			return "String Grid";
+		case 1:
+			return "Utani Nut Oil Bottle";
 		default:
 			return "??";
 		}
@@ -65,12 +69,14 @@ public class CraftingStuff extends Item{
 	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
 		icon[0] = par1IconRegister.registerIcon("chalith:stringGrid");
+		icon[1] = par1IconRegister.registerIcon("chalith:utaniNutOilBottle");
 	}
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void getSubItems(int par1, CreativeTabs tab, List subItems) {
 
 		subItems.add(new ItemStack(this, 1, 0));
+		subItems.add(new ItemStack(this, 1, 1));
 	}
 
 }

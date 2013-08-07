@@ -12,6 +12,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class OilPressOutFilling extends Entity {
 
 	OilPress parent;
+	public int amount;
 
 	public OilPressOutFilling(World par1World) {
 		super(par1World);
@@ -54,6 +55,7 @@ public class OilPressOutFilling extends Entity {
 	}
 
 	protected void entityInit() {
+		this.dataWatcher.addObject(30, 0);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -72,6 +74,10 @@ public class OilPressOutFilling extends Entity {
 		super.onUpdate();
 		if (parent == null && !worldObj.isRemote) {
 			this.setDead();
+		}
+		if(worldObj.isRemote)
+		{
+			this.amount = this.dataWatcher.getWatchableObjectInt(30);
 		}
 	}
 
@@ -179,5 +185,11 @@ public class OilPressOutFilling extends Entity {
 		this.posY = e;
 		this.posZ = f;
 		
+	}
+	
+	public void setAmount(int i)
+	{
+		amount = i;
+		this.dataWatcher.updateObject(30, i);
 	}
 }

@@ -40,7 +40,7 @@ public class EntityPlacer extends Item {
 	public void registerIcons(IconRegister par1IconRegister) {
 		icon[0] = par1IconRegister.registerIcon("chalith:dryStand");
 		icon[1] = par1IconRegister.registerIcon("chalith:woodAwning");
-		icon[1] = par1IconRegister.registerIcon("chalith:oilPress");
+		icon[2] = par1IconRegister.registerIcon("chalith:oilPress");
 	}
 
 	@Override

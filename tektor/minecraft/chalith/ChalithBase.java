@@ -17,6 +17,7 @@ import tektor.minecraft.chalith.blocks.BlockTrapRune;
 import tektor.minecraft.chalith.blocks.ChalithOreBase;
 import tektor.minecraft.chalith.blocks.ChalithWorkplaces;
 import tektor.minecraft.chalith.blocks.GateBlock;
+import tektor.minecraft.chalith.blocks.GlidingSand;
 import tektor.minecraft.chalith.entity.DryIsrakLeaf;
 import tektor.minecraft.chalith.entity.DryStand;
 import tektor.minecraft.chalith.entity.OilPress;
@@ -73,7 +74,7 @@ public class ChalithBase {
 
 	// blocks
 	public static int blockID1, blockID2, blockID3, blockID4, blockID5,
-			blockID6, blockID7;
+			blockID6, blockID7, blockID8;
 	public static Block bloodstone;
 	public static Block chalithBaseOre;
 	public static Block trapRune;
@@ -81,10 +82,11 @@ public class ChalithBase {
 	public static Block plantBase;
 	public static Block workbench;
 	public static Block utaniNutOilBlock;
+	public static Block glidingSand;
 
 	// items
 	public static int itemID1, itemID2, itemID3, itemID4, itemID5, itemID6,
-			itemID7, itemID8, itemID9, itemID10, itemID11,itemID12;
+			itemID7, itemID8, itemID9, itemID10, itemID11, itemID12;
 	public static Item lorynIngot;
 	public static Item utilRune;
 	public static Item trapRuneItem;
@@ -97,7 +99,7 @@ public class ChalithBase {
 	public static Item entityPlacer;
 	public static Item craftingStuff;
 	public static Item utaniNutOilBucket;
-	//fluids
+	// fluids
 	public static Fluid utaniNutOil;
 
 	// Says where the client and server 'proxy' code is loaded.
@@ -122,6 +124,8 @@ public class ChalithBase {
 		blockID6 = config.get(Configuration.CATEGORY_BLOCK, "blockID6", 985)
 				.getInt();
 		blockID7 = config.get(Configuration.CATEGORY_BLOCK, "blockID7", 986)
+				.getInt();
+		blockID8 = config.get(Configuration.CATEGORY_BLOCK, "blockID8", 987)
 				.getInt();
 
 		itemID1 = config.get(Configuration.CATEGORY_ITEM, "itemID1", 7000)
@@ -163,83 +167,83 @@ public class ChalithBase {
 		registerPlants();
 		registerMisc();
 		smeltingRecipes();
-		runeCrafting();
+		
 		GameRegistry.registerWorldGenerator(new ChalithWorldGen());
 		registerEntities();
 		registerFluids();
-
+		runeCrafting();
 		NetworkRegistry.instance().registerGuiHandler(this,
 				new ChalithGuiHandler());
 	}
 
 	private void registerFluids() {
-		
+
 		utaniNutOil = new FluidUtaniNutOil("utaniNutOil");
 		FluidRegistry.registerFluid(utaniNutOil);
 		utaniNutOilBlock = new BlockFluidUtaniNutOil(blockID7, utaniNutOil);
 		utaniNutOilBucket = new UtaniNutOilBucket(itemID12);
-		
-		FluidContainerRegistry.registerFluidContainer(
-				new FluidContainerData(
-					FluidRegistry.getFluidStack( ChalithBase.utaniNutOil.getName(), FluidContainerRegistry.BUCKET_VOLUME ),
-					new ItemStack( ChalithBase.utaniNutOilBucket ),
-					new ItemStack( Item.bucketEmpty )
-				)
-			);	
+
+		FluidContainerRegistry.registerFluidContainer(new FluidContainerData(
+				FluidRegistry.getFluidStack(ChalithBase.utaniNutOil.getName(),
+						FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(
+						ChalithBase.utaniNutOilBucket), new ItemStack(
+						Item.bucketEmpty)));
 		MinecraftForge.EVENT_BUS.register(new ChalithBucketHandler());
 	}
 
 	private void registerEntities() {
-		//DryStand
+		// DryStand
 		EntityRegistry.registerGlobalEntityID(DryStand.class, "DryStand",
 				EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(DryStand.class, "DryStand", 0,
 				this.instance, 40, 5, true);
-		///Sub: DryIsrakLeaf
-		EntityRegistry.registerGlobalEntityID(DryIsrakLeaf.class, "DryIsrakLeaf",
-				EntityRegistry.findGlobalUniqueEntityId());
+		// /Sub: DryIsrakLeaf
+		EntityRegistry.registerGlobalEntityID(DryIsrakLeaf.class,
+				"DryIsrakLeaf", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(DryIsrakLeaf.class, "DryIsrakLeaf", 3,
 				this.instance, 40, 5, true);
-		
-		//Oil Press
-		///Oil Press Base
+
+		// Oil Press
+		// /Oil Press Base
 		EntityRegistry.registerGlobalEntityID(OilPress.class, "OilPress",
 				EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(OilPress.class, "OilPress", 4,
 				this.instance, 40, 5, true);
-		///Oil Press Stair
-		EntityRegistry.registerGlobalEntityID(OilPressStair.class, "OilPressStair",
-				EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(OilPressStair.class, "OilPressStair", 5,
-				this.instance, 40, 5, true);
-		///Oil Press Out
+		// /Oil Press Stair
+		EntityRegistry.registerGlobalEntityID(OilPressStair.class,
+				"OilPressStair", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(OilPressStair.class, "OilPressStair",
+				5, this.instance, 40, 5, true);
+		// /Oil Press Out
 		EntityRegistry.registerGlobalEntityID(OilPressOut.class, "OilPressOut",
 				EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(OilPressOut.class, "OilPressOut", 6,
 				this.instance, 40, 5, true);
-		///Oil Press Middle
-		EntityRegistry.registerGlobalEntityID(OilPressMiddle.class, "OilPressMiddle",
-				EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(OilPressMiddle.class, "OilPressMiddle", 7,
-				this.instance, 40, 5, true);
-		///Oil Press Presser
-		EntityRegistry.registerGlobalEntityID(OilPressPresser.class, "OilPressPresser",
-				EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(OilPressPresser.class, "OilPressPresser", 8,
-				this.instance, 40, 5, true);
-		///Oil Press Filler
-		EntityRegistry.registerGlobalEntityID(OilPressOutFilling.class, "OilPressOutFilling",
-				EntityRegistry.findGlobalUniqueEntityId());
-		EntityRegistry.registerModEntity(OilPressOutFilling.class, "OilPressOutFilling", 9,
-				this.instance, 40, 5, true);
-		
-		//Wood Awning
+		// /Oil Press Middle
+		EntityRegistry.registerGlobalEntityID(OilPressMiddle.class,
+				"OilPressMiddle", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(OilPressMiddle.class,
+				"OilPressMiddle", 7, this.instance, 40, 5, true);
+		// /Oil Press Presser
+		EntityRegistry.registerGlobalEntityID(OilPressPresser.class,
+				"OilPressPresser", EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(OilPressPresser.class,
+				"OilPressPresser", 8, this.instance, 40, 5, true);
+		// /Oil Press Filler
+		EntityRegistry
+				.registerGlobalEntityID(OilPressOutFilling.class,
+						"OilPressOutFilling",
+						EntityRegistry.findGlobalUniqueEntityId());
+		EntityRegistry.registerModEntity(OilPressOutFilling.class,
+				"OilPressOutFilling", 9, this.instance, 40, 5, true);
+
+		// Wood Awning
 		EntityRegistry.registerGlobalEntityID(WoodAwning.class, "WoodAwning",
 				EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(WoodAwning.class, "WoodAwning", 2,
 				this.instance, 40, 5, true);
-		
-		//Shrink Potion
+
+		// Shrink Potion
 		EntityRegistry.registerGlobalEntityID(ShrinkPotionEntity.class,
 				"ShrinkPotion", EntityRegistry.findGlobalUniqueEntityId());
 		EntityRegistry.registerModEntity(ShrinkPotionEntity.class,
@@ -261,26 +265,34 @@ public class ChalithBase {
 		LanguageRegistry.addName(new ItemStack(bloodstone, 1, 3),
 				"Corinnstone Cobble");
 
-		//rune renamer
+		// gliding sand
+		MinecraftForge.setBlockHarvestLevel(glidingSand, "shovel", 1);
+		GameRegistry.registerBlock(glidingSand, "glidingSand");
+		LanguageRegistry.addName(new ItemStack(glidingSand, 1, 0),
+				"Gliding Sand");
+		
+		// rune renamer
 		GameRegistry.registerBlock(workbench, "runeWorkbench");
 		LanguageRegistry.addName(new ItemStack(workbench, 1, 0),
 				"Rune Workbench");
 
-		//shrink stuff
+		// shrink stuff
 		GameRegistry.registerItem(shrinkPotion, "shrinkPotion");
 		LanguageRegistry.addName(new ItemStack(shrinkPotion, 1, 0),
 				"Shrink Potion");
 		GameRegistry.registerItem(shrinkStatue, "shrinkStatue");
 		LanguageRegistry.addName(new ItemStack(shrinkStatue, 1, 0),
 				"Shrink Statue");
-		//entity placer base
+		// entity placer base
 		GameRegistry.registerItem(entityPlacer, "entityPlacer");
-		LanguageRegistry.addName(new ItemStack(entityPlacer, 1, 0),
-				"Dry Stand");
-		
+		LanguageRegistry
+				.addName(new ItemStack(entityPlacer, 1, 0), "Dry Stand");
+		// crafting stuff
 		GameRegistry.registerItem(craftingStuff, "craftingStuff");
 		LanguageRegistry.addName(new ItemStack(craftingStuff, 1, 0),
 				"String Grid");
+		LanguageRegistry.addName(new ItemStack(craftingStuff, 1, 1),
+				"Utani Nut Oil Bottle");
 
 	}
 
@@ -308,6 +320,7 @@ public class ChalithBase {
 		gateBlock = new GateBlock(blockID4);
 		plantBase = new PlantBase(blockID5);
 		workbench = new ChalithWorkplaces(blockID6);
+		glidingSand = new GlidingSand(blockID8);
 		// items
 		seedBase = new SeedBase(itemID7);
 		herbalByProduct = new HerbalByProducts(itemID8);
@@ -317,7 +330,7 @@ public class ChalithBase {
 
 		entityPlacer = new EntityPlacer(itemID11);
 		craftingStuff = new CraftingStuff(itemID1);
-		
+
 		lorynIngot = new ChalithIngotBase(itemID2);
 
 		utilRune = new UtilRune(itemID3);
@@ -371,10 +384,18 @@ public class ChalithBase {
 
 		ItemStack israkRootStack = new ItemStack(this.seedBase, 1, 0);
 		ItemStack israkLeafStack = new ItemStack(this.herbalByProduct, 1, 0);
-		ItemStack israkLeafDriedStack = new ItemStack(this.herbalByProduct, 1, 2);
+		ItemStack israkLeafDriedStack = new ItemStack(this.herbalByProduct, 1,
+				2);
+
+		ItemStack utaniBucket = new ItemStack(this.utaniNutOilBucket.setContainerItem(Item.bucketEmpty),1,0);
 		
-		ItemStack woodStick = new ItemStack(Item.stick,1,0);
-		ItemStack string = new ItemStack(Item.silk,1,0);
+		ItemStack sand = new ItemStack(Block.sand,1,0);
+		ItemStack woodStick = new ItemStack(Item.stick, 1, 0);
+		ItemStack string = new ItemStack(Item.silk, 1, 0);
+		
+		//Gliding Sand
+		GameRegistry.addShapedRecipe(new ItemStack(this.glidingSand, 1, 0),
+				new Object[] { "XY", 'X', sand, 'Y',utaniBucket });
 
 		// Base Runes
 		GameRegistry.addShapedRecipe(new ItemStack(this.baseRune, 1, 0),
@@ -385,26 +406,27 @@ public class ChalithBase {
 				new Object[] { "XY", 'X', baseRuneStack, 'Y', wildRuneStack });
 
 		// Workbenches
-		/// Rune Renamer
+		// / Rune Renamer
 		GameRegistry.addShapedRecipe(new ItemStack(this.workbench, 1, 0),
 				new Object[] { "XYX", "ZYZ", "ZZZ", 'X', lorynIngotStack, 'Y',
 						corinnstoneStack, 'Z', bloodstoneStack });
-		/// Dry Stand
+		// / Dry Stand
 		GameRegistry.addShapedRecipe(new ItemStack(this.entityPlacer, 1, 0),
 				new Object[] { "X X", " Y ", "X X", 'X', woodStick, 'Y',
-						new ItemStack(this.craftingStuff,1,0) });
-		
-		//Crafting Stuff
-		/// String Grid
-		GameRegistry.addShapedRecipe(new ItemStack(this.craftingStuff, 1, 0),
-				new Object[] { "XYX", "XYX", "XYX", 'X', woodStick, 'Y',
-						string});
+						new ItemStack(this.craftingStuff, 1, 0) });
+
+		// Crafting Stuff
+		// / String Grid
+		GameRegistry
+				.addShapedRecipe(new ItemStack(this.craftingStuff, 1, 0),
+						new Object[] { "XYX", "XYX", "XYX", 'X', woodStick,
+								'Y', string });
 
 		// ShrinkPotion
 		GameRegistry.addShapedRecipe(new ItemStack(this.shrinkPotion, 1, 0),
 				new Object[] { "XYX", "YZY", "XYX", 'X', israkRootStack, 'Y',
 						israkLeafDriedStack, 'Z',
-						new ItemStack(ItemPotion.potion.itemID, 1, 0) });
+						new ItemStack(this.craftingStuff, 1, 1) });
 		// Recall
 		GameRegistry.addShapedRecipe(new ItemStack(this.utilRune, 1, 0),
 				new Object[] { "ABC", " X ", "   ", 'A', diStack, 'B', inStack,

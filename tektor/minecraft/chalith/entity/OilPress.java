@@ -99,7 +99,7 @@ public class OilPress extends Entity implements IInventory, IFluidTank {
 	}
 
 	protected void entityInit() {
-			dataWatcher.addObject(30, 0);
+		dataWatcher.addObject(30, 0);
 
 	}
 
@@ -117,9 +117,9 @@ public class OilPress extends Entity implements IInventory, IFluidTank {
 	 */
 	public void onUpdate() {
 		super.onUpdate();
-		if(this.worldObj.isRemote)
-		{
-			isLocked = this.dataWatcher.getWatchableObjectInt(30) > 0 ? true: false;
+		if (this.worldObj.isRemote) {
+			isLocked = this.dataWatcher.getWatchableObjectInt(30) > 0 ? true
+					: false;
 		}
 		if (stair == null) {
 			if (!worldObj.isRemote) {
@@ -144,26 +144,22 @@ public class OilPress extends Entity implements IInventory, IFluidTank {
 			presser.setPositionParent(posX - 0.5D, posY + 0.875D, posZ + 0.5D);
 			worldObj.spawnEntityInWorld(presser);
 		}
-		if(!this.worldObj.isRemote)
-		{
-			if(this.getFluidAmount() > 0)
-			{
-			if(this.fill == null)
-			{
-				fill = new OilPressOutFilling(worldObj,this);
-				fill.setPositionParent(this.posX+1, this.posY+0.5D, this.posZ);
-				worldObj.spawnEntityInWorld(fill);
+		if (!this.worldObj.isRemote) {
+			if (this.getFluidAmount() > 0) {
+				if (this.fill == null) {
+					fill = new OilPressOutFilling(worldObj, this);
+					fill.setPositionParent(this.posX + 1, this.posY + 0.125D
+							, this.posZ);
+					fill.setAmount(this.getFluidAmount());
+					worldObj.spawnEntityInWorld(fill);
+				} else {
+					fill.setPositionParent(this.posX + 1, this.posY + 0.125D, this.posZ);
+					fill.setAmount(this.getFluidAmount());
+				}
+			} else if (!(this.getFluidAmount() > 0) && this.fill != null) {
+				this.fill.setDead();
+				this.fill = null;
 			}
-			else
-			{
-				fill.setPositionParent(this.posX+1, this.posY+0.5D, this.posZ);
-			}
-		}
-		else if(!(this.getFluidAmount() > 0) && this.fill != null)
-		{
-			this.fill.setDead();
-			this.fill = null;
-		}
 		}
 
 	}
@@ -207,6 +203,7 @@ public class OilPress extends Entity implements IInventory, IFluidTank {
 				this.worldObj.removeEntity(out);
 				this.worldObj.removeEntity(middle);
 				this.worldObj.removeEntity(presser);
+				this.worldObj.removeEntity(fill);
 				this.setDead();
 				this.setBeenAttacked();
 				this.func_110128_b(par1DamageSource.getEntity());
@@ -267,19 +264,17 @@ public class OilPress extends Entity implements IInventory, IFluidTank {
 			}
 		}
 		this.isLocked = nbt.getBoolean("lock");
-		int i = isLocked ? 1:0;
+		int i = isLocked ? 1 : 0;
 		this.dataWatcher.updateObject(30, i);
 		this.amount = nbt.getInteger("amount");
 		this.pressings = nbt.getInteger("pressings");
-		if (!nbt.hasKey("Empty"))
-        {
-            FluidStack fluid = FluidStack.loadFluidStackFromNBT(nbt);
+		if (!nbt.hasKey("Empty")) {
+			FluidStack fluid = FluidStack.loadFluidStackFromNBT(nbt);
 
-            if (fluid != null)
-            {
-                setFluid(fluid);
-            }
-        }
+			if (fluid != null) {
+				setFluid(fluid);
+			}
+		}
 
 	}
 
@@ -304,14 +299,11 @@ public class OilPress extends Entity implements IInventory, IFluidTank {
 		nbt.setBoolean("lock", this.isLocked);
 		nbt.setInteger("amount", this.amount);
 		nbt.setInteger("pressings", pressings);
-		if (fluidStack != null)
-        {
-            fluidStack.writeToNBT(nbt);
-        }
-        else
-        {
-            nbt.setString("Empty", "");
-        }
+		if (fluidStack != null) {
+			fluidStack.writeToNBT(nbt);
+		} else {
+			nbt.setString("Empty", "");
+		}
 	}
 
 	protected boolean func_142008_O() {
@@ -435,8 +427,7 @@ public class OilPress extends Entity implements IInventory, IFluidTank {
 	}
 
 	public void pressing() {
-		if (!this.worldObj.isRemote && this.container != null
-				&& this.isLocked) {
+		if (!this.worldObj.isRemote && this.container != null && this.isLocked) {
 			this.fill(new FluidStack(ChalithBase.utaniNutOil, amount * 20),
 					true);
 			this.pressings++;
@@ -444,7 +435,7 @@ public class OilPress extends Entity implements IInventory, IFluidTank {
 			if (pressings > 8) {
 				this.amount = 0;
 				this.isLocked = false;
-				this.dataWatcher.updateObject(30,0);
+				this.dataWatcher.updateObject(30, 0);
 				this.pressings = 0;
 				this.presser.rotate(0);
 			}
@@ -561,9 +552,9 @@ public class OilPress extends Entity implements IInventory, IFluidTank {
 		}
 		return stack;
 	}
-	
+
 	private void setFluid(FluidStack fluid) {
 		this.fluidStack = fluid;
-		
+
 	}
 }
